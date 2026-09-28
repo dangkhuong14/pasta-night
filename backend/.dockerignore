@@ -1,0 +1,12 @@
+# Secrets and runtime data never enter the image.
+.env
+.env.*
+!.env.example
+data/
+
+# Not needed to build.
+docs/
+**/*.md
+.golangci.yml
+Dockerfile
+.dockerignore

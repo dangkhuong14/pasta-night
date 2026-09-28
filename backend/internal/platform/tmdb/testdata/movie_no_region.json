@@ -1,0 +1,44 @@
+{
+  "adult": false,
+  "backdrop_path": "/8ZTVqvKDQ8emSGUEMjsS4yHAwrp.jpg",
+  "genres": [
+    { "id": 28, "name": "Phim Hành Động" },
+    { "id": 878, "name": "Phim Khoa Học Viễn Tưởng" },
+    { "id": 12, "name": "Phim Phiêu Lưu" }
+  ],
+  "id": 27205,
+  "original_language": "en",
+  "original_title": "Inception",
+  "overview": "",
+  "poster_path": "/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
+  "release_date": "2010-07-15",
+  "runtime": 148,
+  "status": "Released",
+  "tagline": "Tâm trí bạn là hiện trường vụ án.",
+  "title": "Kẻ Đánh Cắp Giấc Mơ",
+  "vote_average": 8.369,
+  "vote_count": 36000,
+  "credits": {
+    "cast": [
+      { "id": 6193, "name": "Leonardo DiCaprio", "character": "Cobb", "order": 0 }
+    ],
+    "crew": [
+      { "id": 525, "name": "Christopher Nolan", "department": "Writing", "job": "Screenplay" }
+    ]
+  },
+  "videos": {
+    "results": [
+      { "iso_639_1": "en", "name": "Teaser", "key": "incTeaser01", "site": "YouTube", "type": "Teaser", "official": true }
+    ]
+  },
+  "watch/providers": {
+    "results": {
+      "US": {
+        "link": "https://www.themoviedb.org/movie/27205-inception/watch?locale=US",
+        "flatrate": [
+          { "logo_path": "/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg", "provider_id": 1899, "provider_name": "Max", "display_priority": 1 }
+        ]
+      }
+    }
+  }
+}

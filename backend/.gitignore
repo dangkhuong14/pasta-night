@@ -1,0 +1,11 @@
+# Secrets — never commit (see CLAUDE.md "Secrets")
+.env
+
+# Runtime cache (Docker volume in production)
+data/cache/
+
+# Build output
+/server
+/server.exe
+*.test
+*.out

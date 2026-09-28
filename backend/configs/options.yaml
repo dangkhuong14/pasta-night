@@ -1,0 +1,29 @@
+# Viewing options — schema: docs/DATABASE.md §2 ViewingOption.
+# List order = display order. Option IDs are used in frontend routes: never change them.
+# Genre/provider values are starting points; tune them with the business.
+options:
+  - id: netflix-chill
+    label: "Netflix & Chill"
+    description: "Cho hai người"
+    icon: heart
+    discover:
+      genre_ids: [10749, 35]      # Romance, Comedy
+      genre_mode: or
+      min_vote_average: 7.0
+      watch_provider_ids: [8]     # Netflix (region = WATCH_REGION)
+
+  - id: solo
+    label: "Một mình"
+    description: "Thời gian cho riêng bạn"
+    icon: user
+    discover:
+      genre_ids: [18, 53, 9648]   # Drama, Thriller, Mystery
+      genre_mode: or
+
+  - id: friends
+    label: "Hội bạn"
+    description: "Xem cùng nhóm bạn"
+    icon: users
+    discover:
+      genre_ids: [35, 28, 27]     # Comedy, Action, Horror
+      genre_mode: or

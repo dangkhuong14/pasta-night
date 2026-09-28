@@ -1,0 +1,20 @@
+{
+  "adult": false,
+  "backdrop_path": null,
+  "genres": [],
+  "id": 680,
+  "original_language": "en",
+  "original_title": "Pulp Fiction",
+  "overview": "",
+  "poster_path": null,
+  "release_date": "",
+  "runtime": 0,
+  "status": "Released",
+  "tagline": "",
+  "title": "",
+  "vote_average": 0,
+  "vote_count": 0,
+  "credits": { "cast": [], "crew": [] },
+  "videos": { "results": [] },
+  "watch/providers": { "results": {} }
+}
