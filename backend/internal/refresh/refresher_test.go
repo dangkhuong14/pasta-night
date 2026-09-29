@@ -127,7 +127,7 @@ var friends = domain.Option{
 func newTestRefresher(t *testing.T, client TMDB) (*Refresher, *cache.Store) {
 	t.Helper()
 	store := cache.NewStore(t.TempDir(), []string{"friends", "solo"}, discardLogger())
-	r := NewRefresher(client, store, Settings{WatchRegion: "VN", DiscoverPages: 2, Concurrency: 3, DetailTTL: 336 * time.Hour}, discardLogger())
+	r := NewRefresher(client, store, Settings{DiscoverPages: 2, Concurrency: 3, DetailTTL: 336 * time.Hour}, discardLogger())
 	r.now = func() time.Time { return testNow }
 	return r, store
 }
@@ -384,16 +384,18 @@ func TestDiscoverQuery(t *testing.T) {
 			want: tmdb.DiscoverQuery{Page: 1, WithGenres: "35|28|27", VoteAverageGTE: 6.5, VoteCountGTE: 200, SortBy: "popularity.desc"},
 		},
 		{
-			name: "and genres with providers",
+			// No watch_region: TMDB matches zero movies for regions it has no
+			// provider data for, VN among them (TMDB_INTEGRATION.md §4.1).
+			name: "and genres with providers, never region-scoped",
 			opt: domain.DiscoverParams{GenreIDs: []int{10749, 35}, GenreMode: domain.GenreModeAnd, MinVoteAverage: 7,
 				MinVoteCount: 200, WatchProviderIDs: []int{8, 119}, SortBy: "popularity.desc"},
 			want: tmdb.DiscoverQuery{Page: 1, WithGenres: "10749,35", VoteAverageGTE: 7, VoteCountGTE: 200,
-				SortBy: "popularity.desc", WithWatchProviders: "8|119", WatchRegion: "VN"},
+				SortBy: "popularity.desc", WithWatchProviders: "8|119"},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := discoverQuery(domain.Option{ID: "x", Discover: tt.opt}, "VN", 1)
+			got := discoverQuery(domain.Option{ID: "x", Discover: tt.opt}, 1)
 			if got != tt.want {
 				t.Errorf("query =\n%+v\nwant\n%+v", got, tt.want)
 			}

@@ -83,7 +83,6 @@ func newApp(ctx context.Context, cfg config.Config, options []domain.Option, cli
 	log.Info("cache loaded", "lists", stats.Lists, "details", stats.Details, "skipped", stats.Skipped)
 
 	refresher := refresh.NewRefresher(client, store, refresh.Settings{
-		WatchRegion:   cfg.WatchRegion,
 		DiscoverPages: cfg.DiscoverPages,
 		Concurrency:   cfg.TMDBConcurrency,
 		DetailTTL:     cfg.DetailTTL,

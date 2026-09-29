@@ -30,7 +30,6 @@ type TMDB interface {
 
 // Settings are the refresh knobs from the environment.
 type Settings struct {
-	WatchRegion   string
 	DiscoverPages int
 	Concurrency   int
 	DetailTTL     time.Duration
@@ -122,7 +121,7 @@ func (r *Refresher) discover(ctx context.Context, opt domain.Option) ([]int, err
 	ids := make([]int, 0, domain.MaxListSize)
 	seen := make(map[int]bool, domain.MaxListSize)
 	for page := 1; page <= r.settings.DiscoverPages && len(ids) < domain.MaxListSize; page++ {
-		resp, err := r.client.Discover(ctx, discoverQuery(opt, r.settings.WatchRegion, page))
+		resp, err := r.client.Discover(ctx, discoverQuery(opt, page))
 		if err != nil {
 			return nil, fmt.Errorf("fetch discover page %d for option %s: %w", page, opt.ID, err)
 		}
@@ -146,7 +145,7 @@ func (r *Refresher) discover(ctx context.Context, opt domain.Option) ([]int, err
 
 // discoverQuery maps an option's discover params to TMDB query params
 // (TMDB_INTEGRATION.md §4.1).
-func discoverQuery(opt domain.Option, region string, page int) tmdb.DiscoverQuery {
+func discoverQuery(opt domain.Option, page int) tmdb.DiscoverQuery {
 	d := opt.Discover
 	genreSep := "|"
 	if d.GenreMode == domain.GenreModeAnd {
@@ -159,9 +158,10 @@ func discoverQuery(opt domain.Option, region string, page int) tmdb.DiscoverQuer
 		VoteCountGTE:   d.MinVoteCount,
 		SortBy:         d.SortBy,
 	}
+	// No watch_region: TMDB has no provider data for some regions (VN among
+	// them), and sending one there matches zero movies (TMDB_INTEGRATION.md §4.1).
 	if len(d.WatchProviderIDs) > 0 {
 		q.WithWatchProviders = joinInts(d.WatchProviderIDs, "|")
-		q.WatchRegion = region
 	}
 	return q
 }
@@ -244,7 +244,7 @@ func (r *Refresher) fetchDetail(ctx context.Context, id int) (domain.MovieDetail
 			return domain.MovieDetail{}, false, nil
 		}
 	}
-	d, ok := mapMovieDetails(m, r.settings.WatchRegion, r.timestamp())
+	d, ok := mapMovieDetails(m, r.timestamp())
 	if !ok || d.ID != id {
 		r.log.Debug("dropping movie that fails the mapping rules", "movie_id", id)
 		return domain.MovieDetail{}, false, nil

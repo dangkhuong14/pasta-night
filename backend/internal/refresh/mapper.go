@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"slices"
 	"strconv"
+	"strings"
 	"time"
 
 	"pasta_night/be/internal/domain"
@@ -20,11 +21,14 @@ const (
 	logoSize     = "w92"
 	youtubeURL   = "https://www.youtube.com/watch?v="
 	maxCast      = 5
+	// maxProviders caps the merged list: popular movies are offered by 40+
+	// services worldwide, most of them single-country (TMDB_INTEGRATION.md §5).
+	maxProviders = 8
 )
 
 // mapMovieDetails converts a TMDB movie into a domain.MovieDetail following
 // TMDB_INTEGRATION.md §5. ok is false when the movie must be dropped.
-func mapMovieDetails(m tmdb.MovieDetails, region string, fetchedAt time.Time) (domain.MovieDetail, bool) {
+func mapMovieDetails(m tmdb.MovieDetails, fetchedAt time.Time) (domain.MovieDetail, bool) {
 	if m.ID <= 0 || m.Adult {
 		return domain.MovieDetail{}, false
 	}
@@ -51,7 +55,7 @@ func mapMovieDetails(m tmdb.MovieDetails, region string, fetchedAt time.Time) (d
 		Directors:      directors(m.Credits.Crew),
 		Cast:           topCast(m.Credits.Cast),
 		TrailerURL:     trailerURL(m.Videos.Results),
-		Providers:      providers(m.WatchProviders, region),
+		Providers:      providers(m.WatchProviders),
 		FetchedAt:      fetchedAt,
 	}, true
 }
@@ -159,50 +163,107 @@ func trailerRank(v tmdb.Video) int {
 	return rank
 }
 
-// providers maps the WATCH_REGION providers: types walked in order, the
-// first type seen wins for a provider, then a stable sort by display_priority.
-func providers(wp tmdb.WatchProviders, region string) []domain.Provider {
-	rp, ok := wp.Results[region]
-	if !ok {
-		return []domain.Provider{}
+// providerTypes are the monetization types in preference order: a provider
+// offered as flatrate in any region outranks one that is only rentable.
+var providerTypes = []domain.ProviderType{
+	domain.ProviderFlatrate,
+	domain.ProviderFree,
+	domain.ProviderAds,
+	domain.ProviderRent,
+	domain.ProviderBuy,
+}
+
+func regionEntries(rp tmdb.RegionProviders) [][]tmdb.Provider {
+	return [][]tmdb.Provider{rp.Flatrate, rp.Free, rp.Ads, rp.Rent, rp.Buy}
+}
+
+// providerAgg accumulates one provider across every region that offers it.
+type providerAgg struct {
+	provider domain.Provider
+	typeRank int // index into providerTypes; lowest wins
+	priority int // lowest display_priority seen
+	regions  int // how many regions offer it
+}
+
+// providers merges the watch providers of every region, because TMDB has no
+// data at all for some regions (VN included) and per-region lists are tiny.
+// Providers are ranked by how many regions offer them, which surfaces the
+// global platforms customers recognize and drops single-country services
+// (TMDB_INTEGRATION.md §5).
+func providers(wp tmdb.WatchProviders) []domain.Provider {
+	byID := make(map[int]*providerAgg, len(wp.Results))
+	// Regions are walked in a fixed order so the output never depends on Go's
+	// random map iteration: the same movie must always map to the same list.
+	regions := make([]string, 0, len(wp.Results))
+	for region := range wp.Results {
+		regions = append(regions, region)
 	}
-	type ranked struct {
-		provider domain.Provider
-		priority int
-	}
-	groups := []struct {
-		typ     domain.ProviderType
-		entries []tmdb.Provider
-	}{
-		{domain.ProviderFlatrate, rp.Flatrate},
-		{domain.ProviderFree, rp.Free},
-		{domain.ProviderAds, rp.Ads},
-		{domain.ProviderRent, rp.Rent},
-		{domain.ProviderBuy, rp.Buy},
-	}
-	var all []ranked
-	seen := make(map[int]bool)
-	for _, g := range groups {
-		for _, p := range g.entries {
-			if p.ProviderID <= 0 || p.ProviderName == "" || seen[p.ProviderID] {
-				continue
+	slices.Sort(regions)
+
+	for _, region := range regions {
+		countedInRegion := make(map[int]bool)
+		for typeRank, entries := range regionEntries(wp.Results[region]) {
+			for _, p := range entries {
+				if p.ProviderID <= 0 || p.ProviderName == "" {
+					continue
+				}
+				agg, ok := byID[p.ProviderID]
+				if !ok {
+					agg = &providerAgg{
+						provider: domain.Provider{
+							ID:      p.ProviderID,
+							Name:    p.ProviderName,
+							LogoURL: imageURL(logoSize, p.LogoPath),
+							Type:    providerTypes[typeRank],
+						},
+						typeRank: typeRank,
+						priority: p.DisplayPriority,
+					}
+					byID[p.ProviderID] = agg
+				}
+				if typeRank < agg.typeRank {
+					agg.typeRank = typeRank
+					agg.provider.Type = providerTypes[typeRank]
+				}
+				agg.priority = min(agg.priority, p.DisplayPriority)
+				if agg.provider.LogoURL == nil {
+					agg.provider.LogoURL = imageURL(logoSize, p.LogoPath)
+				}
+				if !countedInRegion[p.ProviderID] {
+					countedInRegion[p.ProviderID] = true
+					agg.regions++
+				}
 			}
-			seen[p.ProviderID] = true
-			all = append(all, ranked{
-				provider: domain.Provider{
-					ID:      p.ProviderID,
-					Name:    p.ProviderName,
-					LogoURL: imageURL(logoSize, p.LogoPath),
-					Type:    g.typ,
-				},
-				priority: p.DisplayPriority,
-			})
 		}
 	}
-	slices.SortStableFunc(all, func(a, b ranked) int { return cmp.Compare(a.priority, b.priority) })
-	out := make([]domain.Provider, 0, len(all))
-	for _, r := range all {
-		out = append(out, r.provider)
+
+	all := make([]*providerAgg, 0, len(byID))
+	for _, agg := range byID {
+		all = append(all, agg)
+	}
+	slices.SortFunc(all, func(a, b *providerAgg) int {
+		return cmp.Or(
+			cmp.Compare(b.regions, a.regions), // most widely available first
+			cmp.Compare(a.typeRank, b.typeRank),
+			cmp.Compare(a.priority, b.priority),
+			cmp.Compare(a.provider.ID, b.provider.ID), // deterministic tie-break
+		)
+	})
+	// TMDB gives one service several IDs (9 and 119 are both "Amazon Prime
+	// Video"), which would show the same name twice on the card. The list is
+	// already ranked, so the first entry of a name is the best one to keep.
+	out := make([]domain.Provider, 0, maxProviders)
+	seenNames := make(map[string]bool, len(all))
+	for _, agg := range all {
+		if len(out) == maxProviders {
+			break
+		}
+		name := strings.ToLower(strings.TrimSpace(agg.provider.Name))
+		if seenNames[name] {
+			continue
+		}
+		seenNames[name] = true
+		out = append(out, agg.provider)
 	}
 	return out
 }

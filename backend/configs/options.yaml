@@ -10,7 +10,7 @@ options:
       genre_ids: [10749, 35]      # Romance, Comedy
       genre_mode: or
       min_vote_average: 7.0
-      watch_provider_ids: [8]     # Netflix (region = WATCH_REGION)
+      watch_provider_ids: [8]     # Netflix, in any region
 
   - id: solo
     label: "Một mình"

@@ -66,8 +66,9 @@ curl -s "https://api.themoviedb.org/3/movie/603?language=vi-VN" \
 | `vote_count.gte` | `200` | option `min_vote_count` |
 | `sort_by` | `popularity.desc` | option `sort_by` |
 | `with_watch_providers` | `8` | option `watch_provider_ids` joined by `\|` = any of them (only if set) |
-| `watch_region` | `VN` | `WATCH_REGION` (only if `with_watch_providers` is set) |
 | `with_watch_monetization_types` | `flatrate` | constant (only if `with_watch_providers` is set) |
+
+- **`watch_region` is never sent.** TMDB matches zero movies for a region it has no provider data for: `with_watch_providers=8&watch_region=VN` returns `total_results: 0` for every query, which silently emptied the `netflix-chill` option. Without the parameter the provider filter still works.
 | `page` | `1` | loop `1..DISCOVER_PAGES`; stop early when `page > total_pages` |
 
 ```bash
@@ -223,11 +224,18 @@ type Provider struct {
 
 ### Provider rules
 
-1. Read `watch/providers.results[WATCH_REGION]`. Missing region → `[]`.
-2. Walk types in order `flatrate`, `free`, `ads`, `rent`, `buy`; map each entry to `{id, name, logo_url, type}`.
+**No region filtering.** TMDB has no watch-provider data at all for some regions, `VN` among them, so a region-scoped list would always be empty here. Every region is merged instead, and the ranking keeps the list useful.
+
+1. Read every region in `watch/providers.results`. No regions → `[]`.
+2. Per region, walk types in order `flatrate`, `free`, `ads`, `rent`, `buy`; map each entry to `{id, name, logo_url, type}`. Skip entries with `provider_id <= 0` or an empty `provider_name`.
 3. `logo_url`: `""` → `null`; else `image base + "w92" + logo_path`.
-4. De-duplicate by provider `id`, keeping the first type seen (e.g. Netflix `flatrate` wins over `buy`).
-5. Sort by `display_priority` asc (stable).
+4. De-duplicate by provider `id` across all regions. The kept `type` is the best one seen anywhere (flatrate beats rent), and the kept `display_priority` is the lowest seen.
+5. Count how many regions offer each provider; a provider listed under several types in one region still counts once for it.
+6. Sort by region count desc, then type order, then `display_priority` asc, then `id` asc. Regions are walked in sorted order and `id` breaks the last tie, so the same input always maps to the same list (Go iterates maps in random order).
+7. Drop an entry whose name (trimmed, case-insensitive) is already in the list: TMDB gives one service several IDs — `9` and `119` are both "Amazon Prime Video" — and the ranking already put the better one first.
+8. Keep the first **8** (`maxProviders`). Popular movies are offered by 40+ services worldwide, most of them in only one or two countries.
+
+> The resulting list answers "which big platforms carry this movie", not "what you can watch in Vietnam right now" — TMDB cannot answer the latter for `VN`.
 
 ---
 
@@ -257,7 +265,7 @@ TMDB error body:
 
 **Publish guards** (per option, in `refresher.go`)
 
-- Phase 1 returns 0 IDs → don't publish; keep the old list; log `Warn` (filters may be too strict, e.g. Netflix + region `VN`).
+- Phase 1 returns 0 IDs → don't publish; keep the old list; log `Warn` (the option's filters may be too strict to match anything).
 - Phase 2 keeps < 50% of phase-1 IDs → don't publish; keep the old list; log `Warn`. This prevents a TMDB outage from shrinking a 40-movie list to 3.
 
 ---
@@ -267,8 +275,8 @@ TMDB error body:
 - Fixtures in `internal/platform/tmdb/testdata/`. They are hand-written in TMDB's response shape (tests and scripts never call TMDB); replace them with real captures when someone runs the manual checks:
   ```text
   discover_page1.json
-  movie_603_full.json          # all appends, VN providers present
-  movie_no_region.json         # watch/providers without VN
+  movie_603_full.json          # all appends, providers in two regions
+  movie_other_region.json      # watch/providers with a single non-VN region
   movie_missing_fields.json    # no poster, runtime 0, release_date ""
   error_401.json
   error_429.json
@@ -278,7 +286,7 @@ TMDB error body:
   - title fallback to `original_title`; drop when both empty
   - `""` paths → `null` URLs; `runtime 0` → `null`; `release_date ""` → `null`
   - trailer preference (vi > en; official first)
-  - provider de-duplication + `display_priority` order; missing region → `[]`
+  - provider merging across regions: ranking by region count, best type wins, cap at 8, deterministic order
 - Refresher tests: fake client (consumer-side interface) for partial failures, 401 abort, publish guards.
 - Manual check of VN provider coverage before promising the feature:
   ```bash

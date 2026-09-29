@@ -105,7 +105,6 @@ func testConfig(cacheDir, adminToken string) config.Config {
 	return config.Config{
 		TMDBReadToken:        testTMDBToken,
 		TMDBLanguage:         "vi-VN",
-		WatchRegion:          "VN",
 		CacheDir:             cacheDir,
 		ListTTL:              168 * time.Hour,
 		DetailTTL:            336 * time.Hour,

@@ -53,16 +53,19 @@ func TestMapperFixtures(t *testing.T) {
 				Directors:      []string{"Lana Wachowski", "Lilly Wachowski"},
 				Cast:           []string{"Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss", "Hugo Weaving", "Gloria Foster"},
 				TrailerURL:     ptr("https://www.youtube.com/watch?v=viTrailer01"),
+				// Merged over US + VN: every provider is in one region, so the
+				// type order decides, then display_priority (Max 1 < Netflix 5).
 				Providers: []domain.Provider{
-					{ID: 2, Name: "Apple TV", LogoURL: ptr("https://image.tmdb.org/t/p/w92/9ghgSC0MA082EL6HLCW3GalykFD.jpg"), Type: domain.ProviderRent},
+					{ID: 1899, Name: "Max", LogoURL: ptr("https://image.tmdb.org/t/p/w92/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg"), Type: domain.ProviderFlatrate},
 					{ID: 8, Name: "Netflix", LogoURL: ptr("https://image.tmdb.org/t/p/w92/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"), Type: domain.ProviderFlatrate},
+					{ID: 2, Name: "Apple TV", LogoURL: ptr("https://image.tmdb.org/t/p/w92/9ghgSC0MA082EL6HLCW3GalykFD.jpg"), Type: domain.ProviderRent},
 					{ID: 3, Name: "Google Play Movies", LogoURL: nil, Type: domain.ProviderBuy},
 				},
 				FetchedAt: mappedAt,
 			},
 		},
 		{
-			fixture: "movie_no_region.json",
+			fixture: "movie_other_region.json",
 			want: domain.MovieDetail{
 				ID:             27205,
 				Title:          "Kẻ Đánh Cắp Giấc Mơ",
@@ -78,8 +81,11 @@ func TestMapperFixtures(t *testing.T) {
 				Directors:      []string{},
 				Cast:           []string{"Leonardo DiCaprio"},
 				TrailerURL:     nil, // only a teaser
-				Providers:      []domain.Provider{},
-				FetchedAt:      mappedAt,
+				// Offered only outside VN, and still listed: region no longer filters.
+				Providers: []domain.Provider{
+					{ID: 1899, Name: "Max", LogoURL: ptr("https://image.tmdb.org/t/p/w92/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg"), Type: domain.ProviderFlatrate},
+				},
+				FetchedAt: mappedAt,
 			},
 		},
 		{
@@ -98,7 +104,7 @@ func TestMapperFixtures(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.fixture, func(t *testing.T) {
-			got, ok := mapMovieDetails(loadMovieFixture(t, tt.fixture), "VN", mappedAt)
+			got, ok := mapMovieDetails(loadMovieFixture(t, tt.fixture), mappedAt)
 			if !ok {
 				t.Fatal("movie was dropped")
 			}
@@ -122,7 +128,7 @@ func TestMapperDrops(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if _, ok := mapMovieDetails(tt.m, "VN", mappedAt); ok {
+			if _, ok := mapMovieDetails(tt.m, mappedAt); ok {
 				t.Error("movie was kept, want dropped")
 			}
 		})
@@ -154,7 +160,7 @@ func TestMapperScalarRules(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, ok := mapMovieDetails(tt.m, "VN", mappedAt)
+			got, ok := mapMovieDetails(tt.m, mappedAt)
 			if !ok || !tt.want(got) {
 				t.Errorf("mapped = %+v (ok %v)", got, ok)
 			}
@@ -204,27 +210,50 @@ func TestMapperProviders(t *testing.T) {
 		wp   tmdb.WatchProviders
 		want []string // "id:type" in order
 	}{
-		{"region missing", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
-			"US": {Flatrate: []tmdb.Provider{p(1899, "Max", 1)}},
-		}}, []string{}},
 		{"no results at all", tmdb.WatchProviders{}, []string{}},
-		{"first type wins, then display_priority", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
-			"VN": {
-				Flatrate: []tmdb.Provider{p(8, "Netflix", 3)},
-				Free:     []tmdb.Provider{p(100, "Free TV", 1)},
-				Rent:     []tmdb.Provider{p(8, "Netflix", 0)},
-			},
-		}}, []string{"100:free", "8:flatrate"}},
-		{"equal priorities keep walk order", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
-			"VN": {Ads: []tmdb.Provider{p(5, "Ads TV", 1)}, Buy: []tmdb.Provider{p(6, "Store", 1)}, Flatrate: []tmdb.Provider{p(7, "Stream", 1)}},
+		{"a region we have no interest in still counts", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
+			"US": {Flatrate: []tmdb.Provider{p(1899, "Max", 1)}},
+		}}, []string{"1899:flatrate"}},
+		{"more regions wins over display_priority", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
+			"US": {Flatrate: []tmdb.Provider{p(8, "Netflix", 9)}, Rent: []tmdb.Provider{p(2, "Apple TV", 1)}},
+			"DE": {Flatrate: []tmdb.Provider{p(8, "Netflix", 9)}},
+			"FR": {Flatrate: []tmdb.Provider{p(8, "Netflix", 9)}},
+		}}, []string{"8:flatrate", "2:rent"}},
+		{"best type across regions wins", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
+			"US": {Rent: []tmdb.Provider{p(8, "Netflix", 3)}},
+			"DE": {Flatrate: []tmdb.Provider{p(8, "Netflix", 3)}},
+		}}, []string{"8:flatrate"}},
+		{"type order breaks a tie on region count", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
+			"US": {Ads: []tmdb.Provider{p(5, "Ads TV", 1)}, Buy: []tmdb.Provider{p(6, "Store", 1)}, Flatrate: []tmdb.Provider{p(7, "Stream", 1)}},
 		}}, []string{"7:flatrate", "5:ads", "6:buy"}},
+		{"a provider listed twice in one region counts once", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
+			"US": {Flatrate: []tmdb.Provider{p(8, "Netflix", 3)}, Buy: []tmdb.Provider{p(8, "Netflix", 3)}},
+			"DE": {Flatrate: []tmdb.Provider{p(100, "Free TV", 1)}},
+			"FR": {Flatrate: []tmdb.Provider{p(100, "Free TV", 1)}},
+		}}, []string{"100:flatrate", "8:flatrate"}},
 		{"invalid entries are skipped", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
 			"VN": {Flatrate: []tmdb.Provider{p(0, "No ID", 1), p(9, "", 1), p(8, "Netflix", 2)}},
 		}}, []string{"8:flatrate"}},
+		{
+			// TMDB gives one service several IDs: 9 and 119 are both
+			// "Amazon Prime Video". Keep the better-ranked one only.
+			name: "same name under different ids appears once",
+			wp: tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
+				"US": {Flatrate: []tmdb.Provider{p(9, "Amazon Prime Video", 3), p(8, "Netflix", 1)}},
+				"DE": {Flatrate: []tmdb.Provider{p(119, "amazon prime video ", 2), p(8, "Netflix", 1)}},
+				"FR": {Flatrate: []tmdb.Provider{p(119, "Amazon Prime Video", 2)}},
+			},
+			},
+			want: []string{"8:flatrate", "119:flatrate"},
+		},
+		{"capped at maxProviders, most available first", manyRegionProviders(), []string{
+			"1:flatrate", "2:flatrate", "3:flatrate", "4:flatrate",
+			"5:flatrate", "6:flatrate", "7:flatrate", "8:flatrate",
+		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := providers(tt.wp, "VN")
+			got := providers(tt.wp)
 			if got == nil {
 				t.Fatal("providers must be [] not nil")
 			}
@@ -241,6 +270,35 @@ func TestMapperProviders(t *testing.T) {
 
 func fmtProvider(p domain.Provider) string {
 	return fmt.Sprintf("%d:%s", p.ID, p.Type)
+}
+
+// manyRegionProviders builds 12 providers offered by a decreasing number of
+// regions, so provider 1 is the most widely available and 12 the least.
+func manyRegionProviders() tmdb.WatchProviders {
+	results := make(map[string]tmdb.RegionProviders)
+	for id := 1; id <= 12; id++ {
+		for region := 0; region <= 12-id; region++ {
+			key := fmt.Sprintf("R%02d", region)
+			rp := results[key]
+			rp.Flatrate = append(rp.Flatrate, tmdb.Provider{
+				ProviderID: id, ProviderName: fmt.Sprintf("P%d", id), LogoPath: "/l.jpg",
+			})
+			results[key] = rp
+		}
+	}
+	return tmdb.WatchProviders{Results: results}
+}
+
+// TestMapperProvidersIsDeterministic guards against Go's random map iteration
+// leaking into the cache files: the same input must always map the same way.
+func TestMapperProvidersIsDeterministic(t *testing.T) {
+	wp := manyRegionProviders()
+	want := providers(wp)
+	for i := 0; i < 50; i++ {
+		if got := providers(wp); !reflect.DeepEqual(got, want) {
+			t.Fatalf("run %d = %v, want %v", i, got, want)
+		}
+	}
 }
 
 func TestMapperDirectorsAndCast(t *testing.T) {

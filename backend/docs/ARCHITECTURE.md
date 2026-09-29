@@ -50,7 +50,7 @@ QR card ─scan─▶ Browser ─HTTPS─▶ Next.js frontend
 
 - TMDB's free tier is **non-commercial only** → a commercial agreement is required before production launch.
 - Watch-provider data comes from JustWatch → the frontend must show attribution.
-- Provider coverage for region `VN` may be sparse → `providers` can be empty.
+- TMDB has no watch-provider data for region `VN` at all, so `providers` lists the platforms that carry a movie **anywhere in the world**, ranked by how many regions offer it (TMDB_INTEGRATION.md §5). It is not a "watchable in Vietnam" list.
 
 ---
 
@@ -206,7 +206,6 @@ Call budget: 3 options × (2 discover + ≤ 40 details) ≈ **126 calls** on a c
 | `PORT` | `8080` | HTTP port |
 | `TMDB_READ_TOKEN` | — (required) | TMDB read access token (Bearer) |
 | `TMDB_LANGUAGE` | `vi-VN` | localized titles and overviews |
-| `WATCH_REGION` | `VN` | region for watch providers |
 | `CACHE_DIR` | `./data/cache` | JSON cache location |
 | `LIST_TTL` | `168h` | list freshness (7 days) |
 | `DETAIL_TTL` | `336h` | detail freshness (14 days) |

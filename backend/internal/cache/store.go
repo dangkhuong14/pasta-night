@@ -20,7 +20,10 @@ import (
 
 // SchemaVersion is written into every cache file. Bump it whenever a
 // persisted struct changes (DATABASE.md §6).
-const SchemaVersion = 1
+//
+// v2: `providers` changed meaning from "providers in WATCH_REGION" to
+// "providers merged across every region, most widely available first".
+const SchemaVersion = 2
 
 // Snapshot is an immutable view of the cache. Readers must never modify it
 // or its maps; the Store swaps in a new Snapshot on every change.

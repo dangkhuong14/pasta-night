@@ -32,7 +32,7 @@
 | `discover.genre_mode` | `and` \| `or` | default `or` | joins IDs with `,` (and) or `\|` (or) |
 | `discover.min_vote_average` | float | 0–10; default `6.5` | `vote_average.gte` |
 | `discover.min_vote_count` | int | ≥ 0; default `200` (filters obscure titles) | `vote_count.gte` |
-| `discover.watch_provider_ids` | int[] | optional | `with_watch_providers` + `watch_region` |
+| `discover.watch_provider_ids` | int[] | optional; not region-scoped | `with_watch_providers` |
 | `discover.sort_by` | string | default `popularity.desc` | `sort_by` |
 
 ```yaml
@@ -47,7 +47,7 @@ options:
       genre_ids: [10749, 35]      # Romance, Comedy
       genre_mode: or
       min_vote_average: 7.0
-      watch_provider_ids: [8]     # Netflix (region = WATCH_REGION)
+      watch_provider_ids: [8]     # Netflix, in any region
 
   - id: solo
     label: "Một mình"
@@ -104,7 +104,7 @@ options:
 | `directors` | string[] | may be empty | `credits.crew` where `job == "Director"` |
 | `cast` | string[] | ≤ 5, billing order | `credits.cast` sorted by `order` |
 | `trailer_url` | string \| null | YouTube URL | first `videos.results` with `site == "YouTube"` and `type == "Trailer"` |
-| `providers` | Provider[] | may be empty | `watch/providers.results[WATCH_REGION]` |
+| `providers` | Provider[] | may be empty; ≤ 8 | `watch/providers.results`, all regions merged and ranked |
 | `fetched_at` | timestamp | when phase 2 fetched this movie | — |
 
 **Provider** (embedded in MovieDetail)
@@ -204,3 +204,10 @@ There are no DB indexes; the snapshot's maps play that role. Total size ≈ 3 op
 - File naming: `lists/{option_id}.json`, `details/{movie_id}.json`. Temp files `*.tmp` are ignored on load and removed at startup.
 - Never hand-edit cache files. To reset: stop the service → delete `$CACHE_DIR/*` → start.
 - Changing a ViewingOption `id` breaks FE routes → treat it as an API breaking change (see API_SPEC.md §1).
+
+### History
+
+| Version | Change |
+|---|---|
+| v1 | initial schema |
+| v2 | `providers` changed meaning: was the `WATCH_REGION` list, now every region merged and ranked (TMDB has no `VN` data). Old files are refetched. |

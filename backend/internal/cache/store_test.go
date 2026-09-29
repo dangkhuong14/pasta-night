@@ -114,7 +114,8 @@ func TestPublishFileFormat(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{`"schema_version": 1`, `"option_id": "friends"`, `"fetched_at": "2026-09-27T10:00:00Z"`} {
+	schemaLine := fmt.Sprintf(`"schema_version": %d`, SchemaVersion)
+	for _, want := range []string{schemaLine, `"option_id": "friends"`, `"fetched_at": "2026-09-27T10:00:00Z"`} {
 		if !strings.Contains(string(raw), want) {
 			t.Errorf("list file misses %s:\n%s", want, raw)
 		}
@@ -123,7 +124,7 @@ func TestPublishFileFormat(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{`"schema_version": 1`, `"id": 603`, `"backdrop_url": null`, `"runtime_minutes": null`} {
+	for _, want := range []string{schemaLine, `"id": 603`, `"backdrop_url": null`, `"runtime_minutes": null`} {
 		if !strings.Contains(string(raw), want) {
 			t.Errorf("detail file misses %s:\n%s", want, raw)
 		}
@@ -223,14 +224,16 @@ func TestLoadSkipsInvalidFiles(t *testing.T) {
 	valid := newTestStore(t, dir)
 	mustPublish(t, valid, list("friends", 1), details(1))
 
+	// Only detail 2 is skipped for its version; the others must fail their own
+	// rule, so they carry the current SchemaVersion.
 	writeFile(t, filepath.Join(dir, "details", "2.json"), `{"schema_version":99,"id":2}`)
 	writeFile(t, filepath.Join(dir, "details", "3.json"), `{not json`)
-	writeFile(t, filepath.Join(dir, "details", "4.json"), `{"schema_version":1,"id":5}`)
+	writeFile(t, filepath.Join(dir, "details", "4.json"), fmt.Sprintf(`{"schema_version":%d,"id":5}`, SchemaVersion))
 	writeFile(t, filepath.Join(dir, "details", ".1.json.123.tmp"), `half-written`)
-	writeFile(t, filepath.Join(dir, "lists", "solo.json"),
-		`{"schema_version":1,"option_id":"solo","fetched_at":"2026-09-27T10:00:00Z","movie_ids":[1,2]}`)
-	writeFile(t, filepath.Join(dir, "lists", "removed-option.json"),
-		`{"schema_version":1,"option_id":"removed-option","fetched_at":"2026-09-27T10:00:00Z","movie_ids":[1]}`)
+	writeFile(t, filepath.Join(dir, "lists", "solo.json"), fmt.Sprintf(
+		`{"schema_version":%d,"option_id":"solo","fetched_at":"2026-09-27T10:00:00Z","movie_ids":[1,2]}`, SchemaVersion))
+	writeFile(t, filepath.Join(dir, "lists", "removed-option.json"), fmt.Sprintf(
+		`{"schema_version":%d,"option_id":"removed-option","fetched_at":"2026-09-27T10:00:00Z","movie_ids":[1]}`, SchemaVersion))
 
 	s := newTestStore(t, dir)
 	stats, err := s.Load(context.Background())

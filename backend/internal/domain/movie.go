@@ -47,7 +47,8 @@ const (
 	ProviderBuy      ProviderType = "buy"
 )
 
-// Provider is a service that offers a movie in WATCH_REGION.
+// Provider is a streaming or rental service that offers a movie somewhere in
+// the world (TMDB_INTEGRATION.md §5 provider rules).
 type Provider struct {
 	ID      int          `json:"id"`
 	Name    string       `json:"name"`

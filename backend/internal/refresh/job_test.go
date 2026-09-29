@@ -22,7 +22,7 @@ func newTestJob(t *testing.T, client TMDB) (*Job, *cache.Store, string) {
 	t.Helper()
 	dir := t.TempDir()
 	store := cache.NewStore(dir, []string{"netflix-chill", "solo", "friends"}, discardLogger())
-	r := NewRefresher(client, store, Settings{WatchRegion: "VN", DiscoverPages: 1, Concurrency: 3, DetailTTL: 336 * time.Hour}, discardLogger())
+	r := NewRefresher(client, store, Settings{DiscoverPages: 1, Concurrency: 3, DetailTTL: 336 * time.Hour}, discardLogger())
 	r.now = func() time.Time { return testNow }
 	j := NewJob(r, store, testOptions, time.Hour, 168*time.Hour, discardLogger())
 	j.now = func() time.Time { return testNow }

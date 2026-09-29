@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -16,7 +15,6 @@ import (
 const (
 	DefaultPort                 = 8080
 	DefaultTMDBLanguage         = "vi-VN"
-	DefaultWatchRegion          = "VN"
 	DefaultCacheDir             = "./data/cache"
 	DefaultListTTL              = 168 * time.Hour
 	DefaultDetailTTL            = 336 * time.Hour
@@ -25,14 +23,11 @@ const (
 	DefaultTMDBConcurrency      = 5
 )
 
-var regionPattern = regexp.MustCompile(`^[A-Z]{2}$`)
-
 // Config is the validated process configuration.
 type Config struct {
 	Port                 int
 	TMDBReadToken        string
 	TMDBLanguage         string
-	WatchRegion          string
 	CacheDir             string
 	ListTTL              time.Duration
 	DetailTTL            time.Duration
@@ -58,7 +53,6 @@ func FromEnv(getenv func(string) string) (Config, error) {
 		Port:                 p.intInRange("PORT", DefaultPort, 1, 65535),
 		TMDBReadToken:        p.required("TMDB_READ_TOKEN"),
 		TMDBLanguage:         p.str("TMDB_LANGUAGE", DefaultTMDBLanguage),
-		WatchRegion:          p.str("WATCH_REGION", DefaultWatchRegion),
 		CacheDir:             p.str("CACHE_DIR", DefaultCacheDir),
 		ListTTL:              p.duration("LIST_TTL", DefaultListTTL),
 		DetailTTL:            p.duration("DETAIL_TTL", DefaultDetailTTL),
@@ -67,9 +61,6 @@ func FromEnv(getenv func(string) string) (Config, error) {
 		TMDBConcurrency:      p.positiveInt("TMDB_CONCURRENCY", DefaultTMDBConcurrency),
 		CORSAllowedOrigins:   p.origins("CORS_ALLOWED_ORIGINS"),
 		AdminToken:           p.str("ADMIN_TOKEN", ""),
-	}
-	if !regionPattern.MatchString(cfg.WatchRegion) {
-		p.fail("WATCH_REGION", fmt.Sprintf("must be a two-letter uppercase region code such as VN, got %q", cfg.WatchRegion))
 	}
 	if err := errors.Join(p.errs...); err != nil {
 		return Config{}, fmt.Errorf("invalid environment: %w", err)
