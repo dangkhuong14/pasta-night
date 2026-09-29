@@ -28,7 +28,7 @@ _Last updated: 2026-09-29_
 - ESLint 9 (pinned by create-next-app) is marked unsupported by npm; upgrade when `eslint-config-next` supports ESLint 10.
 
 ## Open Questions
-- "CÓ MẶT TRÊN" now lists worldwide platforms (2026-09-29 backend change), so a customer may see a service that is not available in Vietnam. Should the card copy say so?
+- "CÓ MẶT TRÊN" lists only services available in Vietnam, but TMDB cannot confirm a title is licensed here. Should the card copy say so?
 - Brand name confirmation: "Pásta Night" vs "Lusso Pasta" (SCREENS §0).
 - Pasta pairing copy for `netflix-chill`, `solo`, `friends` (business).
 - Should `netflix-chill` drop the Netflix provider filter, or the landing page hide options without a list? Needs a product decision (backend `configs/options.yaml`).

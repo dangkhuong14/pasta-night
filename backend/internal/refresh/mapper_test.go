@@ -60,13 +60,12 @@ func TestMapperFixtures(t *testing.T) {
 					{Name: "Gloria Foster", ProfileURL: nil},
 				},
 				TrailerURL: ptr("https://www.youtube.com/watch?v=viTrailer01"),
-				// Merged over US + VN: every provider is in one region, so the
-				// type order decides, then display_priority (Max 1 < Netflix 5).
+				// Max (1899) and Google Play Movies (3) are not available in
+				// Vietnam, so only Netflix and Apple TV survive the allowlist.
+				// Both are in one region, so the type order decides.
 				Providers: []domain.Provider{
-					{ID: 1899, Name: "Max", LogoURL: ptr("https://image.tmdb.org/t/p/w92/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg"), Type: domain.ProviderFlatrate},
 					{ID: 8, Name: "Netflix", LogoURL: ptr("https://image.tmdb.org/t/p/w92/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"), Type: domain.ProviderFlatrate},
 					{ID: 2, Name: "Apple TV", LogoURL: ptr("https://image.tmdb.org/t/p/w92/9ghgSC0MA082EL6HLCW3GalykFD.jpg"), Type: domain.ProviderRent},
-					{ID: 3, Name: "Google Play Movies", LogoURL: nil, Type: domain.ProviderBuy},
 				},
 				FetchedAt: mappedAt,
 			},
@@ -90,10 +89,8 @@ func TestMapperFixtures(t *testing.T) {
 					{Name: "Leonardo DiCaprio", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/z2K1ERKlfMNzgLLIsM3jJ7Q9tHZ.jpg")},
 				},
 				TrailerURL: nil, // only a teaser
-				// Offered only outside VN, and still listed: region no longer filters.
-				Providers: []domain.Provider{
-					{ID: 1899, Name: "Max", LogoURL: ptr("https://image.tmdb.org/t/p/w92/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg"), Type: domain.ProviderFlatrate},
-				},
+				// Only Max, which does not operate in Vietnam → nothing to show.
+				Providers: []domain.Provider{},
 				FetchedAt: mappedAt,
 			},
 		},
@@ -221,8 +218,26 @@ func TestMapperProviders(t *testing.T) {
 	}{
 		{"no results at all", tmdb.WatchProviders{}, []string{}},
 		{"a region we have no interest in still counts", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
-			"US": {Flatrate: []tmdb.Provider{p(1899, "Max", 1)}},
-		}}, []string{"1899:flatrate"}},
+			"US": {Flatrate: []tmdb.Provider{p(8, "Netflix", 1)}},
+		}}, []string{"8:flatrate"}},
+		{
+			// Services that do not operate in Vietnam are dropped, however many
+			// regions carry them (TMDB_INTEGRATION.md §5).
+			name: "providers outside the Vietnam allowlist are dropped",
+			wp: tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
+				"US": {Flatrate: []tmdb.Provider{p(1899, "HBO Max", 1), p(8, "Netflix", 9)}},
+				"DE": {Flatrate: []tmdb.Provider{p(1899, "HBO Max", 1), p(76, "Viaplay", 1)}},
+				"SE": {Rent: []tmdb.Provider{p(35, "Rakuten TV", 1), p(130, "Sky Store", 1)}},
+			}},
+			want: []string{"8:flatrate"},
+		},
+		{
+			name: "nothing left after filtering",
+			wp: tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
+				"SE": {Flatrate: []tmdb.Provider{p(76, "Viaplay", 1)}, Rent: []tmdb.Provider{p(426, "SF Anytime", 1)}},
+			}},
+			want: []string{},
+		},
 		{"more regions wins over display_priority", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
 			"US": {Flatrate: []tmdb.Provider{p(8, "Netflix", 9)}, Rent: []tmdb.Provider{p(2, "Apple TV", 1)}},
 			"DE": {Flatrate: []tmdb.Provider{p(8, "Netflix", 9)}},
@@ -233,13 +248,13 @@ func TestMapperProviders(t *testing.T) {
 			"DE": {Flatrate: []tmdb.Provider{p(8, "Netflix", 3)}},
 		}}, []string{"8:flatrate"}},
 		{"type order breaks a tie on region count", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
-			"US": {Ads: []tmdb.Provider{p(5, "Ads TV", 1)}, Buy: []tmdb.Provider{p(6, "Store", 1)}, Flatrate: []tmdb.Provider{p(7, "Stream", 1)}},
-		}}, []string{"7:flatrate", "5:ads", "6:buy"}},
+			"US": {Ads: []tmdb.Provider{p(192, "YouTube", 1)}, Buy: []tmdb.Provider{p(2, "Apple TV Store", 1)}, Flatrate: []tmdb.Provider{p(8, "Netflix", 1)}},
+		}}, []string{"8:flatrate", "192:ads", "2:buy"}},
 		{"a provider listed twice in one region counts once", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
 			"US": {Flatrate: []tmdb.Provider{p(8, "Netflix", 3)}, Buy: []tmdb.Provider{p(8, "Netflix", 3)}},
-			"DE": {Flatrate: []tmdb.Provider{p(100, "Free TV", 1)}},
-			"FR": {Flatrate: []tmdb.Provider{p(100, "Free TV", 1)}},
-		}}, []string{"100:flatrate", "8:flatrate"}},
+			"DE": {Flatrate: []tmdb.Provider{p(623, "WeTV", 1)}},
+			"FR": {Flatrate: []tmdb.Provider{p(623, "WeTV", 1)}},
+		}}, []string{"623:flatrate", "8:flatrate"}},
 		{"invalid entries are skipped", tmdb.WatchProviders{Results: map[string]tmdb.RegionProviders{
 			"VN": {Flatrate: []tmdb.Provider{p(0, "No ID", 1), p(9, "", 1), p(8, "Netflix", 2)}},
 		}}, []string{"8:flatrate"}},
@@ -256,8 +271,8 @@ func TestMapperProviders(t *testing.T) {
 			want: []string{"8:flatrate", "119:flatrate"},
 		},
 		{"capped at maxProviders, most available first", manyRegionProviders(), []string{
-			"1:flatrate", "2:flatrate", "3:flatrate", "4:flatrate",
-			"5:flatrate", "6:flatrate", "7:flatrate", "8:flatrate",
+			"8:flatrate", "9:flatrate", "2:flatrate", "350:flatrate",
+			"192:flatrate", "283:flatrate", "344:flatrate", "581:flatrate",
 		}},
 	}
 	for _, tt := range tests {
@@ -281,15 +296,21 @@ func fmtProvider(p domain.Provider) string {
 	return fmt.Sprintf("%d:%s", p.ID, p.Type)
 }
 
-// manyRegionProviders builds 12 providers offered by a decreasing number of
-// regions, so provider 1 is the most widely available and 12 the least.
+// allowlistByPopularity are the allowed provider IDs in the order
+// manyRegionProviders makes them popular: the first is offered by the most
+// regions, the last by one.
+var allowlistByPopularity = []int{8, 9, 2, 350, 192, 283, 344, 581, 623, 119}
+
+// manyRegionProviders offers every allowed provider, each in one region fewer
+// than the one before, so the ranking order is known and the cap is exercised.
 func manyRegionProviders() tmdb.WatchProviders {
 	results := make(map[string]tmdb.RegionProviders)
-	for id := 1; id <= 12; id++ {
-		for region := 0; region <= 12-id; region++ {
+	for i, id := range allowlistByPopularity {
+		for region := 0; region <= len(allowlistByPopularity)-1-i; region++ {
 			key := fmt.Sprintf("R%02d", region)
 			rp := results[key]
 			rp.Flatrate = append(rp.Flatrate, tmdb.Provider{
+				// Distinct names: name de-duplication is covered by its own case.
 				ProviderID: id, ProviderName: fmt.Sprintf("P%d", id), LogoPath: "/l.jpg",
 			})
 			results[key] = rp

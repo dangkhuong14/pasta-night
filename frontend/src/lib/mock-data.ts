@@ -5,11 +5,12 @@
 // - 969681: last cast member has no photo (initials fallback)
 // - 1368337: no poster, no backdrop
 // - 1204680: no runtime, no release year
+// - 1032863: no providers (the "CÓ MẶT TRÊN" card is hidden)
 // - 1288445: empty cast
 // Titles with an empty overview are real TMDB gaps (no vi-VN translation).
 import type { MovieDetail, ViewingOption } from "./api-types";
 
-export const MOCK_FETCHED_AT = "2026-09-29T08:32:43Z";
+export const MOCK_FETCHED_AT = "2026-09-29T11:35:40Z";
 
 export const MOCK_OPTIONS: ViewingOption[] = [
   {
@@ -136,7 +137,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
     backdrop_url: null,
     release_year: 2026,
     rating: 8,
-    vote_count: 3960,
+    vote_count: 3964,
     runtime_minutes: 173,
     genres: ["Phim Phiêu Lưu", "Phim Hành Động", "Phim Giả Tượng"],
     directors: ["Christopher Nolan"],
@@ -261,29 +262,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
       },
     ],
     trailer_url: "https://www.youtube.com/watch?v=xwdamnfS6IM",
-    providers: [
-      {
-        id: 119,
-        name: "Amazon Prime Video",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/gMZdpavHmxFNnLpMHwVxfqeux2g.png",
-        type: "flatrate",
-      },
-      {
-        id: 2100,
-        name: "Amazon Prime Video with Ads",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/tpwTT1FpWqLLhxUfAuDavIXDDfI.png",
-        type: "flatrate",
-      },
-      {
-        id: 1961,
-        name: "Allente",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/hPIVVR7yvR0PrTe7eHR2I5nAFis.png",
-        type: "flatrate",
-      },
-    ],
+    providers: [],
   },
   {
     id: 1288445,
@@ -298,7 +277,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/e2QAGrEmbpmZpMymDRkDisJkvg9.jpg",
     release_year: 2026,
     rating: 7.3,
-    vote_count: 691,
+    vote_count: 699,
     runtime_minutes: 95,
     genres: ["Phim Hành Động", "Phim Gây Cấn"],
     directors: ["Jean-François Richet"],
@@ -310,41 +289,6 @@ export const MOCK_MOVIES: MovieDetail[] = [
         name: "Apple TV Store",
         logo_url:
           "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
-        type: "rent",
-      },
-      {
-        id: 10,
-        name: "Amazon Video",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
-        type: "rent",
-      },
-      {
-        id: 2285,
-        name: "JustWatch TV",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/aJXLTvX11u4fBLMPRVJZVKkLYHP.png",
-        type: "rent",
-      },
-      {
-        id: 538,
-        name: "Plex",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/blAEhvx3XX8sV0fFVFk88FFjubs.png",
-        type: "rent",
-      },
-      {
-        id: 140,
-        name: "CosmoGo",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/fyUUKmDdzpJjSwsXPN4Rpi7jTu5.png",
-        type: "rent",
-      },
-      {
-        id: 7,
-        name: "Fandango At Home",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/wpOt6x0dRxTrIzuBosto4LGd7E9.png",
         type: "rent",
       },
     ],
@@ -402,20 +346,6 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
         type: "rent",
       },
-      {
-        id: 2214,
-        name: "CDA Premium",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/19i0ihHvFzvK0GF5qQ6Wc4UnkOf.png",
-        type: "flatrate",
-      },
-      {
-        id: 10,
-        name: "Amazon Video",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
-        type: "rent",
-      },
     ],
   },
   {
@@ -431,7 +361,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/4D1pdB27uph7J8HQzNf8QvvH9bn.jpg",
     release_year: 2026,
     rating: 8.3,
-    vote_count: 2404,
+    vote_count: 2409,
     runtime_minutes: 102,
     genres: ["Phim Hoạt Hình", "Phim Gia Đình", "Phim Hài", "Phim Phiêu Lưu"],
     directors: ["Andrew Stanton"],
@@ -465,13 +395,6 @@ export const MOCK_MOVIES: MovieDetail[] = [
     trailer_url: "https://www.youtube.com/watch?v=QftAW9TTmuQ",
     providers: [
       {
-        id: 337,
-        name: "Disney Plus",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/5eZ872CghnHFLB1j8grszbrx0dx.png",
-        type: "flatrate",
-      },
-      {
         id: 2,
         name: "Apple TV Store",
         logo_url:
@@ -479,46 +402,11 @@ export const MOCK_MOVIES: MovieDetail[] = [
         type: "rent",
       },
       {
-        id: 10,
-        name: "Amazon Video",
+        id: 192,
+        name: "YouTube",
         logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
-        type: "buy",
-      },
-      {
-        id: 35,
-        name: "Rakuten TV",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
-        type: "buy",
-      },
-      {
-        id: 76,
-        name: "Viaplay",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
-        type: "buy",
-      },
-      {
-        id: 130,
-        name: "Sky Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
-        type: "buy",
-      },
-      {
-        id: 426,
-        name: "SF Anytime",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/fVuqy8kmzsULoJjc3ROOcurRH7S.png",
-        type: "buy",
-      },
-      {
-        id: 20,
-        name: "maxdome Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/mjB4eyswPoC0XeJPUd1W1oitOlh.png",
-        type: "buy",
+          "https://image.tmdb.org/t/p/w92/5Maob4o5w8oZnNeYpCDyVFD3M7X.png",
+        type: "rent",
       },
     ],
   },
@@ -548,7 +436,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
       {
         name: "Inde Navarrette",
         profile_url:
-          "https://image.tmdb.org/t/p/w185/mjzZXDgclbrxWVTiyAnyzlO4Dpl.jpg",
+          "https://image.tmdb.org/t/p/w185/ayKQBpXkjtLWIKOaITO493NTqFk.jpg",
       },
       {
         name: "Cooper Tomlinson",
@@ -576,52 +464,17 @@ export const MOCK_MOVIES: MovieDetail[] = [
         type: "rent",
       },
       {
-        id: 10,
-        name: "Amazon Video",
+        id: 119,
+        name: "Amazon Prime Video",
         logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
-        type: "rent",
+          "https://image.tmdb.org/t/p/w92/gMZdpavHmxFNnLpMHwVxfqeux2g.png",
+        type: "flatrate",
       },
       {
-        id: 35,
-        name: "Rakuten TV",
+        id: 192,
+        name: "YouTube",
         logo_url:
-          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
-        type: "rent",
-      },
-      {
-        id: 130,
-        name: "Sky Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
-        type: "rent",
-      },
-      {
-        id: 76,
-        name: "Viaplay",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
-        type: "rent",
-      },
-      {
-        id: 426,
-        name: "SF Anytime",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/fVuqy8kmzsULoJjc3ROOcurRH7S.png",
-        type: "rent",
-      },
-      {
-        id: 373,
-        name: "Go3",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/bWrdc66M5z0FJgznkdRdPueU2S.png",
-        type: "rent",
-      },
-      {
-        id: 20,
-        name: "maxdome Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/mjB4eyswPoC0XeJPUd1W1oitOlh.png",
+          "https://image.tmdb.org/t/p/w92/5Maob4o5w8oZnNeYpCDyVFD3M7X.png",
         type: "rent",
       },
     ],
@@ -639,7 +492,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/c6BPbkO5Npt1OdwttAxCFo06wtH.jpg",
     release_year: 2026,
     rating: 7.4,
-    vote_count: 804,
+    vote_count: 805,
     runtime_minutes: 115,
     genres: ["Phim Gia Đình", "Phim Giả Tượng", "Phim Hài", "Phim Phiêu Lưu"],
     directors: ["Thomas Kail"],
@@ -679,55 +532,6 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
         type: "rent",
       },
-      {
-        id: 10,
-        name: "Amazon Video",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
-        type: "rent",
-      },
-      {
-        id: 35,
-        name: "Rakuten TV",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
-        type: "rent",
-      },
-      {
-        id: 76,
-        name: "Viaplay",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
-        type: "buy",
-      },
-      {
-        id: 130,
-        name: "Sky Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
-        type: "buy",
-      },
-      {
-        id: 426,
-        name: "SF Anytime",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/fVuqy8kmzsULoJjc3ROOcurRH7S.png",
-        type: "buy",
-      },
-      {
-        id: 20,
-        name: "maxdome Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/mjB4eyswPoC0XeJPUd1W1oitOlh.png",
-        type: "buy",
-      },
-      {
-        id: 505,
-        name: "Player",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/8mtdz2Y3NW5NfiSZiBFhngFSy3S.png",
-        type: "flatrate",
-      },
     ],
   },
   {
@@ -743,7 +547,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
     release_year: 2019,
     rating: 8.2,
-    vote_count: 28840,
+    vote_count: 28841,
     runtime_minutes: 180,
     genres: ["Phim Phiêu Lưu", "Phim Khoa Học Viễn Tưởng", "Phim Hành Động"],
     directors: ["Anthony Russo", "Joe Russo"],
@@ -777,13 +581,6 @@ export const MOCK_MOVIES: MovieDetail[] = [
     trailer_url: "https://www.youtube.com/watch?v=4sZj4aeYUCA",
     providers: [
       {
-        id: 337,
-        name: "Disney Plus",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/5eZ872CghnHFLB1j8grszbrx0dx.png",
-        type: "flatrate",
-      },
-      {
         id: 2,
         name: "Apple TV Store",
         logo_url:
@@ -791,45 +588,10 @@ export const MOCK_MOVIES: MovieDetail[] = [
         type: "rent",
       },
       {
-        id: 3,
-        name: "Google Play Movies",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/aZRENwYILujqs0RVOZutTh0BVGV.png",
-        type: "rent",
-      },
-      {
-        id: 10,
-        name: "Amazon Video",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
-        type: "rent",
-      },
-      {
-        id: 35,
-        name: "Rakuten TV",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
-        type: "rent",
-      },
-      {
         id: 192,
         name: "YouTube",
         logo_url:
           "https://image.tmdb.org/t/p/w92/5Maob4o5w8oZnNeYpCDyVFD3M7X.png",
-        type: "rent",
-      },
-      {
-        id: 76,
-        name: "Viaplay",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
-        type: "rent",
-      },
-      {
-        id: 130,
-        name: "Sky Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
         type: "rent",
       },
     ],
@@ -847,7 +609,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/kkcwhgSFd81QDlXo8ytrpHPQjhy.jpg",
     release_year: 2026,
     rating: 7.6,
-    vote_count: 1191,
+    vote_count: 1192,
     runtime_minutes: 90,
     genres: [
       "Phim Phiêu Lưu",
@@ -894,53 +656,11 @@ export const MOCK_MOVIES: MovieDetail[] = [
         type: "rent",
       },
       {
-        id: 10,
-        name: "Amazon Video",
+        id: 192,
+        name: "YouTube",
         logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+          "https://image.tmdb.org/t/p/w92/5Maob4o5w8oZnNeYpCDyVFD3M7X.png",
         type: "rent",
-      },
-      {
-        id: 35,
-        name: "Rakuten TV",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
-        type: "rent",
-      },
-      {
-        id: 130,
-        name: "Sky Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
-        type: "rent",
-      },
-      {
-        id: 76,
-        name: "Viaplay",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
-        type: "rent",
-      },
-      {
-        id: 426,
-        name: "SF Anytime",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/fVuqy8kmzsULoJjc3ROOcurRH7S.png",
-        type: "rent",
-      },
-      {
-        id: 40,
-        name: "CHILI",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/xfDy4aGaOqbUqKPVQobjoJ9ZsSs.png",
-        type: "rent",
-      },
-      {
-        id: 20,
-        name: "maxdome Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/mjB4eyswPoC0XeJPUd1W1oitOlh.png",
-        type: "buy",
       },
     ],
   },
@@ -998,52 +718,17 @@ export const MOCK_MOVIES: MovieDetail[] = [
         type: "rent",
       },
       {
-        id: 10,
-        name: "Amazon Video",
+        id: 119,
+        name: "Amazon Prime Video",
         logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
-        type: "rent",
-      },
-      {
-        id: 35,
-        name: "Rakuten TV",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
-        type: "rent",
-      },
-      {
-        id: 130,
-        name: "Sky Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
-        type: "rent",
-      },
-      {
-        id: 1899,
-        name: "HBO Max",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/skypuy7SXuugIQeYg0IglmzoKaS.png",
+          "https://image.tmdb.org/t/p/w92/gMZdpavHmxFNnLpMHwVxfqeux2g.png",
         type: "flatrate",
       },
       {
-        id: 76,
-        name: "Viaplay",
+        id: 192,
+        name: "YouTube",
         logo_url:
-          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
-        type: "buy",
-      },
-      {
-        id: 373,
-        name: "Go3",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/bWrdc66M5z0FJgznkdRdPueU2S.png",
-        type: "flatrate",
-      },
-      {
-        id: 538,
-        name: "Plex",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/blAEhvx3XX8sV0fFVFk88FFjubs.png",
+          "https://image.tmdb.org/t/p/w92/5Maob4o5w8oZnNeYpCDyVFD3M7X.png",
         type: "rent",
       },
     ],
@@ -1064,7 +749,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
     vote_count: 33012,
     runtime_minutes: 149,
     genres: ["Phim Phiêu Lưu", "Phim Hành Động", "Phim Khoa Học Viễn Tưởng"],
-    directors: ["Joe Russo", "Anthony Russo"],
+    directors: ["Anthony Russo", "Joe Russo"],
     cast: [
       {
         name: "Robert Downey Jr.",
@@ -1095,13 +780,6 @@ export const MOCK_MOVIES: MovieDetail[] = [
     trailer_url: "https://www.youtube.com/watch?v=DKqu9qc-5f4",
     providers: [
       {
-        id: 337,
-        name: "Disney Plus",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/5eZ872CghnHFLB1j8grszbrx0dx.png",
-        type: "flatrate",
-      },
-      {
         id: 2,
         name: "Apple TV Store",
         logo_url:
@@ -1109,45 +787,10 @@ export const MOCK_MOVIES: MovieDetail[] = [
         type: "rent",
       },
       {
-        id: 3,
-        name: "Google Play Movies",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/aZRENwYILujqs0RVOZutTh0BVGV.png",
-        type: "rent",
-      },
-      {
-        id: 10,
-        name: "Amazon Video",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
-        type: "rent",
-      },
-      {
-        id: 35,
-        name: "Rakuten TV",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
-        type: "rent",
-      },
-      {
         id: 192,
         name: "YouTube",
         logo_url:
           "https://image.tmdb.org/t/p/w92/5Maob4o5w8oZnNeYpCDyVFD3M7X.png",
-        type: "rent",
-      },
-      {
-        id: 76,
-        name: "Viaplay",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
-        type: "rent",
-      },
-      {
-        id: 130,
-        name: "Sky Store",
-        logo_url:
-          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
         type: "rent",
       },
     ],

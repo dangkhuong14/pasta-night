@@ -113,7 +113,7 @@ Reference: `design/03-movie-detail.png`
 2. Sheet body (`rounded-t-3xl`, drag handle):
    1. Title row: title (Detail title) + `RatingBadge`.
    2. Meta row: clock + runtime · calendar + year · first genre as `neutral` chip.
-   3. `InfoCard` "CÓ MẶT TRÊN": `ProviderLogo` row (≤ 8) + "Nguồn: JustWatch" caption. TMDB has no watch-provider data for Vietnam, so `providers` lists the platforms carrying the movie **anywhere in the world**, most widely available first — not what is streamable in Vietnam today (DATABASE.md §2).
+   3. `InfoCard` "CÓ MẶT TRÊN": `ProviderLogo` row (≤ 8) + "Nguồn: JustWatch" caption. The backend limits `providers` to services available in Vietnam (Netflix, Amazon Prime Video, Apple TV, YouTube, Crunchyroll, Viki, iQIYI, WeTV). TMDB has no `VN` licensing data, so this says the service carries the movie somewhere, not that it is streamable in Vietnam today (DATABASE.md §2).
    4. `PastaPairingCard` "GỢI Ý MÓN MỲ HOÀN HẢO".
    5. `SectionLabel` "NỘI DUNG" + overview.
    6. `SectionLabel` "DIỄN VIÊN CHÍNH" + `CastAvatar` row (max 5, horizontal scroll, photo or initials).

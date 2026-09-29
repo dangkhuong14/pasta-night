@@ -225,10 +225,26 @@ type Provider struct {
 
 ### Provider rules
 
-**No region filtering.** TMDB has no watch-provider data at all for some regions, `VN` among them, so a region-scoped list would always be empty here. Every region is merged instead, and the ranking keeps the list useful.
+**No region filtering, but an allowlist instead.** TMDB has no watch-provider data at all for some regions, `VN` among them, so a region-scoped list would always be empty here. Every region is merged instead, and only services a customer in Vietnam can actually use are kept — otherwise a movie lists Rakuten TV, Viaplay or Sky Store, which is worse than showing nothing.
+
+The allowlist lives in `internal/refresh/providers.go` (`allowedProviderIDs`), keyed by TMDB provider ID:
+
+| Service | TMDB ID |
+|---|---|
+| Netflix | 8 |
+| Amazon Prime Video | 9, 119 (TMDB uses two IDs for it) |
+| Apple TV Store (rent/buy) | 2 |
+| Apple TV (subscription, formerly Apple TV+) | 350 |
+| YouTube | 192 |
+| Crunchyroll | 283 |
+| Rakuten Viki | 344 |
+| iQIYI | 581 |
+| WeTV | 623 |
+
+These run in Vietnam but TMDB has no entry for them, so they can never appear: **FPT Play, VieON, Galaxy Play, TV360, K+, Danet, Bilibili**. Re-check the list with `GET /watch/providers/movie` when TMDB adds region `VN`.
 
 1. Read every region in `watch/providers.results`. No regions → `[]`.
-2. Per region, walk types in order `flatrate`, `free`, `ads`, `rent`, `buy`; map each entry to `{id, name, logo_url, type}`. Skip entries with `provider_id <= 0` or an empty `provider_name`.
+2. Per region, walk types in order `flatrate`, `free`, `ads`, `rent`, `buy`; map each entry to `{id, name, logo_url, type}`. Skip entries with `provider_id <= 0`, an empty `provider_name`, or an ID outside `allowedProviderIDs`.
 3. `logo_url`: `""` → `null`; else `image base + "w92" + logo_path`.
 4. De-duplicate by provider `id` across all regions. The kept `type` is the best one seen anywhere (flatrate beats rent), and the kept `display_priority` is the lowest seen.
 5. Count how many regions offer each provider; a provider listed under several types in one region still counts once for it.
@@ -236,7 +252,7 @@ type Provider struct {
 7. Drop an entry whose name (trimmed, case-insensitive) is already in the list: TMDB gives one service several IDs — `9` and `119` are both "Amazon Prime Video" — and the ranking already put the better one first.
 8. Keep the first **8** (`maxProviders`). Popular movies are offered by 40+ services worldwide, most of them in only one or two countries.
 
-> The resulting list answers "which big platforms carry this movie", not "what you can watch in Vietnam right now" — TMDB cannot answer the latter for `VN`.
+> The list answers "which services available in Vietnam carry this movie somewhere in the world". TMDB has no `VN` data, so it still cannot prove the title is licensed in Vietnam today — but every service named is one a customer here can subscribe to.
 
 ---
 

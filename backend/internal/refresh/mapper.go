@@ -191,9 +191,9 @@ type providerAgg struct {
 
 // providers merges the watch providers of every region, because TMDB has no
 // data at all for some regions (VN included) and per-region lists are tiny.
-// Providers are ranked by how many regions offer them, which surfaces the
-// global platforms customers recognize and drops single-country services
-// (TMDB_INTEGRATION.md §5).
+// Only services a customer in Vietnam can use are kept (allowedProviderIDs),
+// and they are ranked by how many regions offer them, so the best-known ones
+// come first (TMDB_INTEGRATION.md §5).
 func providers(wp tmdb.WatchProviders) []domain.Provider {
 	byID := make(map[int]*providerAgg, len(wp.Results))
 	// Regions are walked in a fixed order so the output never depends on Go's
@@ -208,7 +208,7 @@ func providers(wp tmdb.WatchProviders) []domain.Provider {
 		countedInRegion := make(map[int]bool)
 		for typeRank, entries := range regionEntries(wp.Results[region]) {
 			for _, p := range entries {
-				if p.ProviderID <= 0 || p.ProviderName == "" {
+				if p.ProviderID <= 0 || p.ProviderName == "" || !allowedProviderIDs[p.ProviderID] {
 					continue
 				}
 				agg, ok := byID[p.ProviderID]

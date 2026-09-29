@@ -50,7 +50,7 @@ QR card ─scan─▶ Browser ─HTTPS─▶ Next.js frontend
 
 - TMDB's free tier is **non-commercial only** → a commercial agreement is required before production launch.
 - Watch-provider data comes from JustWatch → the frontend must show attribution.
-- TMDB has no watch-provider data for region `VN` at all, so `providers` lists the platforms that carry a movie **anywhere in the world**, ranked by how many regions offer it (TMDB_INTEGRATION.md §5). It is not a "watchable in Vietnam" list.
+- TMDB has no watch-provider data for region `VN` at all. `providers` therefore merges every region and keeps only services that operate in Vietnam (allowlist in `internal/refresh/providers.go`, TMDB_INTEGRATION.md §5). Local services such as FPT Play or VieON are missing from TMDB entirely, so they can never appear.
 
 ---
 

@@ -104,7 +104,7 @@ options:
 | `directors` | string[] | may be empty | `credits.crew` where `job == "Director"` |
 | `cast` | CastMember[] | ≤ 5, billing order | `credits.cast` sorted by `order` |
 | `trailer_url` | string \| null | YouTube URL | first `videos.results` with `site == "YouTube"` and `type == "Trailer"` |
-| `providers` | Provider[] | may be empty; ≤ 8 | `watch/providers.results`, all regions merged and ranked |
+| `providers` | Provider[] | may be empty; ≤ 8 | `watch/providers.results`, all regions merged, limited to services available in Vietnam, ranked |
 | `fetched_at` | timestamp | when phase 2 fetched this movie | — |
 
 **CastMember** (embedded in MovieDetail)
@@ -222,3 +222,4 @@ There are no DB indexes; the snapshot's maps play that role. Total size ≈ 3 op
 | v1 | initial schema |
 | v2 | `providers` changed meaning: was the `WATCH_REGION` list, now every region merged and ranked (TMDB has no `VN` data). Old files are refetched. |
 | v3 | `cast` changed from a list of names to `CastMember` objects carrying `profile_url`. Old files are refetched. |
+| v4 | `providers` is limited to services available in Vietnam (allowlist in `internal/refresh/providers.go`). Old files are refetched. |
