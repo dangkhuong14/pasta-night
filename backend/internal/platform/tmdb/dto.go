@@ -52,8 +52,9 @@ type Credits struct {
 
 // CastMember is one actor.
 type CastMember struct {
-	Name  string `json:"name"`
-	Order int    `json:"order"` // billing order, 0 = top
+	Name        string `json:"name"`
+	Order       int    `json:"order"`        // billing order, 0 = top
+	ProfilePath string `json:"profile_path"` // "" when TMDB has no photo
 }
 
 // CrewMember is one crew member.

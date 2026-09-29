@@ -13,7 +13,7 @@ The UX Pilot screens show things the v1 API does not provide. v1 decisions:
 | Option descriptions ("Phim lãng mạn, ấm áp cho hai người.") | yes (`description`) | update copy in `backend/configs/options.yaml`; FE never hardcodes it |
 | "Gợi ý món mỳ hoàn hảo" pasta pairing | no | static `src/config/brand.ts`, keyed by `option_id`; no entry → hide card |
 | "Mua ngay" shop link | no | env `NEXT_PUBLIC_SHOP_URL`; unset → hide `PromoCard` |
-| Cast photos | no (`cast` is `string[]`) | initials avatars. Photos need `cast` as objects = breaking change → deferred (needs API v2 or a new field) |
+| Cast photos | yes, since API v1.1 | `cast[].profile_url` from TMDB. Initials avatars remain the fallback for the few actors TMDB has no photo of |
 | TMDB + JustWatch attribution | n/a | **required by license, missing from the design** → add to `Footer` and the providers card |
 | Brand name | design: "Pásta Night"; UX Pilot prompts: "Lusso Pasta" | use **Pásta Night** (confirm with the business) |
 | Error state | not in export (only the "LỖI" tab) | spec in §4 below |
@@ -116,7 +116,7 @@ Reference: `design/03-movie-detail.png`
    3. `InfoCard` "CÓ MẶT TRÊN": `ProviderLogo` row (≤ 8) + "Nguồn: JustWatch" caption. TMDB has no watch-provider data for Vietnam, so `providers` lists the platforms carrying the movie **anywhere in the world**, most widely available first — not what is streamable in Vietnam today (DATABASE.md §2).
    4. `PastaPairingCard` "GỢI Ý MÓN MỲ HOÀN HẢO".
    5. `SectionLabel` "NỘI DUNG" + overview.
-   6. `SectionLabel` "DIỄN VIÊN CHÍNH" + `CastAvatar` row (max 5, horizontal scroll).
+   6. `SectionLabel` "DIỄN VIÊN CHÍNH" + `CastAvatar` row (max 5, horizontal scroll, photo or initials).
    7. `PromoCard` "Cần thêm gia vị?" · "Mua ngay Pásta Night để trải nghiệm phim thêm trọn vẹn." · "MUA NGAY".
 
 **Data**
@@ -125,7 +125,7 @@ Reference: `design/03-movie-detail.png`
 |---|---|---|
 | title, rating, runtime, year, genre, providers, overview | the `MovieSummary` already in the list | instantly |
 | hero | `backdrop_url` → `poster_url` | after `GET /movies/{id}` (use `poster_url` meanwhile) |
-| cast | `cast` | after `GET /movies/{id}` |
+| cast names + photos | `cast[].name`, `cast[].profile_url` | after `GET /movies/{id}` |
 | pasta pairing | `brand.ts` → `pastaPairings[option_id]` | instantly |
 | shop link | `NEXT_PUBLIC_SHOP_URL` | instantly |
 

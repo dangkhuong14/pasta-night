@@ -51,8 +51,15 @@ func TestMapperFixtures(t *testing.T) {
 				RuntimeMinutes: ptr(136),
 				Genres:         []string{"Phim Hành Động", "Phim Khoa Học Viễn Tưởng"},
 				Directors:      []string{"Lana Wachowski", "Lilly Wachowski"},
-				Cast:           []string{"Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss", "Hugo Weaving", "Gloria Foster"},
-				TrailerURL:     ptr("https://www.youtube.com/watch?v=viTrailer01"),
+				// Gloria Foster has no profile_path in the fixture: her photo is nil.
+				Cast: []domain.CastMember{
+					{Name: "Keanu Reeves", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/8RZLOyYGsoRe9p44q3xin9QkMHv.jpg")},
+					{Name: "Laurence Fishburne", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/2GbXERENPpl5MmlqOLlPVaVtifD.jpg")},
+					{Name: "Carrie-Anne Moss", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/9zya72vRZYBQILfetACsnmCBgdj.jpg")},
+					{Name: "Hugo Weaving", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/lSC8Et0PYi5zeQb3IpPkFje7hgR.jpg")},
+					{Name: "Gloria Foster", ProfileURL: nil},
+				},
+				TrailerURL: ptr("https://www.youtube.com/watch?v=viTrailer01"),
 				// Merged over US + VN: every provider is in one region, so the
 				// type order decides, then display_priority (Max 1 < Netflix 5).
 				Providers: []domain.Provider{
@@ -79,8 +86,10 @@ func TestMapperFixtures(t *testing.T) {
 				RuntimeMinutes: ptr(148),
 				Genres:         []string{"Phim Hành Động", "Phim Khoa Học Viễn Tưởng", "Phim Phiêu Lưu"},
 				Directors:      []string{},
-				Cast:           []string{"Leonardo DiCaprio"},
-				TrailerURL:     nil, // only a teaser
+				Cast: []domain.CastMember{
+					{Name: "Leonardo DiCaprio", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/z2K1ERKlfMNzgLLIsM3jJ7Q9tHZ.jpg")},
+				},
+				TrailerURL: nil, // only a teaser
 				// Offered only outside VN, and still listed: region no longer filters.
 				Providers: []domain.Provider{
 					{ID: 1899, Name: "Max", LogoURL: ptr("https://image.tmdb.org/t/p/w92/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg"), Type: domain.ProviderFlatrate},
@@ -96,7 +105,7 @@ func TestMapperFixtures(t *testing.T) {
 				OriginalTitle: "Pulp Fiction",
 				Genres:        []string{},
 				Directors:     []string{},
-				Cast:          []string{},
+				Cast:          []domain.CastMember{},
 				Providers:     []domain.Provider{},
 				FetchedAt:     mappedAt,
 			},
@@ -313,10 +322,18 @@ func TestMapperDirectorsAndCast(t *testing.T) {
 		t.Errorf("directors = %v, want [B A] (TMDB order, de-duplicated)", got)
 	}
 	cast := []tmdb.CastMember{
-		{Name: "third", Order: 2}, {Name: "first", Order: 0}, {Name: "sixth", Order: 5},
-		{Name: "second", Order: 1}, {Name: "fourth", Order: 3}, {Name: "fifth", Order: 4},
+		{Name: "third", Order: 2, ProfilePath: "/c.jpg"}, {Name: "first", Order: 0, ProfilePath: "/a.jpg"},
+		{Name: "sixth", Order: 5, ProfilePath: "/f.jpg"}, {Name: "second", Order: 1, ProfilePath: ""},
+		{Name: "fourth", Order: 3, ProfilePath: "/d.jpg"}, {Name: "fifth", Order: 4, ProfilePath: "/e.jpg"},
 	}
-	if got := topCast(cast); !reflect.DeepEqual(got, []string{"first", "second", "third", "fourth", "fifth"}) {
-		t.Errorf("cast = %v, want the first 5 in billing order", got)
+	want := []domain.CastMember{
+		{Name: "first", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/a.jpg")},
+		{Name: "second", ProfileURL: nil}, // no profile_path → initials in the UI
+		{Name: "third", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/c.jpg")},
+		{Name: "fourth", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/d.jpg")},
+		{Name: "fifth", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/e.jpg")},
+	}
+	if got := topCast(cast); !reflect.DeepEqual(got, want) {
+		t.Errorf("cast = %+v, want the first 5 in billing order with photos", got)
 	}
 }

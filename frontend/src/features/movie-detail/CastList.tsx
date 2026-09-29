@@ -1,5 +1,8 @@
+import Image from "next/image";
+
 import { SectionLabel } from "@/components/common/SectionLabel";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { CastMember } from "@/lib/api-types";
 import { initials } from "@/lib/format";
 
 const MAX_CAST = 5;
@@ -7,12 +10,13 @@ const SKELETON_COUNT = 4;
 
 type CastListProps = {
   /** null while the detail is loading. */
-  cast: string[] | null;
+  cast: CastMember[] | null;
 };
 
 /**
- * "DIỄN VIÊN CHÍNH": initials avatars, since API v1 has no cast photos
- * (SCREENS §0). The parent hides it when the cast is empty or failed to load.
+ * "DIỄN VIÊN CHÍNH": TMDB profile photos, falling back to initials for the
+ * few actors TMDB has no photo of (SCREENS.md §3). The parent hides the
+ * section when the cast is empty or failed to load.
  */
 export function CastList({ cast }: CastListProps) {
   return (
@@ -29,19 +33,30 @@ export function CastList({ cast }: CastListProps) {
                 <Skeleton className="h-2.5 w-12 rounded-full" />
               </li>
             ))
-          : cast.slice(0, MAX_CAST).map((name) => (
+          : cast.slice(0, MAX_CAST).map((member) => (
               <li
-                key={name}
+                key={member.name}
                 className="flex w-16 shrink-0 flex-col items-center gap-2 text-center"
               >
-                <span
-                  aria-hidden
-                  className="flex size-12 items-center justify-center rounded-full border border-gold-line bg-muted font-serif text-sm text-primary"
-                >
-                  {initials(name)}
-                </span>
+                {member.profile_url !== null ? (
+                  <Image
+                    src={member.profile_url}
+                    alt={member.name}
+                    width={48}
+                    height={48}
+                    sizes="48px"
+                    className="size-12 rounded-full border border-gold-line object-cover"
+                  />
+                ) : (
+                  <span
+                    aria-hidden
+                    className="flex size-12 items-center justify-center rounded-full border border-gold-line bg-muted font-serif text-sm text-primary"
+                  >
+                    {initials(member.name)}
+                  </span>
+                )}
                 <span className="line-clamp-2 text-xs leading-tight text-muted-foreground">
-                  {name}
+                  {member.name}
                 </span>
               </li>
             ))}

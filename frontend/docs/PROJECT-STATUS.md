@@ -1,6 +1,6 @@
 # Project Status — Frontend
 
-_Last updated: 2026-09-28_
+_Last updated: 2026-09-29_
 
 ## Done
 - Next.js 16.3 app scaffolded per ARCHITECTURE §2 (TypeScript strict, Tailwind v4 tokens, shadcn `base-nova`, Playfair + Inter with the `vietnamese` subset); ADR `docs/decisions/001-frontend-stack.md`
@@ -12,11 +12,13 @@ _Last updated: 2026-09-28_
 - Mock mode (no `NEXT_PUBLIC_API_BASE_URL`) with real TMDB sample data and edge cases
 - Verified: lint (0 warnings), `tsc`, Prettier, `next build` (mock and API mode, build needs no backend); 390 px screenshots against `design/*.png` in both modes; error states against a stub API
 
+- Cast photos in the detail sheet (2026-09-29), from `cast[].profile_url` (API v1.1); initials remain the fallback when TMDB has no photo
+
 ## In Progress
 - None
 
 ## Next
-- Brand assets: `public/images/options/{netflix-chill,solo,friends}.webp`, dish photos (drop in; no code change)
+- Brand assets: `public/images/options/{netflix-chill,solo,friends}.webp`, dish photos (drop in; no code change). Sizes are in DESIGN-SYSTEM §6 "Brand assets still missing"
 - Pasta pairings per option in `src/config/brand.ts` (card hidden until then)
 - `NEXT_PUBLIC_SHOP_URL` for "MUA NGAY" (PromoCard hidden until then)
 - Deploy setup (host, env vars, backend `CORS_ALLOWED_ORIGINS` with the production origin)

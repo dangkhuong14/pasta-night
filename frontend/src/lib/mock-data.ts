@@ -2,14 +2,14 @@
 // Movies are copied from a real refresh of the backend cache (option "friends").
 // Some fields are altered on purpose so every hide rule and fallback in
 // docs/SCREENS.md shows up in mock mode:
-// - 969681: has providers (logos null → name-only fallback)
+// - 969681: last cast member has no photo (initials fallback)
 // - 1368337: no poster, no backdrop
 // - 1204680: no runtime, no release year
 // - 1288445: empty cast
 // Titles with an empty overview are real TMDB gaps (no vi-VN translation).
 import type { MovieDetail, ViewingOption } from "./api-types";
 
-export const MOCK_FETCHED_AT = "2026-09-27T17:22:13Z";
+export const MOCK_FETCHED_AT = "2026-09-29T08:32:43Z";
 
 export const MOCK_OPTIONS: ViewingOption[] = [
   {
@@ -46,32 +46,38 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/qeQJx07rK2xm8SD2sJxFKhE7gs0.jpg",
     release_year: 2026,
     rating: 7.9,
-    vote_count: 2895,
+    vote_count: 2930,
     runtime_minutes: 150,
     genres: ["Phim Khoa Học Viễn Tưởng", "Phim Hành Động", "Phim Phiêu Lưu"],
     directors: ["Destin Daniel Cretton"],
     cast: [
-      "Tom Holland",
-      "Zendaya",
-      "Mark Ruffalo",
-      "Jon Bernthal",
-      "Jacob Batalon",
+      {
+        name: "Tom Holland",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/xKBAaPIa1c7tzZD3Y0MhBLv4hPE.jpg",
+      },
+      {
+        name: "Zendaya",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/1qup8tSt95HLbcy2c2xrx4iJNxv.jpg",
+      },
+      {
+        name: "Mark Ruffalo",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/5GilHMOt5PAQh6rlUKZzGmaKEI7.jpg",
+      },
+      {
+        name: "Jon Bernthal",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/bjcglF1IpDcZNs1HwFxakGpzBo6.jpg",
+      },
+      {
+        name: "Jacob Batalon",
+        profile_url: null,
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=P3uI5sLosKU",
-    providers: [
-      {
-        id: 8,
-        name: "Netflix",
-        logo_url: null,
-        type: "flatrate",
-      },
-      {
-        id: 2,
-        name: "Apple TV",
-        logo_url: null,
-        type: "rent",
-      },
-    ],
+    providers: [],
   },
   {
     id: 1423191,
@@ -85,16 +91,36 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/3icyRAqgakNcQn6aDVz9libFmBA.jpg",
     release_year: 2026,
     rating: 7.3,
-    vote_count: 520,
+    vote_count: 583,
     runtime_minutes: 95,
     genres: ["Phim Kinh Dị", "Phim Khoa Học Viễn Tưởng", "Phim Phiêu Lưu"],
     directors: ["Zach Cregger"],
     cast: [
-      "Austin Abrams",
-      "Paul Walter Hauser",
-      "Kali Reis",
-      "Zach Cherry",
-      "Johnno Wilson",
+      {
+        name: "Austin Abrams",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/nvbJNwyhIICUFcS4lhxj9mGvL5z.jpg",
+      },
+      {
+        name: "Paul Walter Hauser",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/hXjjbYg1Ah8mFf5ZcaakyXzDKMx.jpg",
+      },
+      {
+        name: "Kali Reis",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/ruLDXHnKA4aHEQCcFGDAJ7bLTdt.jpg",
+      },
+      {
+        name: "Zach Cherry",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/fT3Wv8ef0Vn0daHWAObCp2Bd4Y.jpg",
+      },
+      {
+        name: "Johnno Wilson",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/eZtBoBE0F7Qb9ZyNpacMOQtmWnM.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=mNd1gb19A-c",
     providers: [],
@@ -110,16 +136,36 @@ export const MOCK_MOVIES: MovieDetail[] = [
     backdrop_url: null,
     release_year: 2026,
     rating: 8,
-    vote_count: 3921,
+    vote_count: 3960,
     runtime_minutes: 173,
     genres: ["Phim Phiêu Lưu", "Phim Hành Động", "Phim Giả Tượng"],
     directors: ["Christopher Nolan"],
     cast: [
-      "Matt Damon",
-      "Tom Holland",
-      "Anne Hathaway",
-      "Robert Pattinson",
-      "Himesh Patel",
+      {
+        name: "Matt Damon",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/aCvBXTAR9B1qRjIRzMBYhhbm1fR.jpg",
+      },
+      {
+        name: "Tom Holland",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/xKBAaPIa1c7tzZD3Y0MhBLv4hPE.jpg",
+      },
+      {
+        name: "Anne Hathaway",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/nbccV2pMoyLTCeg5DQip24Eq0Jp.jpg",
+      },
+      {
+        name: "Robert Pattinson",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/sRUM2u8qLcsOaTm0jGJGlOEQhlQ.jpg",
+      },
+      {
+        name: "Himesh Patel",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/icqsXLmU0FxBGTv63kkA0GcrecO.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=o4s236zGkMM",
     providers: [],
@@ -137,16 +183,36 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/viZqGq9TNvQ5uXSD4ahg2RpRONT.jpg",
     release_year: null,
     rating: 7.6,
-    vote_count: 534,
+    vote_count: 553,
     runtime_minutes: null,
     genres: ["Phim Hài", "Phim Phiêu Lưu", "Phim Gia Đình"],
     directors: ["Dave Green"],
     cast: [
-      "Will Forte",
-      "Trần Đồng Lan",
-      "John Cena",
-      "Tone Bell",
-      "Martha Kelly",
+      {
+        name: "Will Forte",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/4VEzbkL3HwHTUZAPA5PyypFG2U.jpg",
+      },
+      {
+        name: "Trần Đồng Lan",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/vWn27Fk2GLwH7o9fBG9hBWZI6OR.jpg",
+      },
+      {
+        name: "John Cena",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/rgB2eIOt7WyQjdgJCOuESdDlrjg.jpg",
+      },
+      {
+        name: "Tone Bell",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/fB06Xj5FgwvHcZESsNGMupGBTyY.jpg",
+      },
+      {
+        name: "Martha Kelly",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/ac7HoARDIHdYNqpzgJBzpmKHXHR.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=kMsiD1Nky5I",
     providers: [],
@@ -162,20 +228,62 @@ export const MOCK_MOVIES: MovieDetail[] = [
     backdrop_url:
       "https://image.tmdb.org/t/p/w1280/o7Oy9Gbx1CCyaweL8xUhtMW4Puq.jpg",
     release_year: 2026,
-    rating: 8.3,
-    vote_count: 279,
+    rating: 8.1,
+    vote_count: 353,
     runtime_minutes: 112,
     genres: ["Phim Lãng Mạn", "Phim Hài"],
     directors: ["Claire Scanlon"],
     cast: [
-      "Lili Reinhart",
-      "Tom Bateman",
-      "Rachel Marsh",
-      "Jaboukie Young-White",
-      "Nicholas Duvernay",
+      {
+        name: "Lili Reinhart",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/sJcuQAJdIv3mnh9M9p5sQWhWSRN.jpg",
+      },
+      {
+        name: "Tom Bateman",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/6elQzmY4EJHlLvHsaeoeo2dXOQ1.jpg",
+      },
+      {
+        name: "Rachel Marsh",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/6R0pDuQuSf4CEtZHCRnZkqc2EAN.jpg",
+      },
+      {
+        name: "Jaboukie Young-White",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/8OYI8OqsMUpBZica4lM2odjgVH6.jpg",
+      },
+      {
+        name: "Nicholas Duvernay",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/4uwcWYbXxrxyhJbCPXshTQXQQKi.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=xwdamnfS6IM",
-    providers: [],
+    providers: [
+      {
+        id: 119,
+        name: "Amazon Prime Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/gMZdpavHmxFNnLpMHwVxfqeux2g.png",
+        type: "flatrate",
+      },
+      {
+        id: 2100,
+        name: "Amazon Prime Video with Ads",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/tpwTT1FpWqLLhxUfAuDavIXDDfI.png",
+        type: "flatrate",
+      },
+      {
+        id: 1961,
+        name: "Allente",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/hPIVVR7yvR0PrTe7eHR2I5nAFis.png",
+        type: "flatrate",
+      },
+    ],
   },
   {
     id: 1288445,
@@ -189,14 +297,57 @@ export const MOCK_MOVIES: MovieDetail[] = [
     backdrop_url:
       "https://image.tmdb.org/t/p/w1280/e2QAGrEmbpmZpMymDRkDisJkvg9.jpg",
     release_year: 2026,
-    rating: 7.2,
-    vote_count: 608,
+    rating: 7.3,
+    vote_count: 691,
     runtime_minutes: 95,
     genres: ["Phim Hành Động", "Phim Gây Cấn"],
     directors: ["Jean-François Richet"],
     cast: [],
     trailer_url: "https://www.youtube.com/watch?v=2Iqvbe98Gb4",
-    providers: [],
+    providers: [
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "rent",
+      },
+      {
+        id: 2285,
+        name: "JustWatch TV",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/aJXLTvX11u4fBLMPRVJZVKkLYHP.png",
+        type: "rent",
+      },
+      {
+        id: 538,
+        name: "Plex",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/blAEhvx3XX8sV0fFVFk88FFjubs.png",
+        type: "rent",
+      },
+      {
+        id: 140,
+        name: "CosmoGo",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/fyUUKmDdzpJjSwsXPN4Rpi7jTu5.png",
+        type: "rent",
+      },
+      {
+        id: 7,
+        name: "Fandango At Home",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/wpOt6x0dRxTrIzuBosto4LGd7E9.png",
+        type: "rent",
+      },
+    ],
   },
   {
     id: 1375646,
@@ -211,13 +362,61 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/hpBGCnzOvdtQoMyE48gvwp2y5yx.jpg",
     release_year: 2026,
     rating: 8.1,
-    vote_count: 889,
+    vote_count: 948,
     runtime_minutes: 123,
-    genres: ["Phim Hành Động", "Phim Kinh Dị", "Phim Khoa Học Viễn Tưởng"],
+    genres: ["Phim Kinh Dị", "Phim Hành Động", "Phim Khoa Học Viễn Tưởng"],
     directors: ["연상호"],
-    cast: ["전지현", "구교환", "지창욱", "김신록", "신현빈"],
+    cast: [
+      {
+        name: "전지현",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/qejOQBdIzN18e69yRcsiD0JQi4c.jpg",
+      },
+      {
+        name: "구교환",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/aFwCpSKPGFqoiTStY6ljXnD5CwH.jpg",
+      },
+      {
+        name: "지창욱",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/sBmHrO5Tn27Ot5hy0yAKniROmNb.jpg",
+      },
+      {
+        name: "김신록",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/x4zo2mSbehnQY80PbuldAZ7ruGm.jpg",
+      },
+      {
+        name: "신현빈",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/lU0yMFh5KgOEWZRThLYbB6ZI1hE.jpg",
+      },
+    ],
     trailer_url: "https://www.youtube.com/watch?v=LW6dpj1uCK8",
-    providers: [],
+    providers: [
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 2214,
+        name: "CDA Premium",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/19i0ihHvFzvK0GF5qQ6Wc4UnkOf.png",
+        type: "flatrate",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "rent",
+      },
+    ],
   },
   {
     id: 1084244,
@@ -232,19 +431,96 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/4D1pdB27uph7J8HQzNf8QvvH9bn.jpg",
     release_year: 2026,
     rating: 8.3,
-    vote_count: 2349,
+    vote_count: 2404,
     runtime_minutes: 102,
     genres: ["Phim Hoạt Hình", "Phim Gia Đình", "Phim Hài", "Phim Phiêu Lưu"],
     directors: ["Andrew Stanton"],
     cast: [
-      "Joan Cusack",
-      "Tom Hanks",
-      "Tim Allen",
-      "Conan O'Brien",
-      "Scarlett Spears",
+      {
+        name: "Joan Cusack",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/59UIeHZFYrKyP20lXqijtfTXglO.jpg",
+      },
+      {
+        name: "Tom Hanks",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/oFvZoKI6lvU03n4YoNGAll9rkas.jpg",
+      },
+      {
+        name: "Tim Allen",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/k8XPNHBO459FaqkqqM4tfX5GMKk.jpg",
+      },
+      {
+        name: "Conan O'Brien",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/deRbViPut0t80miscBpP2DhBJU5.jpg",
+      },
+      {
+        name: "Scarlett Spears",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/h0loJ4v3wbUfUA6dxUYv7B6fET1.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=QftAW9TTmuQ",
-    providers: [],
+    providers: [
+      {
+        id: 337,
+        name: "Disney Plus",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/5eZ872CghnHFLB1j8grszbrx0dx.png",
+        type: "flatrate",
+      },
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "buy",
+      },
+      {
+        id: 35,
+        name: "Rakuten TV",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
+        type: "buy",
+      },
+      {
+        id: 76,
+        name: "Viaplay",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
+        type: "buy",
+      },
+      {
+        id: 130,
+        name: "Sky Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
+        type: "buy",
+      },
+      {
+        id: 426,
+        name: "SF Anytime",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/fVuqy8kmzsULoJjc3ROOcurRH7S.png",
+        type: "buy",
+      },
+      {
+        id: 20,
+        name: "maxdome Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/mjB4eyswPoC0XeJPUd1W1oitOlh.png",
+        type: "buy",
+      },
+    ],
   },
   {
     id: 1339713,
@@ -256,22 +532,99 @@ export const MOCK_MOVIES: MovieDetail[] = [
     poster_url:
       "https://image.tmdb.org/t/p/w500/15qLAM3QM8DoPL9Fps4JOTdqWqt.jpg",
     backdrop_url:
-      "https://image.tmdb.org/t/p/w1280/uoTZOIXnkcTgJe1emITpsQq7sPu.jpg",
+      "https://image.tmdb.org/t/p/w1280/5lTZyuBTNOfawsfPT8Q0cIg6qAF.jpg",
     release_year: 2026,
     rating: 8.2,
-    vote_count: 5751,
+    vote_count: 5809,
     runtime_minutes: 109,
     genres: ["Phim Kinh Dị", "Phim Gây Cấn"],
     directors: ["Curry Barker"],
     cast: [
-      "Michael Johnston",
-      "Inde Navarrette",
-      "Cooper Tomlinson",
-      "Megan Lawless",
-      "Andy Richter",
+      {
+        name: "Michael Johnston",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/fbpcCkBzu43kMdlXxEAMuLhseL8.jpg",
+      },
+      {
+        name: "Inde Navarrette",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/mjzZXDgclbrxWVTiyAnyzlO4Dpl.jpg",
+      },
+      {
+        name: "Cooper Tomlinson",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/vBMQbYT1DyWPCUp11dIiqZR9zhd.jpg",
+      },
+      {
+        name: "Megan Lawless",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/6qW63YEgB1qro01sM7T2HvhtFkh.jpg",
+      },
+      {
+        name: "Andy Richter",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/5Qr7N6TzC8cI0ULxDm6EC5GpZ4C.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=gMC8kkwbIQQ",
-    providers: [],
+    providers: [
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "rent",
+      },
+      {
+        id: 35,
+        name: "Rakuten TV",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
+        type: "rent",
+      },
+      {
+        id: 130,
+        name: "Sky Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
+        type: "rent",
+      },
+      {
+        id: 76,
+        name: "Viaplay",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
+        type: "rent",
+      },
+      {
+        id: 426,
+        name: "SF Anytime",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/fVuqy8kmzsULoJjc3ROOcurRH7S.png",
+        type: "rent",
+      },
+      {
+        id: 373,
+        name: "Go3",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/bWrdc66M5z0FJgznkdRdPueU2S.png",
+        type: "rent",
+      },
+      {
+        id: 20,
+        name: "maxdome Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/mjB4eyswPoC0XeJPUd1W1oitOlh.png",
+        type: "rent",
+      },
+    ],
   },
   {
     id: 1108427,
@@ -286,19 +639,96 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/c6BPbkO5Npt1OdwttAxCFo06wtH.jpg",
     release_year: 2026,
     rating: 7.4,
-    vote_count: 781,
+    vote_count: 804,
     runtime_minutes: 115,
     genres: ["Phim Gia Đình", "Phim Giả Tượng", "Phim Hài", "Phim Phiêu Lưu"],
     directors: ["Thomas Kail"],
     cast: [
-      "Catherine Lagaʻaia",
-      "Dwayne Johnson",
-      "Rena Owen",
-      "John Tui",
-      "Frankie Adams",
+      {
+        name: "Catherine Lagaʻaia",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/2KRIRDwy1CtY7Bge3aqVZrORelc.jpg",
+      },
+      {
+        name: "Dwayne Johnson",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/5QApZVV8FUFlVxQpIK3Ew6cqotq.jpg",
+      },
+      {
+        name: "Rena Owen",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/648ZdDBmlx6OFDFRmgAbh6q5LBo.jpg",
+      },
+      {
+        name: "John Tui",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/2jIc9M5kl2GmK8fZtbtUr2s1jkS.jpg",
+      },
+      {
+        name: "Frankie Adams",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/aAUHUSf0lh3OBRoaiCRL9ep8lfL.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=EEz5xbzYPKI",
-    providers: [],
+    providers: [
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "rent",
+      },
+      {
+        id: 35,
+        name: "Rakuten TV",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
+        type: "rent",
+      },
+      {
+        id: 76,
+        name: "Viaplay",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
+        type: "buy",
+      },
+      {
+        id: 130,
+        name: "Sky Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
+        type: "buy",
+      },
+      {
+        id: 426,
+        name: "SF Anytime",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/fVuqy8kmzsULoJjc3ROOcurRH7S.png",
+        type: "buy",
+      },
+      {
+        id: 20,
+        name: "maxdome Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/mjB4eyswPoC0XeJPUd1W1oitOlh.png",
+        type: "buy",
+      },
+      {
+        id: 505,
+        name: "Player",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/8mtdz2Y3NW5NfiSZiBFhngFSy3S.png",
+        type: "flatrate",
+      },
+    ],
   },
   {
     id: 299534,
@@ -313,19 +743,96 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
     release_year: 2019,
     rating: 8.2,
-    vote_count: 28809,
+    vote_count: 28840,
     runtime_minutes: 180,
     genres: ["Phim Phiêu Lưu", "Phim Khoa Học Viễn Tưởng", "Phim Hành Động"],
     directors: ["Anthony Russo", "Joe Russo"],
     cast: [
-      "Robert Downey Jr.",
-      "Chris Evans",
-      "Mark Ruffalo",
-      "Chris Hemsworth",
-      "Scarlett Johansson",
+      {
+        name: "Robert Downey Jr.",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/5qHNjhtjMD4YWH3UP0rm4tKwxCL.jpg",
+      },
+      {
+        name: "Chris Evans",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/3bOGNsHlrswhyW79uvIHH1V43JI.jpg",
+      },
+      {
+        name: "Mark Ruffalo",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/5GilHMOt5PAQh6rlUKZzGmaKEI7.jpg",
+      },
+      {
+        name: "Chris Hemsworth",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/piQGdoIQOF3C1EI5cbYZLAW1gfj.jpg",
+      },
+      {
+        name: "Scarlett Johansson",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/tgxYh3jMs5bY2Ub4d2dcp9iaz1R.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=4sZj4aeYUCA",
-    providers: [],
+    providers: [
+      {
+        id: 337,
+        name: "Disney Plus",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/5eZ872CghnHFLB1j8grszbrx0dx.png",
+        type: "flatrate",
+      },
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 3,
+        name: "Google Play Movies",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/aZRENwYILujqs0RVOZutTh0BVGV.png",
+        type: "rent",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "rent",
+      },
+      {
+        id: 35,
+        name: "Rakuten TV",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
+        type: "rent",
+      },
+      {
+        id: 192,
+        name: "YouTube",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/5Maob4o5w8oZnNeYpCDyVFD3M7X.png",
+        type: "rent",
+      },
+      {
+        id: 76,
+        name: "Viaplay",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
+        type: "rent",
+      },
+      {
+        id: 130,
+        name: "Sky Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
+        type: "rent",
+      },
+    ],
   },
   {
     id: 1315772,
@@ -340,7 +847,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/kkcwhgSFd81QDlXo8ytrpHPQjhy.jpg",
     release_year: 2026,
     rating: 7.6,
-    vote_count: 1180,
+    vote_count: 1191,
     runtime_minutes: 90,
     genres: [
       "Phim Phiêu Lưu",
@@ -351,14 +858,91 @@ export const MOCK_MOVIES: MovieDetail[] = [
     ],
     directors: ["Pierre Coffin"],
     cast: [
-      "Pierre Coffin",
-      "Trey Parker",
-      "Christoph Waltz",
-      "Allison Janney",
-      "Jesse Eisenberg",
+      {
+        name: "Pierre Coffin",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/eAA9uWRqHlm1LT3nZfXb7UuPfVb.jpg",
+      },
+      {
+        name: "Trey Parker",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/3tJe8t90lrcQzXj9cRcpW9wmj2c.jpg",
+      },
+      {
+        name: "Christoph Waltz",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/jMvLGCVXLaBqjRLf5olyvEucZob.jpg",
+      },
+      {
+        name: "Allison Janney",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/kSaSnQ9xU8eVNL0mTppab95dZA8.jpg",
+      },
+      {
+        name: "Jesse Eisenberg",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/2ojZrkt5rdkUi857WSeCatxXdGS.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=V-O-uBaHk3c",
-    providers: [],
+    providers: [
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "rent",
+      },
+      {
+        id: 35,
+        name: "Rakuten TV",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
+        type: "rent",
+      },
+      {
+        id: 130,
+        name: "Sky Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
+        type: "rent",
+      },
+      {
+        id: 76,
+        name: "Viaplay",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
+        type: "rent",
+      },
+      {
+        id: 426,
+        name: "SF Anytime",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/fVuqy8kmzsULoJjc3ROOcurRH7S.png",
+        type: "rent",
+      },
+      {
+        id: 40,
+        name: "CHILI",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/xfDy4aGaOqbUqKPVQobjoJ9ZsSs.png",
+        type: "rent",
+      },
+      {
+        id: 20,
+        name: "maxdome Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/mjB4eyswPoC0XeJPUd1W1oitOlh.png",
+        type: "buy",
+      },
+    ],
   },
   {
     id: 1083381,
@@ -373,19 +957,96 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/dqmMWNWfLnExDRpMtIMqI97GQFR.jpg",
     release_year: 2026,
     rating: 7,
-    vote_count: 3440,
+    vote_count: 3487,
     runtime_minutes: 111,
     genres: ["Phim Kinh Dị", "Phim Bí Ẩn", "Phim Khoa Học Viễn Tưởng"],
     directors: ["Kane Parsons"],
     cast: [
-      "Chiwetel Ejiofor",
-      "Renate Reinsve",
-      "Finn Bennett",
-      "Lukita Maxwell",
-      "Mark Duplass",
+      {
+        name: "Chiwetel Ejiofor",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/kq5DDnqqofoRI0t6ddtRlsJnNPT.jpg",
+      },
+      {
+        name: "Renate Reinsve",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/q0ljTd4fyFSJKxPgmcrKtdg3HKo.jpg",
+      },
+      {
+        name: "Finn Bennett",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/p4ya77nmLlhS2cyPKUZi9zVD4Mu.jpg",
+      },
+      {
+        name: "Lukita Maxwell",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/g5g6XxUAtSdPfsJrSoFkl7vH51d.jpg",
+      },
+      {
+        name: "Mark Duplass",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/lRDf99rAfcdqt8Cqk4LsIT7XSD2.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=0HjdiohVOik",
-    providers: [],
+    providers: [
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "rent",
+      },
+      {
+        id: 35,
+        name: "Rakuten TV",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
+        type: "rent",
+      },
+      {
+        id: 130,
+        name: "Sky Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
+        type: "rent",
+      },
+      {
+        id: 1899,
+        name: "HBO Max",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/skypuy7SXuugIQeYg0IglmzoKaS.png",
+        type: "flatrate",
+      },
+      {
+        id: 76,
+        name: "Viaplay",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
+        type: "buy",
+      },
+      {
+        id: 373,
+        name: "Go3",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/bWrdc66M5z0FJgznkdRdPueU2S.png",
+        type: "flatrate",
+      },
+      {
+        id: 538,
+        name: "Plex",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/blAEhvx3XX8sV0fFVFk88FFjubs.png",
+        type: "rent",
+      },
+    ],
   },
   {
     id: 299536,
@@ -400,18 +1061,95 @@ export const MOCK_MOVIES: MovieDetail[] = [
       "https://image.tmdb.org/t/p/w1280/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
     release_year: 2018,
     rating: 8.2,
-    vote_count: 32993,
+    vote_count: 33012,
     runtime_minutes: 149,
     genres: ["Phim Phiêu Lưu", "Phim Hành Động", "Phim Khoa Học Viễn Tưởng"],
     directors: ["Joe Russo", "Anthony Russo"],
     cast: [
-      "Robert Downey Jr.",
-      "Chris Evans",
-      "Chris Hemsworth",
-      "Josh Brolin",
-      "Mark Ruffalo",
+      {
+        name: "Robert Downey Jr.",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/5qHNjhtjMD4YWH3UP0rm4tKwxCL.jpg",
+      },
+      {
+        name: "Chris Evans",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/3bOGNsHlrswhyW79uvIHH1V43JI.jpg",
+      },
+      {
+        name: "Chris Hemsworth",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/piQGdoIQOF3C1EI5cbYZLAW1gfj.jpg",
+      },
+      {
+        name: "Josh Brolin",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/sX2etBbIkxRaCsATyw5ZpOVMPTD.jpg",
+      },
+      {
+        name: "Mark Ruffalo",
+        profile_url:
+          "https://image.tmdb.org/t/p/w185/5GilHMOt5PAQh6rlUKZzGmaKEI7.jpg",
+      },
     ],
     trailer_url: "https://www.youtube.com/watch?v=DKqu9qc-5f4",
-    providers: [],
+    providers: [
+      {
+        id: 337,
+        name: "Disney Plus",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/5eZ872CghnHFLB1j8grszbrx0dx.png",
+        type: "flatrate",
+      },
+      {
+        id: 2,
+        name: "Apple TV Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/qdEGArH3lKfFnAtYXMkSYk5wxuG.png",
+        type: "rent",
+      },
+      {
+        id: 3,
+        name: "Google Play Movies",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/aZRENwYILujqs0RVOZutTh0BVGV.png",
+        type: "rent",
+      },
+      {
+        id: 10,
+        name: "Amazon Video",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/jn6TLbtaTZntTRX9UYucHJvpQx1.png",
+        type: "rent",
+      },
+      {
+        id: 35,
+        name: "Rakuten TV",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/872dfVu1biZISJ8rO143CZZutPR.png",
+        type: "rent",
+      },
+      {
+        id: 192,
+        name: "YouTube",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/5Maob4o5w8oZnNeYpCDyVFD3M7X.png",
+        type: "rent",
+      },
+      {
+        id: 76,
+        name: "Viaplay",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/c1J9PGGowXwW5AxAaZaGipeFu7U.png",
+        type: "rent",
+      },
+      {
+        id: 130,
+        name: "Sky Store",
+        logo_url:
+          "https://image.tmdb.org/t/p/w92/nNkZ1JKe6vNhzti14KiKEUWHE6H.png",
+        type: "rent",
+      },
+    ],
   },
 ];

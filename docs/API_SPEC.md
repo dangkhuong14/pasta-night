@@ -150,6 +150,7 @@ Values in the examples below are illustrative.
 
 - Only movies in a current recommendation list are available. There is no live TMDB lookup.
 - **200:** `data` is `MovieDetail` = all MovieSummary fields + `original_title`, `tagline`, `backdrop_url`, `vote_count`, `directors`, `cast`, `trailer_url`.
+- `cast` holds up to 5 objects in billing order: `name`, and `profile_url` which is `null` when TMDB has no photo of the actor (the frontend then shows their initials).
 
   ```json
   {
@@ -167,7 +168,10 @@ Values in the examples below are illustrative.
       "runtime_minutes": 136,
       "genres": ["Phim Hành Động", "Phim Khoa Học Viễn Tưởng"],
       "directors": ["Lana Wachowski", "Lilly Wachowski"],
-      "cast": ["Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss", "Hugo Weaving", "Gloria Foster"],
+      "cast": [
+        { "name": "Keanu Reeves", "profile_url": "https://image.tmdb.org/t/p/w185/<profile_path>.jpg" },
+        { "name": "Gloria Foster", "profile_url": null }
+      ],
       "trailer_url": "https://www.youtube.com/watch?v=<video_key>",
       "providers": [
         { "id": 8, "name": "Netflix", "logo_url": "https://image.tmdb.org/t/p/w92/<logo_path>.jpg", "type": "flatrate" }
@@ -243,3 +247,4 @@ Values in the examples below are illustrative.
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-27 | initial contract |
+| v1.1 | 2026-09-29 | `cast` changed from `string[]` to `{ name, profile_url }[]` so the detail sheet can show actor photos. Formally a breaking change (§1), applied to v1 rather than opening v2 because nothing is deployed yet and the frontend is the only client. |

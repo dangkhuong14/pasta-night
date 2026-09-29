@@ -147,8 +147,9 @@ type Credits struct {
 }
 
 type CastMember struct {
-	Name  string `json:"name"`
-	Order int    `json:"order"` // billing order, 0 = top
+	Name        string `json:"name"`
+	Order       int    `json:"order"`        // billing order, 0 = top
+	ProfilePath string `json:"profile_path"` // "" when TMDB has no photo
 }
 
 type CrewMember struct {
@@ -210,7 +211,7 @@ type Provider struct {
 | `runtime_minutes` | `0` → `null` | |
 | `genres` | `genres[].name`, TMDB order | `["Phim Hành Động"]` |
 | `directors` | `credits.crew` where `job == "Director"`; names de-duplicated, TMDB order | `["Lana Wachowski", "Lilly Wachowski"]` |
-| `cast` | `credits.cast` sorted by `order` asc; first 5 names | |
+| `cast` | `credits.cast` sorted by `order` asc; first 5, each mapped to `{name, profile_url}`. `profile_url`: `""` → `null`; else `image base + "w185" + profile_path` (avatars render at 48 px, so w185 covers 3x screens) | `{"name": "Keanu Reeves", "profile_url": "…/t/p/w185/abc.jpg"}` |
 | `trailer_url` | see trailer selection below; none → `null` | `https://www.youtube.com/watch?v=<key>` |
 | `providers` | see provider rules below; region missing → `[]` | |
 | `fetched_at` | `time.Now().UTC()` at fetch time | |
@@ -275,7 +276,7 @@ TMDB error body:
 - Fixtures in `internal/platform/tmdb/testdata/`. They are hand-written in TMDB's response shape (tests and scripts never call TMDB); replace them with real captures when someone runs the manual checks:
   ```text
   discover_page1.json
-  movie_603_full.json          # all appends, providers in two regions
+  movie_603_full.json          # all appends, providers in two regions, one actor without a photo
   movie_other_region.json      # watch/providers with a single non-VN region
   movie_missing_fields.json    # no poster, runtime 0, release_date ""
   error_401.json
@@ -285,6 +286,7 @@ TMDB error body:
 - Mapper tests (table-driven), at minimum:
   - title fallback to `original_title`; drop when both empty
   - `""` paths → `null` URLs; `runtime 0` → `null`; `release_date ""` → `null`
+  - cast: billing order, capped at 5, and an actor without `profile_path` → `profile_url: null`
   - trailer preference (vi > en; official first)
   - provider merging across regions: ranking by region count, best type wins, cap at 8, deterministic order
 - Refresher tests: fake client (consumer-side interface) for partial failures, 401 abort, publish guards.

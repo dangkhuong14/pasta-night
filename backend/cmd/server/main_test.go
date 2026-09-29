@@ -59,9 +59,15 @@ func newFakeTMDB(t *testing.T) *fakeTMDB {
 			"id": id, "title": fmt.Sprintf("Phim %d", id), "original_title": fmt.Sprintf("Movie %d", id),
 			"poster_path": fmt.Sprintf("/p%d.jpg", id), "release_date": "2020-01-01",
 			"vote_average": 7.46, "vote_count": 1000, "runtime": 100,
-			"genres":  []map[string]any{{"id": 35, "name": "Phim Hài"}},
-			"credits": map[string]any{"cast": []map[string]any{{"name": "Diễn viên", "order": 0}}, "crew": []map[string]any{}},
-			"videos":  map[string]any{"results": []map[string]any{}},
+			"genres": []map[string]any{{"id": 35, "name": "Phim Hài"}},
+			"credits": map[string]any{
+				"cast": []map[string]any{
+					{"name": "Diễn viên", "order": 0, "profile_path": "/actor.jpg"},
+					{"name": "Diễn viên phụ", "order": 1, "profile_path": nil},
+				},
+				"crew": []map[string]any{},
+			},
+			"videos": map[string]any{"results": []map[string]any{}},
 			"watch/providers": map[string]any{"results": map[string]any{
 				"VN": map[string]any{"flatrate": []map[string]any{
 					{"provider_id": 8, "provider_name": "Netflix", "logo_path": "/n.jpg", "display_priority": 1},
@@ -223,6 +229,19 @@ func TestServerEndToEnd(t *testing.T) {
 		data, _ := res.body["data"].(map[string]any)
 		if res.status != http.StatusOK || data["id"] != float64(40) {
 			t.Errorf("GET /movies/40 = %d %v", res.status, res.body)
+		}
+		// Cast carries TMDB photos, and null where TMDB has none (API_SPEC §5.3).
+		cast, _ := data["cast"].([]any)
+		if len(cast) != 2 {
+			t.Fatalf("cast = %v, want 2 members", cast)
+		}
+		withPhoto, _ := cast[0].(map[string]any)
+		withoutPhoto, _ := cast[1].(map[string]any)
+		if withPhoto["name"] != "Diễn viên" || withPhoto["profile_url"] != "https://image.tmdb.org/t/p/w185/actor.jpg" {
+			t.Errorf("cast[0] = %v", withPhoto)
+		}
+		if _, hasKey := withoutPhoto["profile_url"]; !hasKey || withoutPhoto["profile_url"] != nil {
+			t.Errorf("cast[1] = %v, want profile_url present and null", withoutPhoto)
 		}
 	})
 	t.Run("error codes", func(t *testing.T) {

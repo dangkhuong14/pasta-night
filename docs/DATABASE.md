@@ -102,10 +102,17 @@ options:
 | `runtime_minutes` | int \| null | > 0 when set | `runtime` (`0` → `null`) |
 | `genres` | string[] | localized names | `genres[].name` |
 | `directors` | string[] | may be empty | `credits.crew` where `job == "Director"` |
-| `cast` | string[] | ≤ 5, billing order | `credits.cast` sorted by `order` |
+| `cast` | CastMember[] | ≤ 5, billing order | `credits.cast` sorted by `order` |
 | `trailer_url` | string \| null | YouTube URL | first `videos.results` with `site == "YouTube"` and `type == "Trailer"` |
 | `providers` | Provider[] | may be empty; ≤ 8 | `watch/providers.results`, all regions merged and ranked |
 | `fetched_at` | timestamp | when phase 2 fetched this movie | — |
+
+**CastMember** (embedded in MovieDetail)
+
+| Field | Type | Constraints |
+|---|---|---|
+| `name` | string | required |
+| `profile_url` | string \| null | `https://image.tmdb.org/t/p/w185` + `profile_path`; `null` when TMDB has no photo |
 
 **Provider** (embedded in MovieDetail)
 
@@ -132,7 +139,10 @@ options:
   "runtime_minutes": 136,
   "genres": ["Phim Hành Động", "Phim Khoa Học Viễn Tưởng"],
   "directors": ["Lana Wachowski", "Lilly Wachowski"],
-  "cast": ["Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss", "Hugo Weaving", "Gloria Foster"],
+  "cast": [
+    { "name": "Keanu Reeves", "profile_url": "https://image.tmdb.org/t/p/w185/<profile_path>.jpg" },
+    { "name": "Gloria Foster", "profile_url": null }
+  ],
   "trailer_url": "https://www.youtube.com/watch?v=<video_key>",
   "providers": [
     { "id": 8, "name": "Netflix", "logo_url": "https://image.tmdb.org/t/p/w92/<logo_path>.jpg", "type": "flatrate" }
@@ -211,3 +221,4 @@ There are no DB indexes; the snapshot's maps play that role. Total size ≈ 3 op
 |---|---|
 | v1 | initial schema |
 | v2 | `providers` changed meaning: was the `WATCH_REGION` list, now every region merged and ranked (TMDB has no `VN` data). Old files are refetched. |
+| v3 | `cast` changed from a list of names to `CastMember` objects carrying `profile_url`. Old files are refetched. |

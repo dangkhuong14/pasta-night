@@ -124,7 +124,7 @@ const inter = Inter({ subsets: ["latin", "vietnamese"], variable: "--font-inter"
 | `InfoCard` | `bg-card rounded-xl border-border p-4`, `SectionLabel` on top | "CÓ MẶT TRÊN" |
 | `ProviderLogo` | 32 px logo `rounded-md` + 10 px name below | providers |
 | `PastaPairingCard` | like `InfoCard` but `border-gold-line`; gold `SectionLabel`; 56 px dish image `rounded-lg` + dish name (Playfair 16 px) + note (Caption) | detail |
-| `CastAvatar` | 48 px circle, 1 px `border-gold-line`, name (Caption) below. No photo in v1 → initials on `bg-muted` | detail |
+| `CastAvatar` | 48 px circle, 1 px `border-gold-line`, name (Caption) below. Photo from `cast[].profile_url`; `null` → initials on `bg-muted` | detail |
 | `PromoCard` | `rounded-xl`, gradient `from-gold-soft to-transparent`, `border-gold-line`; Playfair 18 px gold title + Caption + `OutlineButton` right | detail bottom |
 | `Skeleton` | `bg-muted rounded-*` + shimmer; mirrors the real layout's sizes | all loading states |
 | `ErrorState` | centered: gold line icon (lucide `film` / `clapperboard`), Playfair 20 px title, Body muted text, `PrimaryButton` | errors |
@@ -139,6 +139,7 @@ Icons: `lucide-react`, stroke 1.5, gold for actions, muted for metadata (clock, 
 | Image | Source | Fallback |
 |---|---|---|
 | Option card background | `public/images/options/{option_id}.webp` (brand asset) | gold radial gradient + the option's lucide `icon` |
+| Cast avatar | `cast[].profile_url` (TMDB CDN, `w185`) | initials on `bg-muted` |
 | Movie poster | `poster_url` (TMDB CDN) | `bg-muted` + film icon + title |
 | Detail hero | `backdrop_url` → `poster_url` | gradient `from-card to-background` |
 | Provider logo | `logo_url` (TMDB CDN) | provider name only |
@@ -146,3 +147,12 @@ Icons: `lucide-react`, stroke 1.5, gold for actions, muted for metadata (clock, 
 
 - Use `next/image` with `sizes`. `priority` only for above-the-fold images (the first 2 posters, the detail hero).
 - The UX Pilot photos are AI-generated mockups: replace them with licensed brand assets before launch.
+
+### Brand assets still missing
+
+The app renders its fallbacks until these land; dropping the files in is enough, no code change (`src/lib/assets.ts` checks whether each file exists).
+
+| Asset | Path | Size | Notes |
+|---|---|---|---|
+| Option card background | `public/images/options/{option_id}.webp` — `netflix-chill`, `solo`, `friends` | ≥ 896×352, ideally 1344×528 (≈ 2.55:1) | Rendered `object-cover` at up to 448×176 CSS px. Keep the lower half dark: a black gradient and gold title sit on top |
+| Dish photo | `public/images/dishes/{dish_id}.webp` | ≥ 168×168 square (56 px at 3x) | Only needed once `pastaPairings` in `src/config/brand.ts` has entries |

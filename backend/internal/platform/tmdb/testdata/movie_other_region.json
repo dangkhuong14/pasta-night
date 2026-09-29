@@ -2,9 +2,18 @@
   "adult": false,
   "backdrop_path": "/8ZTVqvKDQ8emSGUEMjsS4yHAwrp.jpg",
   "genres": [
-    { "id": 28, "name": "Phim Hành Động" },
-    { "id": 878, "name": "Phim Khoa Học Viễn Tưởng" },
-    { "id": 12, "name": "Phim Phiêu Lưu" }
+    {
+      "id": 28,
+      "name": "Phim Hành Động"
+    },
+    {
+      "id": 878,
+      "name": "Phim Khoa Học Viễn Tưởng"
+    },
+    {
+      "id": 12,
+      "name": "Phim Phiêu Lưu"
+    }
   ],
   "id": 27205,
   "original_language": "en",
@@ -20,15 +29,33 @@
   "vote_count": 36000,
   "credits": {
     "cast": [
-      { "id": 6193, "name": "Leonardo DiCaprio", "character": "Cobb", "order": 0 }
+      {
+        "id": 6193,
+        "name": "Leonardo DiCaprio",
+        "character": "Cobb",
+        "order": 0,
+        "profile_path": "/z2K1ERKlfMNzgLLIsM3jJ7Q9tHZ.jpg"
+      }
     ],
     "crew": [
-      { "id": 525, "name": "Christopher Nolan", "department": "Writing", "job": "Screenplay" }
+      {
+        "id": 525,
+        "name": "Christopher Nolan",
+        "department": "Writing",
+        "job": "Screenplay"
+      }
     ]
   },
   "videos": {
     "results": [
-      { "iso_639_1": "en", "name": "Teaser", "key": "incTeaser01", "site": "YouTube", "type": "Teaser", "official": true }
+      {
+        "iso_639_1": "en",
+        "name": "Teaser",
+        "key": "incTeaser01",
+        "site": "YouTube",
+        "type": "Teaser",
+        "official": true
+      }
     ]
   },
   "watch/providers": {
@@ -36,7 +63,12 @@
       "US": {
         "link": "https://www.themoviedb.org/movie/27205-inception/watch?locale=US",
         "flatrate": [
-          { "logo_path": "/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg", "provider_id": 1899, "provider_name": "Max", "display_priority": 1 }
+          {
+            "logo_path": "/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg",
+            "provider_id": 1899,
+            "provider_name": "Max",
+            "display_priority": 1
+          }
         ]
       }
     }

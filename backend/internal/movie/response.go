@@ -35,9 +35,14 @@ type movieDetail struct {
 	RuntimeMinutes *int               `json:"runtime_minutes"`
 	Genres         []string           `json:"genres"`
 	Directors      []string           `json:"directors"`
-	Cast           []string           `json:"cast"`
+	Cast           []castResponse     `json:"cast"`
 	TrailerURL     *string            `json:"trailer_url"`
 	Providers      []providerResponse `json:"providers"`
+}
+
+type castResponse struct {
+	Name       string  `json:"name"`
+	ProfileURL *string `json:"profile_url"`
 }
 
 type providerResponse struct {
@@ -91,10 +96,18 @@ func newMovieDetail(m domain.MovieDetail) movieDetail {
 		RuntimeMinutes: m.RuntimeMinutes,
 		Genres:         nonNil(m.Genres),
 		Directors:      nonNil(m.Directors),
-		Cast:           nonNil(m.Cast),
+		Cast:           newCast(m.Cast),
 		TrailerURL:     m.TrailerURL,
 		Providers:      newProviders(m.Providers),
 	}
+}
+
+func newCast(cast []domain.CastMember) []castResponse {
+	out := make([]castResponse, 0, len(cast))
+	for _, c := range cast {
+		out = append(out, castResponse{Name: c.Name, ProfileURL: c.ProfileURL})
+	}
+	return out
 }
 
 func newProviders(providers []domain.Provider) []providerResponse {

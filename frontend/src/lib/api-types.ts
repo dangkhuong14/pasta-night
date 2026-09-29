@@ -30,6 +30,12 @@ export type MovieSummary = {
   providers: Provider[];
 };
 
+/** One billed actor; profile_url is null when TMDB has no photo (DATABASE.md §2). */
+export type CastMember = {
+  name: string;
+  profile_url: string | null;
+};
+
 /** GET /movies/{movie_id} → data (API_SPEC §5.3). */
 export type MovieDetail = MovieSummary & {
   original_title: string;
@@ -37,7 +43,7 @@ export type MovieDetail = MovieSummary & {
   backdrop_url: string | null;
   vote_count: number;
   directors: string[];
-  cast: string[];
+  cast: CastMember[];
   trailer_url: string | null;
 };
 

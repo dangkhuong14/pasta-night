@@ -1,6 +1,6 @@
 # Project Status — Backend
 
-_Last updated: 2026-09-29 (watch-provider region filtering removed; cache schema v2)_
+_Last updated: 2026-09-29 (cast photos added; cache schema v3)_
 
 ## Done
 - All 5 endpoints of API_SPEC v1: `GET /api/v1/options`, `GET /api/v1/options/{option_id}/recommendations`, `GET /api/v1/movies/{movie_id}`, `POST /api/v1/admin/refresh`, `GET /healthz`
@@ -16,6 +16,8 @@ _Last updated: 2026-09-29 (watch-provider region filtering removed; cache schema
 - Doc/code audit against API_SPEC, DATABASE, TMDB_INTEGRATION: no contract mismatches found. Two doc bugs fixed:
   - API_SPEC §3, §5.5: documented that `/healthz` sends `Cache-Control: no-store` (it reports live state, unlike other GETs)
   - DATABASE §2: `original_title` changed from "required" to "may be `\"\"`\"" (rare TMDB data gap; mapped as-is, no fallback, matches TMDB_INTEGRATION §5)
+
+- Cast photos (2026-09-29): `cast` changed from names to `{name, profile_url}` using TMDB `profile_path` at size `w185`. Formally a breaking API change applied to v1 before launch (API_SPEC Changelog v1.1); cache schema v2 → v3. Coverage is effectively complete — every actor in the current data has a photo — and `profile_url` is `null` when TMDB has none.
 
 ## In Progress
 - None

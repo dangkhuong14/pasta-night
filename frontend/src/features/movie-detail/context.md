@@ -7,6 +7,7 @@ Bottom sheet over the recommendations page for `?movie={id}`: summary from the p
 - `MovieDetailSheet.tsx` — client; `?movie=` ↔ open state, close behavior, section composition
 - `useMovieDetail.ts` — fetches the detail on open; in-memory cache per session
 - `ProvidersCard.tsx`, `PastaPairingCard.tsx`, `CastList.tsx`, `PromoCard.tsx` — sections
+- `CastList.tsx` — TMDB photo per actor, initials when `profile_url` is null
 
 ## Invariants
 - Never show an empty section: follow the hide rules in SCREENS.md §3.

@@ -9,8 +9,14 @@
   },
   "budget": 63000000,
   "genres": [
-    { "id": 28, "name": "Phim Hành Động" },
-    { "id": 878, "name": "Phim Khoa Học Viễn Tưởng" }
+    {
+      "id": 28,
+      "name": "Phim Hành Động"
+    },
+    {
+      "id": 878,
+      "name": "Phim Khoa Học Viễn Tưởng"
+    }
   ],
   "homepage": "http://www.warnerbros.com/matrix",
   "id": 603,
@@ -31,28 +37,135 @@
   "vote_count": 26000,
   "credits": {
     "cast": [
-      { "adult": false, "id": 2975, "name": "Laurence Fishburne", "character": "Morpheus", "order": 1 },
-      { "adult": false, "id": 6384, "name": "Keanu Reeves", "character": "Thomas A. Anderson / Neo", "order": 0 },
-      { "adult": false, "id": 530, "name": "Carrie-Anne Moss", "character": "Trinity", "order": 2 },
-      { "adult": false, "id": 1331, "name": "Hugo Weaving", "character": "Agent Smith", "order": 3 },
-      { "adult": false, "id": 9364, "name": "Gloria Foster", "character": "Oracle", "order": 4 },
-      { "adult": false, "id": 9372, "name": "Joe Pantoliano", "character": "Cypher", "order": 5 }
+      {
+        "adult": false,
+        "id": 2975,
+        "name": "Laurence Fishburne",
+        "character": "Morpheus",
+        "order": 1,
+        "profile_path": "/2GbXERENPpl5MmlqOLlPVaVtifD.jpg"
+      },
+      {
+        "adult": false,
+        "id": 6384,
+        "name": "Keanu Reeves",
+        "character": "Thomas A. Anderson / Neo",
+        "order": 0,
+        "profile_path": "/8RZLOyYGsoRe9p44q3xin9QkMHv.jpg"
+      },
+      {
+        "adult": false,
+        "id": 530,
+        "name": "Carrie-Anne Moss",
+        "character": "Trinity",
+        "order": 2,
+        "profile_path": "/9zya72vRZYBQILfetACsnmCBgdj.jpg"
+      },
+      {
+        "adult": false,
+        "id": 1331,
+        "name": "Hugo Weaving",
+        "character": "Agent Smith",
+        "order": 3,
+        "profile_path": "/lSC8Et0PYi5zeQb3IpPkFje7hgR.jpg"
+      },
+      {
+        "adult": false,
+        "id": 9364,
+        "name": "Gloria Foster",
+        "character": "Oracle",
+        "order": 4,
+        "profile_path": null
+      },
+      {
+        "adult": false,
+        "id": 9372,
+        "name": "Joe Pantoliano",
+        "character": "Cypher",
+        "order": 5,
+        "profile_path": "/3OHUI3nX4SYGGItDk3xqeIvWtIf.jpg"
+      }
     ],
     "crew": [
-      { "id": 9340, "name": "Lana Wachowski", "department": "Directing", "job": "Director" },
-      { "id": 9339, "name": "Lilly Wachowski", "department": "Directing", "job": "Director" },
-      { "id": 9340, "name": "Lana Wachowski", "department": "Writing", "job": "Writer" },
-      { "id": 9340, "name": "Lana Wachowski", "department": "Directing", "job": "Director" },
-      { "id": 1091, "name": "Joel Silver", "department": "Production", "job": "Producer" }
+      {
+        "id": 9340,
+        "name": "Lana Wachowski",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "id": 9339,
+        "name": "Lilly Wachowski",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "id": 9340,
+        "name": "Lana Wachowski",
+        "department": "Writing",
+        "job": "Writer"
+      },
+      {
+        "id": 9340,
+        "name": "Lana Wachowski",
+        "department": "Directing",
+        "job": "Director"
+      },
+      {
+        "id": 1091,
+        "name": "Joel Silver",
+        "department": "Production",
+        "job": "Producer"
+      }
     ]
   },
   "videos": {
     "results": [
-      { "iso_639_1": "en", "iso_3166_1": "US", "name": "Teaser", "key": "teaserKey01", "site": "YouTube", "type": "Teaser", "official": true },
-      { "iso_639_1": "en", "iso_3166_1": "US", "name": "Fan-made Trailer", "key": "enFanTrailer", "site": "YouTube", "type": "Trailer", "official": false },
-      { "iso_639_1": "en", "iso_3166_1": "US", "name": "Official Trailer", "key": "enOfficial01", "site": "YouTube", "type": "Trailer", "official": true },
-      { "iso_639_1": "vi", "iso_3166_1": "VN", "name": "Trailer lồng tiếng", "key": "viTrailer01", "site": "YouTube", "type": "Trailer", "official": false },
-      { "iso_639_1": "vi", "iso_3166_1": "VN", "name": "Trailer (Vimeo)", "key": "viVimeo01", "site": "Vimeo", "type": "Trailer", "official": true }
+      {
+        "iso_639_1": "en",
+        "iso_3166_1": "US",
+        "name": "Teaser",
+        "key": "teaserKey01",
+        "site": "YouTube",
+        "type": "Teaser",
+        "official": true
+      },
+      {
+        "iso_639_1": "en",
+        "iso_3166_1": "US",
+        "name": "Fan-made Trailer",
+        "key": "enFanTrailer",
+        "site": "YouTube",
+        "type": "Trailer",
+        "official": false
+      },
+      {
+        "iso_639_1": "en",
+        "iso_3166_1": "US",
+        "name": "Official Trailer",
+        "key": "enOfficial01",
+        "site": "YouTube",
+        "type": "Trailer",
+        "official": true
+      },
+      {
+        "iso_639_1": "vi",
+        "iso_3166_1": "VN",
+        "name": "Trailer lồng tiếng",
+        "key": "viTrailer01",
+        "site": "YouTube",
+        "type": "Trailer",
+        "official": false
+      },
+      {
+        "iso_639_1": "vi",
+        "iso_3166_1": "VN",
+        "name": "Trailer (Vimeo)",
+        "key": "viVimeo01",
+        "site": "Vimeo",
+        "type": "Trailer",
+        "official": true
+      }
     ]
   },
   "watch/providers": {
@@ -60,21 +173,51 @@
       "VN": {
         "link": "https://www.themoviedb.org/movie/603-the-matrix/watch?locale=VN",
         "flatrate": [
-          { "logo_path": "/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg", "provider_id": 8, "provider_name": "Netflix", "display_priority": 5 }
+          {
+            "logo_path": "/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg",
+            "provider_id": 8,
+            "provider_name": "Netflix",
+            "display_priority": 5
+          }
         ],
         "rent": [
-          { "logo_path": "/9ghgSC0MA082EL6HLCW3GalykFD.jpg", "provider_id": 2, "provider_name": "Apple TV", "display_priority": 2 }
+          {
+            "logo_path": "/9ghgSC0MA082EL6HLCW3GalykFD.jpg",
+            "provider_id": 2,
+            "provider_name": "Apple TV",
+            "display_priority": 2
+          }
         ],
         "buy": [
-          { "logo_path": "/9ghgSC0MA082EL6HLCW3GalykFD.jpg", "provider_id": 2, "provider_name": "Apple TV", "display_priority": 2 },
-          { "logo_path": "/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg", "provider_id": 8, "provider_name": "Netflix", "display_priority": 5 },
-          { "logo_path": "", "provider_id": 3, "provider_name": "Google Play Movies", "display_priority": 9 }
+          {
+            "logo_path": "/9ghgSC0MA082EL6HLCW3GalykFD.jpg",
+            "provider_id": 2,
+            "provider_name": "Apple TV",
+            "display_priority": 2
+          },
+          {
+            "logo_path": "/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg",
+            "provider_id": 8,
+            "provider_name": "Netflix",
+            "display_priority": 5
+          },
+          {
+            "logo_path": "",
+            "provider_id": 3,
+            "provider_name": "Google Play Movies",
+            "display_priority": 9
+          }
         ]
       },
       "US": {
         "link": "https://www.themoviedb.org/movie/603-the-matrix/watch?locale=US",
         "flatrate": [
-          { "logo_path": "/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg", "provider_id": 1899, "provider_name": "Max", "display_priority": 1 }
+          {
+            "logo_path": "/fksCUZ9QDWZMUwL2LgMtLckROUN.jpg",
+            "provider_id": 1899,
+            "provider_name": "Max",
+            "display_priority": 1
+          }
         ]
       }
     }

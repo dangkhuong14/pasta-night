@@ -35,7 +35,7 @@ func detail(id int) domain.MovieDetail {
 		Rating:        8.2,
 		Genres:        []string{"Phim Hành Động"},
 		Directors:     []string{},
-		Cast:          []string{"Keanu Reeves"},
+		Cast:          []domain.CastMember{{Name: "Keanu Reeves", ProfileURL: &poster}},
 		Providers:     []domain.Provider{{ID: 8, Name: "Netflix", Type: domain.ProviderFlatrate}},
 		FetchedAt:     fetchedAt,
 	}

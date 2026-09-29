@@ -16,23 +16,30 @@ type MovieList struct {
 // MovieDetail is everything the API can return about one movie. The JSON tags
 // define the cache file format; pointer fields are nullable and encode as null.
 type MovieDetail struct {
-	ID             int        `json:"id"`
-	Title          string     `json:"title"`
-	OriginalTitle  string     `json:"original_title"`
-	Overview       string     `json:"overview"`
-	Tagline        string     `json:"tagline"`
-	PosterURL      *string    `json:"poster_url"`
-	BackdropURL    *string    `json:"backdrop_url"`
-	ReleaseYear    *int       `json:"release_year"`
-	Rating         float64    `json:"rating"`
-	VoteCount      int        `json:"vote_count"`
-	RuntimeMinutes *int       `json:"runtime_minutes"`
-	Genres         []string   `json:"genres"`
-	Directors      []string   `json:"directors"`
-	Cast           []string   `json:"cast"`
-	TrailerURL     *string    `json:"trailer_url"`
-	Providers      []Provider `json:"providers"`
-	FetchedAt      time.Time  `json:"fetched_at"`
+	ID             int          `json:"id"`
+	Title          string       `json:"title"`
+	OriginalTitle  string       `json:"original_title"`
+	Overview       string       `json:"overview"`
+	Tagline        string       `json:"tagline"`
+	PosterURL      *string      `json:"poster_url"`
+	BackdropURL    *string      `json:"backdrop_url"`
+	ReleaseYear    *int         `json:"release_year"`
+	Rating         float64      `json:"rating"`
+	VoteCount      int          `json:"vote_count"`
+	RuntimeMinutes *int         `json:"runtime_minutes"`
+	Genres         []string     `json:"genres"`
+	Directors      []string     `json:"directors"`
+	Cast           []CastMember `json:"cast"`
+	TrailerURL     *string      `json:"trailer_url"`
+	Providers      []Provider   `json:"providers"`
+	FetchedAt      time.Time    `json:"fetched_at"`
+}
+
+// CastMember is one billed actor. ProfileURL is nil when TMDB has no photo,
+// and the UI falls back to the actor's initials.
+type CastMember struct {
+	Name       string  `json:"name"`
+	ProfileURL *string `json:"profile_url"`
 }
 
 // ProviderType is how a watch provider offers a movie.

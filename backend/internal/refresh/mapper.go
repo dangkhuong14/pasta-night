@@ -19,6 +19,7 @@ const (
 	posterSize   = "w500"
 	backdropSize = "w1280"
 	logoSize     = "w92"
+	profileSize  = "w185" // cast avatars render at 48 px, so this covers 3x screens
 	youtubeURL   = "https://www.youtube.com/watch?v="
 	maxCast      = 5
 	// maxProviders caps the merged list: popular movies are offered by 40+
@@ -114,20 +115,23 @@ func directors(crew []tmdb.CrewMember) []string {
 	return names
 }
 
-// topCast returns the first maxCast names in billing order.
-func topCast(cast []tmdb.CastMember) []string {
+// topCast returns the first maxCast actors in billing order.
+func topCast(cast []tmdb.CastMember) []domain.CastMember {
 	sorted := slices.Clone(cast)
 	slices.SortStableFunc(sorted, func(a, b tmdb.CastMember) int { return cmp.Compare(a.Order, b.Order) })
-	names := make([]string, 0, maxCast)
+	members := make([]domain.CastMember, 0, maxCast)
 	for _, c := range sorted {
-		if len(names) == maxCast {
+		if len(members) == maxCast {
 			break
 		}
 		if c.Name != "" {
-			names = append(names, c.Name)
+			members = append(members, domain.CastMember{
+				Name:       c.Name,
+				ProfileURL: imageURL(profileSize, c.ProfilePath),
+			})
 		}
 	}
-	return names
+	return members
 }
 
 // trailerURL picks the best YouTube trailer: language vi, then en, then

@@ -34,8 +34,11 @@ var matrix = domain.MovieDetail{
 	RuntimeMinutes: ptr(136),
 	Genres:         []string{"Phim Hành Động"},
 	Directors:      []string{"Lana Wachowski", "Lilly Wachowski"},
-	Cast:           []string{"Keanu Reeves"},
-	TrailerURL:     ptr("https://www.youtube.com/watch?v=k"),
+	Cast: []domain.CastMember{
+		{Name: "Keanu Reeves", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/k.jpg")},
+		{Name: "Gloria Foster", ProfileURL: nil}, // no TMDB photo → null in the response
+	},
+	TrailerURL: ptr("https://www.youtube.com/watch?v=k"),
 	Providers: []domain.Provider{
 		{ID: 8, Name: "Netflix", LogoURL: ptr("https://image.tmdb.org/t/p/w92/n.jpg"), Type: domain.ProviderFlatrate},
 	},
@@ -109,7 +112,11 @@ func TestHandler(t *testing.T) {
 				"overview":"Một hacker phát hiện thế giới anh đang sống chỉ là một mô phỏng.","tagline":"",
 				"poster_url":"https://image.tmdb.org/t/p/w500/p.jpg","backdrop_url":null,"release_year":1999,
 				"rating":8.2,"vote_count":26000,"runtime_minutes":136,"genres":["Phim Hành Động"],
-				"directors":["Lana Wachowski","Lilly Wachowski"],"cast":["Keanu Reeves"],
+				"directors":["Lana Wachowski","Lilly Wachowski"],
+				"cast":[
+				  {"name":"Keanu Reeves","profile_url":"https://image.tmdb.org/t/p/w185/k.jpg"},
+				  {"name":"Gloria Foster","profile_url":null}
+				],
 				"trailer_url":"https://www.youtube.com/watch?v=k",
 				"providers":[{"id":8,"name":"Netflix","logo_url":"https://image.tmdb.org/t/p/w92/n.jpg","type":"flatrate"}]
 			},"meta":{"fetched_at":"2026-09-27T10:00:05Z"}}`,
