@@ -1,0 +1,11 @@
+# Generated or not ours to format
+.next/
+out/
+node_modules/
+package-lock.json
+next-env.d.ts
+src/components/ui/
+
+# Docs and design exports are edited by hand
+**/*.md
+design/
