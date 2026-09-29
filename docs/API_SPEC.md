@@ -34,7 +34,7 @@
 - Nullable fields are always present as `null`, never omitted. Arrays are `[]`, never `null`.
 - Text is Vietnamese (`vi-VN`). `title` may fall back to the original title; `overview` may be `""` when TMDB has no translation.
 - Every response carries an `X-Request-ID` header. Include it in bug reports.
-- Successful `GET` responses send `Cache-Control: public, max-age=300`.
+- Successful `GET` responses under `/api/v1` send `Cache-Control: public, max-age=300`. Exception: `/healthz` (§5.5) always sends `no-store`, since it reports live state.
 
 ---
 
@@ -210,6 +210,7 @@ Values in the examples below are illustrative.
 ### 5.5 `GET /healthz`
 
 - Infrastructure endpoint: **not** wrapped in the `{ data, meta }` envelope.
+- Sends `Cache-Control: no-store` (§3 exception): `cache_ready` changes over time and must never be served stale by a cache or proxy sitting in front of the orchestrator's probe.
 - **200** while the process is alive:
 
   ```json

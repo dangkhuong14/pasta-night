@@ -91,7 +91,7 @@ options:
 | `schema_version` | int | = `cache.SchemaVersion` | — |
 | `id` | int | PK; > 0 | `id` |
 | `title` | string | required; localized, falls back to original | `title` |
-| `original_title` | string | required | `original_title` |
+| `original_title` | string | may be `""` (rare TMDB data gap); copied as-is, no fallback | `original_title` |
 | `overview` | string | may be `""` (no vi-VN translation) | `overview` |
 | `tagline` | string | may be `""` | `tagline` |
 | `poster_url` | string \| null | absolute URL | `https://image.tmdb.org/t/p/w500` + `poster_path` |
