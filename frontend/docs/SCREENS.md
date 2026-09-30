@@ -14,7 +14,8 @@ The UX Pilot screens show things the v1 API does not provide. v1 decisions:
 | "Gợi ý món mỳ hoàn hảo" pasta pairing | no | static `src/config/brand.ts`, keyed by `option_id`; no entry → hide card |
 | "Mua ngay" shop link | no | env `NEXT_PUBLIC_SHOP_URL`; unset → hide `PromoCard` |
 | Cast photos | yes, since API v1.1 | `cast[].profile_url` from TMDB. Initials avatars remain the fallback for the few actors TMDB has no photo of |
-| TMDB + JustWatch attribution | n/a | **required by license, missing from the design** → add to `Footer` and the providers card |
+| TMDB + JustWatch attribution | n/a | **required by license, missing from the design** → add to `Footer` and the providers card. The mockup translates the TMDB notice into Vietnamese; the terms require the English wording, so we keep English (§5) |
+| Shop details in the about sheet (address, hours, hotline, socials) | no | static `src/config/brand.ts`; each empty value hides its row (§6) |
 | Brand name | design: "Pásta Night"; UX Pilot prompts: "Lusso Pasta" | use **Pásta Night** (confirm with the business) |
 | Error state | not in export (only the "LỖI" tab) | spec in §4 below |
 
@@ -118,6 +119,15 @@ Reference: `design/03-movie-detail.png`
    5. `SectionLabel` "NỘI DUNG" + overview.
    6. `SectionLabel` "DIỄN VIÊN CHÍNH" + `CastAvatar` row (max 5, horizontal scroll, photo or initials).
    7. `PromoCard` "Cần thêm gia vị?" · "Mua ngay Pásta Night để trải nghiệm phim thêm trọn vẹn." · "MUA NGAY".
+   8. `SheetActions`: "Chúc bạn ngon miệng." (serif italic, muted, centered), then two equal-width pill buttons side by side — "Chia sẻ gợi ý" and "Chọn phim khác". Always shown.
+   9. `Footer`. The sheet covers the whole screen, so the page's own footer sits behind it; `recommendations/[option]/page.tsx` passes a second one in through the sheet's `footer` prop.
+
+**Sharing** (`SheetActions`)
+
+- Shares the current URL, which carries `?movie={id}`, so the link reopens this exact sheet.
+- Uses the native share sheet (`navigator.share`) — customers arrive by QR scan, so they are on a phone. A dismissed share sheet is not an error and shows nothing.
+- Where the browser has no share sheet (most desktops), it copies the link instead and the button reads "Đã sao chép" for 2 seconds. If the clipboard is blocked too, the label simply stays put.
+- "Chọn phim khác" closes the sheet through `DrawerClose`, which is the same close path as the × and the back gesture.
 
 **Data**
 
@@ -171,5 +181,51 @@ Not in the export; spec from the UX Pilot prompt.
 
 ## 5. Footer (all pages)
 
-- "— PÁSTA NIGHT —" (thin lines, muted, 10 px, tracking wide).
-- Below, 10 px muted: TMDB logo + TMDB's required notice, kept in its **original English wording** (don't translate a legal notice). Current text, from TMDB's API Terms of Use: "This website uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB." Logo: `public/images/brand/tmdb-logo.svg` (official "blue_short" SVG), smaller than the Pásta Night wordmark as the terms require.
+Stacked and centered, in this order:
+
+0. A 1 px divider inset to the page padding, faint gold, setting the footer off from whatever is above it.
+1. `BrandWordmark` (gold serif, 16 px).
+2. Contact and social icon row, 44 px tap targets, gold: phone (`tel:`), map (`shopInfo.mapUrl`), Facebook, Instagram, TikTok. **Each icon is hidden when its destination is empty**, so the row shrinks rather than linking nowhere. Social glyphs are inline SVG in `components/common/SocialIcons.tsx` — lucide v1 dropped its brand icons.
+3. "Về Pásta Night" link (gold, 13 px) → opens the about sheet (§6).
+4. TMDB logo + TMDB's required notice, 10 px muted, kept in its **original English wording** (don't translate a legal notice). Current text, from TMDB's API Terms of Use: "This website uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB." Logo: `public/images/brand/tmdb-logo.svg` (official "blue_short" SVG), smaller than the Pásta Night wordmark as the terms require.
+
+The footer lives in `components/common`, which may not import features, so `app/layout.tsx` passes the about link in as a prop.
+
+---
+
+## 6. About sheet — "Về Pásta Night" (`?about=1`)
+
+Reference: the UX Pilot export of the about sheet.
+
+**Open/close**
+
+- Opens when `?about=1` is present, over whatever page is underneath; the footer link sets it with `history.pushState` (no server round trip).
+- Close = remove the param: `history.back()` if opened in-app, else `history.replaceState` (someone shared the link).
+- Rendered once in `app/layout.tsx`, so it is reachable from every page.
+- **One sheet at a time.** The about and movie Drawers are siblings in the layout and cannot nest, so the footer link replaces the query rather than adding to it: opening it from inside the movie sheet swaps sheets, and back returns to the movie.
+
+**Layout** (sheet `rounded-t-3xl`, max height 85 dvh, scrollable)
+
+1. Gold drag handle (top center) + round close × (top right).
+2. `BrandWordmark` then the tagline in serif italic.
+3. `SectionLabel` "CÂU CHUYỆN" + one paragraph per entry of `BRAND_STORY`.
+4. Info list, each row = gold circle icon + label + value:
+   - ĐỊA CHỈ + `OutlineButton` "CHỈ ĐƯỜNG"
+   - GIỜ MỞ CỬA, two columns: days left, times right
+   - HOTLINE, tappable `tel:` link
+5. Social row: Facebook, Instagram, TikTok in gold-outlined circles.
+6. `PrimaryButton` "ĐẶT THÊM MỘT PHẦN" → `NEXT_PUBLIC_SHOP_URL`, opens a new tab.
+
+**Data** — all from `src/config/brand.ts`, none from the API: `BRAND_TAGLINE`, `BRAND_STORY`, `shopInfo` (address, mapUrl, openingHours, hotline), `socialLinks`.
+
+**Hide rules** (never show an empty row)
+
+| Condition | Hide |
+|---|---|
+| `shopInfo.address` empty | ĐỊA CHỈ row |
+| `shopInfo.mapUrl` empty | "CHỈ ĐƯỜNG" button |
+| `shopInfo.openingHours` empty | GIỜ MỞ CỬA row |
+| `shopInfo.hotline` empty | HOTLINE row |
+| a social URL empty | that icon |
+| all social URLs empty | the whole row |
+| `NEXT_PUBLIC_SHOP_URL` unset | "ĐẶT THÊM MỘT PHẦN" button |

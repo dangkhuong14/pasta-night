@@ -49,6 +49,11 @@ frontend/
 │   │       ├── loading.tsx            # skeleton (design/04-loading-state.png)
 │   │       └── error.tsx
 │   ├── features/
+│   │   ├── about/
+│   │   │   ├── AboutSheet.tsx         # client: ?about=1 ↔ open state
+│   │   │   ├── AboutLink.tsx          # client: the footer link
+│   │   │   ├── constants.ts           # ABOUT_PARAM
+│   │   │   └── context.md
 │   │   ├── options/
 │   │   │   ├── OptionCard.tsx
 │   │   │   ├── OptionList.tsx
@@ -73,7 +78,8 @@ frontend/
 │   │   ├── ui/                        # shadcn-generated (don't edit heavily)
 │   │   └── common/                    # BrandWordmark, PageHeader, GenreChip, RatingBadge,
 │   │                                  # PrimaryButton, OutlineButton, StickyActionBar,
-│   │                                  # InfoCard, ErrorState, Footer, SectionLabel
+│   │                                  # InfoCard, ErrorState, Footer, SectionLabel,
+│   │                                  # SocialIcons
 │   ├── lib/
 │   │   ├── api.ts                     # ONLY backend caller
 │   │   ├── api-types.ts               # mirrors API_SPEC
@@ -118,7 +124,7 @@ Dependency rules:
 
 - `app/` → `features/`, `components/`, `lib/`, `config/`.
 - `features/X` → `components/`, `lib/`, `config/`. **Never** `features/Y`.
-- `components/common` → `lib/utils` only (pure presentational).
+- `components/common` → `lib/` and `config/` only; presentational, never a feature. When one needs feature-owned behavior, the route or layout passes it in as a prop — `Footer` takes `aboutLink` that way.
 - `lib/` → nothing in `app/`, `features/`, or `components/`.
 
 Example: the grid doesn't import the sheet. Cards link to `?movie=603`; `recommendations/[option]/page.tsx` renders both `<RecommendationGrid>` and `<MovieDetailSheet>`.
@@ -160,6 +166,7 @@ No global store. State lives where it belongs:
 |---|---|---|
 | selected option | URL path `/recommendations/{id}` | shareable, back button works |
 | open movie | URL query `?movie={id}` (set with `history.pushState`) | back gesture closes the sheet; deep-linkable |
+| about sheet open | URL query `?about=1` (set with `history.pushState`) | same pattern; rendered in the root layout so every page can open it |
 | initial order | shuffled in `recommendations/[option]/page.tsx` per request | server and client render the same cards (no hydration mismatch) |
 | current page + later reshuffles | `useState` in `useShuffle` (`RecommendationGrid`) | throwaway; resets on reload (fine) |
 | movie detail response | `useMovieDetail` (fetch on open, in-memory per session) | only needed while the sheet is open |

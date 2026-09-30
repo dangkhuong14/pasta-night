@@ -1,8 +1,11 @@
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 
 import { Footer } from "@/components/common/Footer";
 import { BRAND_NAME } from "@/config/brand";
+import { AboutLink } from "@/features/about/AboutLink";
+import { AboutSheet } from "@/features/about/AboutSheet";
 
 import "./globals.css";
 
@@ -38,8 +41,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Pages with a StickyActionBar get room below the footer so the bar never hides it. */}
         <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col has-data-[slot=sticky-action-bar]:pb-24">
           <main className="flex flex-1 flex-col">{children}</main>
-          <Footer />
+          <Footer aboutLink={<AboutLink />} />
         </div>
+        {/* Suspense: AboutSheet reads useSearchParams, which would otherwise
+            stop statically prerendered routes such as /_not-found building. */}
+        <Suspense>
+          <AboutSheet />
+        </Suspense>
       </body>
     </html>
   );

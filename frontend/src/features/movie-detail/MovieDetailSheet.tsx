@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -23,6 +29,7 @@ import { CastList } from "./CastList";
 import { PastaPairingCard, type PastaPairingView } from "./PastaPairingCard";
 import { PromoCard } from "./PromoCard";
 import { ProvidersCard } from "./ProvidersCard";
+import { SheetActions } from "./SheetActions";
 import { useMovieDetail } from "./useMovieDetail";
 
 const SHOP_URL = process.env.NEXT_PUBLIC_SHOP_URL ?? "";
@@ -31,6 +38,12 @@ type MovieDetailSheetProps = {
   /** The page's recommendation list: summaries render instantly from it. */
   movies: MovieSummary[];
   pairing: PastaPairingView | null;
+  /**
+   * The site footer. The sheet covers the whole screen, so the page's own
+   * footer is hidden behind it; the route passes one in to close the page
+   * off here too (SCREENS §3).
+   */
+  footer?: ReactNode;
 };
 
 /** `?movie=` must be a positive integer, else it is ignored (PROJECT-RULES §3). */
@@ -40,7 +53,11 @@ function parseMovieId(value: string | null): number | null {
 }
 
 /** Detail bottom sheet driven by `?movie={id}` (SCREENS §3). */
-export function MovieDetailSheet({ movies, pairing }: MovieDetailSheetProps) {
+export function MovieDetailSheet({
+  movies,
+  pairing,
+  footer,
+}: MovieDetailSheetProps) {
   const router = useRouter();
   const pathname = usePathname();
   const movieId = parseMovieId(useSearchParams().get("movie"));
@@ -99,6 +116,7 @@ export function MovieDetailSheet({ movies, pairing }: MovieDetailSheetProps) {
             detail={detail?.id === movie.id ? detail : null}
             isDetailFailed={detailState.status === "error"}
             pairing={pairing}
+            footer={footer}
           />
         )}
       </DrawerContent>
@@ -111,6 +129,7 @@ type DetailBodyProps = {
   detail: MovieDetail | null;
   isDetailFailed: boolean;
   pairing: PastaPairingView | null;
+  footer?: ReactNode;
 };
 
 function DetailBody({
@@ -118,6 +137,7 @@ function DetailBody({
   detail,
   isDetailFailed,
   pairing,
+  footer,
 }: DetailBodyProps) {
   // Poster first; the backdrop arrives with GET /movies/{id} (SCREENS §3 Data).
   const heroSrc = detail?.backdrop_url ?? movie.poster_url;
@@ -190,7 +210,9 @@ function DetailBody({
 
         {(cast === null || cast.length > 0) && <CastList cast={cast} />}
         {SHOP_URL !== "" && <PromoCard shopUrl={SHOP_URL} />}
+        <SheetActions movieTitle={movie.title} />
       </div>
+      {footer}
     </div>
   );
 }

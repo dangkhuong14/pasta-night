@@ -7,6 +7,7 @@ Bottom sheet over the recommendations page for `?movie={id}`: summary from the p
 - `MovieDetailSheet.tsx` — client; `?movie=` ↔ open state, close behavior, section composition
 - `useMovieDetail.ts` — fetches the detail on open; in-memory cache per session
 - `ProvidersCard.tsx`, `PastaPairingCard.tsx`, `CastList.tsx`, `PromoCard.tsx` — sections
+- `SheetActions.tsx` — client; closing note, share (Web Share API, clipboard fallback), close
 - `CastList.tsx` — TMDB photo per actor, initials when `profile_url` is null
 
 ## Invariants
@@ -18,6 +19,7 @@ Bottom sheet over the recommendations page for `?movie={id}`: summary from the p
 
 ## Gotchas
 - The page renders the sheet next to the grid; features never import each other.
+- The sheet covers the page, so it takes a `footer` prop and the route passes `<Footer aboutLink={<AboutLink />} />` in — the page's own footer is behind the sheet.
 - The pasta pairing is resolved on the server (`page.tsx`) because it checks `public/` for the dish image.
 
 ## Related Docs

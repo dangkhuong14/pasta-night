@@ -126,9 +126,12 @@ const inter = Inter({ subsets: ["latin", "vietnamese"], variable: "--font-inter"
 | `PastaPairingCard` | like `InfoCard` but `border-gold-line`; gold `SectionLabel`; 56 px dish image `rounded-lg` + dish name (Playfair 16 px) + note (Caption) | detail |
 | `CastAvatar` | 48 px circle, 1 px `border-gold-line`, name (Caption) below. Photo from `cast[].profile_url`; `null` → initials on `bg-muted` | detail |
 | `PromoCard` | `rounded-xl`, gradient `from-gold-soft to-transparent`, `border-gold-line`; Playfair 18 px gold title + Caption + `OutlineButton` right | detail bottom |
+| `SheetActions` | closing note (Playfair italic 14 px, muted, centered) + two equal pill buttons, h-10, `border-border bg-muted/40`, 12 px muted text with a 16 px icon; hover turns the border gold | detail bottom |
 | `Skeleton` | `bg-muted rounded-*` + shimmer; mirrors the real layout's sizes | all loading states |
 | `ErrorState` | centered: gold line icon (lucide `film` / `clapperboard`), Playfair 20 px title, Body muted text, `PrimaryButton` | errors |
-| `Footer` | "— PÁSTA NIGHT —" (thin lines both sides, muted, 10 px) + attribution line | all pages |
+| `Footer` | centered stack behind a 1 px `bg-gold-line/50` divider: `BrandWordmark` (16 px) · contact and social icon row (44 px targets, gold) · "Về Pásta Night" link · TMDB logo + attribution (10 px muted). Empty destinations drop their icon | all pages |
+| `SocialIcons` | inline SVG on lucide's 24 px grid: `FacebookIcon`, `InstagramIcon`, `TiktokIcon`. lucide v1 removed brand icons | footer, about sheet |
+| `AboutSheet` | shadcn `Drawer`, `rounded-t-3xl`, max height 85 dvh, scrollable; drag handle + close ×; wordmark, serif-italic tagline, story, info rows (gold circle icon + label + value), social circles, gold CTA | `?about=1`, every page |
 
 Icons: `lucide-react`, stroke 1.5, gold for actions, muted for metadata (clock, calendar).
 

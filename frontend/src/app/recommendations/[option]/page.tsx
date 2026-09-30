@@ -3,10 +3,12 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 
 import { ErrorState } from "@/components/common/ErrorState";
+import { Footer } from "@/components/common/Footer";
 import { PageHeader } from "@/components/common/PageHeader";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 import { SectionLabel } from "@/components/common/SectionLabel";
 import { pastaPairings } from "@/config/brand";
+import { AboutLink } from "@/features/about/AboutLink";
 import { MovieDetailSheet } from "@/features/movie-detail/MovieDetailSheet";
 import type { PastaPairingView } from "@/features/movie-detail/PastaPairingCard";
 import { CacheNotReady } from "@/features/recommendations/CacheNotReady";
@@ -70,7 +72,12 @@ export default async function RecommendationsPage({
       </section>
       {/* The initial shuffle happens here, per request, so SSR and hydration agree (SCREENS §2). */}
       <RecommendationGrid movies={shuffle(movies)} />
-      <MovieDetailSheet movies={movies} pairing={resolvePairing(option)} />
+      {/* The sheet covers the page, so it carries its own copy of the footer. */}
+      <MovieDetailSheet
+        movies={movies}
+        pairing={resolvePairing(option)}
+        footer={<Footer aboutLink={<AboutLink />} />}
+      />
     </Shell>
   );
 }

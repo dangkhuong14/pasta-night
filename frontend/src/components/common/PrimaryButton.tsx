@@ -9,16 +9,35 @@ const PRIMARY_CLASSES =
 type PrimaryButtonProps = {
   children: ReactNode;
   className?: string;
-} & ({ href: string; onClick?: never } | { href?: never; onClick: () => void });
+} & (
+  | { href: string; isExternal?: boolean; onClick?: never }
+  | { href?: never; isExternal?: never; onClick: () => void }
+);
 
-/** The one gold call to action per screen (DESIGN-SYSTEM §5). Renders a Link when `href` is set. */
+/**
+ * The one gold call to action per screen (DESIGN-SYSTEM §5). Renders a Link
+ * when `href` is set, or a plain anchor opening a new tab for `isExternal`.
+ */
 export function PrimaryButton({
   children,
   className,
   href,
+  isExternal = false,
   onClick,
 }: PrimaryButtonProps) {
   if (href !== undefined) {
+    if (isExternal) {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(PRIMARY_CLASSES, className)}
+        >
+          {children}
+        </a>
+      );
+    }
     return (
       <Link href={href} className={cn(PRIMARY_CLASSES, className)}>
         {children}

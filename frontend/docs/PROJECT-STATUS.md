@@ -13,11 +13,14 @@ _Last updated: 2026-09-29_
 - Verified: lint (0 warnings), `tsc`, Prettier, `next build` (mock and API mode, build needs no backend); 390 px screenshots against `design/*.png` in both modes; error states against a stub API
 
 - Cast photos in the detail sheet (2026-09-29), from `cast[].profile_url` (API v1.1); initials remain the fallback when TMDB has no photo
+- Detail sheet closing actions (2026-09-30): "Chúc bạn ngon miệng." plus share (native share sheet, clipboard fallback) and "Chọn phim khác"
+- Footer redesign + "Về Pásta Night" about sheet (2026-09-30): brand story, address, opening hours, hotline, social links and the shop CTA, opened from every page via `?about=1`. Content lives in `src/config/brand.ts`; every value still holds the mockup's placeholder
 
 ## In Progress
 - None
 
 ## Next
+- **Real shop details in `src/config/brand.ts`**: address, Google Maps URL, opening hours, hotline, and the Facebook / Instagram / TikTok URLs. Everything there now is the UX Pilot placeholder ("123 Đường Pasta", "0123 456 789"); empty links simply hide their icon, so nothing breaks until they land
 - Brand assets: `public/images/options/{netflix-chill,solo,friends}.webp`, dish photos (drop in; no code change). Sizes are in DESIGN-SYSTEM §6 "Brand assets still missing"
 - Pasta pairings per option in `src/config/brand.ts` (card hidden until then)
 - `NEXT_PUBLIC_SHOP_URL` for "MUA NGAY" (PromoCard hidden until then)

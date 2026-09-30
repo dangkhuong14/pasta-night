@@ -181,6 +181,7 @@ export const ERROR_COPY: Record<string, { title: string; body: string }> = {
 - ❌ Showing the API `message` or `err.message` to users.
 - ❌ Rendering a section with empty data (empty providers card, blank synopsis).
 - ❌ Features importing other features. Compose them in the route `page.tsx`; share through `components/common` or `lib`.
+- ❌ `components/common` importing a feature. Take the feature-owned piece as a prop and let the route or layout pass it in (`Footer` does this with `aboutLink`).
 - ❌ Global state libraries (Redux, Zustand) or data libraries (React Query, SWR) without an ADR. URL + local state are enough (ARCHITECTURE §5).
 - ❌ Heavy edits to `components/ui/*` (shadcn). Wrap or compose instead.
 
