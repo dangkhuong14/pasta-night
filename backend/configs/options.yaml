@@ -13,7 +13,7 @@ options:
       watch_provider_ids: [8]     # Netflix, in any region
 
   - id: solo
-    label: "Một mình"
+    label: "Solo Night"
     description: "Thời gian cho riêng bạn"
     icon: user
     discover:
@@ -21,7 +21,7 @@ options:
       genre_mode: or
 
   - id: friends
-    label: "Hội bạn"
+    label: "Party Night"
     description: "Xem cùng nhóm bạn"
     icon: users
     discover:
