@@ -14,7 +14,8 @@ _Last updated: 2026-09-30_
 
 - Cast photos in the detail sheet (2026-09-29), from `cast[].profile_url` (API v1.1); initials remain the fallback when TMDB has no photo
 - Detail sheet closing actions (2026-09-30): "Chúc bạn ngon miệng." plus share (native share sheet, clipboard fallback) and "Chọn phim khác"
-- Footer redesign + "Về Pásta Night" about sheet (2026-09-30): brand story, address, opening hours, hotline, social links and the shop CTA, opened from every page via `?about=1`. Content lives in `src/config/brand.ts`; every value still holds the mockup's placeholder
+- Real shop details (2026-10-02): address on Đường Tạ Quang Bửu (Quận 8), hotline 0939 465 840, opening hours Mon–Fri 19:00–24:00 and Sunday 12:00–24:00, in the footer and the about sheet
+- Footer redesign + "Về Pásta Night" about sheet (2026-09-30): brand story, address, opening hours, hotline, social links and the shop CTA, opened from every page via `?about=1`. Content lives in `src/config/brand.ts`
 
 - Detail hero carousel (2026-09-30, revised the same day after a device check): the trailer loops so YouTube's suggestion end screen never appears, a transparent layer over the player restores swiping (a cross-origin iframe keeps the touch), the position dots became buttons, and a mouse can drag the strip (`overflow-x-auto` offers a mouse nothing once the scrollbar is hidden). `MediaCarousel` replaces the static hero — the trailer in a muted-autoplay `youtube-nocookie` embed, then up to 8 stills, on a snap scroller with position dots. Images auto-advance every 5 s; the video slide, a touch, a hidden tab and `prefers-reduced-motion` each stop it.
 
@@ -22,7 +23,7 @@ _Last updated: 2026-09-30_
 - None
 
 ## Next
-- **Real shop details in `src/config/brand.ts`**: address, Google Maps URL, opening hours, hotline, and the Facebook / Instagram / TikTok URLs. Everything there now is the UX Pilot placeholder ("123 Đường Pasta", "0123 456 789"); empty links simply hide their icon, so nothing breaks until they land
+- **The rest of `src/config/brand.ts`**: the Google Maps URL (the address has no house number, so the "CHỈ ĐƯỜNG" button stays hidden), **Saturday opening hours** (the business gave Mon–Fri and Sunday only), and the Facebook / Instagram / TikTok URLs. Empty links simply hide their icon, so nothing breaks until they land
 - Brand assets: `public/images/options/{netflix-chill,solo,friends}.webp`, dish photos (drop in; no code change). Sizes are in DESIGN-SYSTEM §6 "Brand assets still missing"
 - Pasta pairings per option in `src/config/brand.ts` (card hidden until then)
 - `NEXT_PUBLIC_SHOP_URL` for "MUA NGAY" (PromoCard hidden until then)

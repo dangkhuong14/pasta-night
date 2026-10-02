@@ -21,20 +21,23 @@ export type OpeningHours = {
  * Shop details for the about sheet and the footer. Every field is optional in
  * practice: an empty string hides its row or icon, so the sheet never shows a
  * blank label (SCREENS.md §6 hide rules).
- *
- * TODO(business): replace these placeholders with the real shop details before
- * launch. They come from the UX Pilot mockup, not from the business.
  */
 export const shopInfo = {
-  address: "123 Đường Pasta, Quận 1, TP. Hồ Chí Minh",
-  /** Opens in Google Maps; empty hides the "CHỈ ĐƯỜNG" button. */
+  address: "Đường Tạ Quang Bửu, Quận 8, TP. Hồ Chí Minh",
+  /**
+   * Opens in Google Maps; empty hides the "CHỈ ĐƯỜNG" button.
+   *
+   * TODO(business): a Google Maps link for the shop. The address has no house
+   * number, so a search URL built from it would point at the street, not here.
+   */
   mapUrl: "",
+  /** TODO(business): Saturday is missing; the business has not said yet. */
   openingHours: [
-    { days: "Thứ 2 – Thứ 6", hours: "10:00 – 22:00" },
-    { days: "Thứ 7 – CN", hours: "09:00 – 23:00" },
+    { days: "Thứ 2 – Thứ 6", hours: "19:00 – 24:00" },
+    { days: "Chủ nhật", hours: "12:00 – 24:00" },
   ] satisfies OpeningHours[],
   /** Digits and spaces; the tel: link strips the spaces. */
-  hotline: "0123 456 789",
+  hotline: "0939 465 840",
 };
 
 /** Social profiles; an empty URL hides that icon. */
