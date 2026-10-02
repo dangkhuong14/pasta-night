@@ -22,7 +22,7 @@ kill_timeout = "15s"
   # Only the browser-side detail sheet needs this; until it is set to the real
   # origin, the landing page and grid work but the detail sheet fails.
   # Set during DEPLOYMENT.md §5.
-  CORS_ALLOWED_ORIGINS = "https://pastanight.io.vn"
+  CORS_ALLOWED_ORIGINS = "https://pastanight.io.vn,https://pasta-night.vercel.app"
 
 # The JSON cache must outlive restarts and deploys: losing it means
 # 503 CACHE_NOT_READY and ~126 TMDB calls to rebuild (docs/DATABASE.md §6).

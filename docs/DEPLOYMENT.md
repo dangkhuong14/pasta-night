@@ -10,7 +10,7 @@ How Pásta Night runs in production, how to set it up the first time, and how to
 
 | | URL |
 |---|---|
-| Frontend | `https://pastanight.io.vn` |
+| Frontend | `https://pastanight.io.vn` (DNS at Tino Host) · `https://pasta-night.vercel.app` (Vercel's own URL) |
 | Backend | `https://pasta-night-api.fly.dev` (API base `…/api/v1`) |
 
 In the steps below, `<api-host>` means `pasta-night-api.fly.dev`; `api.<domain>` appears only in the optional §3.2.
@@ -134,6 +134,8 @@ CORS_ALLOWED_ORIGINS = "https://<domain>"
 ```
 
 Rules (enforced at startup by `validateOrigin` in `backend/internal/platform/config/config.go`): scheme and host only, lowercase, **no trailing slash**, no path, no `*`. Several origins are comma-separated. If `www` redirects to the apex, only the apex is needed — the redirect happens before the page loads.
+
+Production allows two origins: `https://pastanight.io.vn` and `https://pasta-night.vercel.app`, the project's own Vercel URL, so the site works fully on either. Preview URLs stay excluded.
 
 ```bash
 fly deploy
