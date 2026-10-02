@@ -135,7 +135,7 @@ CORS_ALLOWED_ORIGINS = "https://<domain>"
 
 Rules (enforced at startup by `validateOrigin` in `backend/internal/platform/config/config.go`): scheme and host only, lowercase, **no trailing slash**, no path, no `*`. Several origins are comma-separated. If `www` redirects to the apex, only the apex is needed — the redirect happens before the page loads.
 
-Production allows two origins: `https://pastanight.io.vn` and `https://pasta-night.vercel.app`, the project's own Vercel URL, so the site works fully on either. Preview URLs stay excluded.
+Production allows three origins: `https://www.pastanight.io.vn` (the primary in Vercel; the apex redirects to it), `https://pastanight.io.vn`, and `https://pasta-night.vercel.app`, the project's own Vercel URL. **If the primary domain is switched in Vercel, check this list**: the browser's origin is whichever host the redirect lands on. Preview URLs stay excluded.
 
 ```bash
 fly deploy
