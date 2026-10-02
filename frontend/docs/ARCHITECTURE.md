@@ -191,5 +191,6 @@ No global store. State lives where it belongs:
 | `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8080/api/v1` | backend base URL; unset → mock data |
 | `NEXT_PUBLIC_SHOP_URL` | `https://…` | "Mua ngay" link; unset → `PromoCard` hidden |
 
-- `NEXT_PUBLIC_*` values are inlined at build time → changing them requires a rebuild.
+- `NEXT_PUBLIC_*` values are inlined at build time → changing them requires a rebuild (on Vercel: Redeploy).
+- Production: `NEXT_PUBLIC_API_BASE_URL=https://api.<domain>/api/v1`, set in Vercel. Hosting and first-time setup: `docs/DEPLOYMENT.md`.
 - Keep `.env.example` in sync.

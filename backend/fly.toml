@@ -1,0 +1,54 @@
+# Fly.io config for the backend. Runbook: ../docs/DEPLOYMENT.md
+# Decision record: ../docs/decisions/SYS-001-deployment-targets.md
+#
+# Secrets (TMDB_READ_TOKEN, ADMIN_TOKEN) are set with `fly secrets set` and
+# never written here.
+
+# Fly app names are global. If this one is taken, pick another and update the
+# CNAME for api.<domain> to match (DEPLOYMENT.md §3).
+app = "pasta-night-api"
+primary_region = "sin" # Singapore, the closest region to Vietnam
+
+# The server drains requests for up to 10 s on shutdown (cmd/server/main.go).
+kill_signal = "SIGTERM"
+kill_timeout = "15s"
+
+[build]
+  # Uses ./Dockerfile as is.
+
+[env]
+  PORT = "8080"
+  # Exact frontend origin(s): scheme://host, lowercase, no trailing slash, no "*".
+  # Only the browser-side detail sheet needs this; until it is set to the real
+  # origin, the landing page and grid work but the detail sheet fails.
+  # Set during DEPLOYMENT.md §5.
+  CORS_ALLOWED_ORIGINS = "http://localhost:3000"
+
+# The JSON cache must outlive restarts and deploys: losing it means
+# 503 CACHE_NOT_READY and ~126 TMDB calls to rebuild (docs/DATABASE.md §6).
+[[mounts]]
+  source = "pasta_cache"
+  destination = "/app/data/cache" # matches CACHE_DIR in the Dockerfile
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # Always on: the refresh job runs on a 1 h ticker only while the machine is
+  # awake, and a customer who just scanned the QR code should not wait for a
+  # cold start.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/healthz"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+
+# One machine only: replicas would each call TMDB (backend ADR 001), and a
+# volume attaches to a single machine anyway.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

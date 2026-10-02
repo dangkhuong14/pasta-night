@@ -23,6 +23,7 @@ Web app for Pásta Night, a pasta startup. Customers scan the QR code on their o
 | `backend/docs/TMDB_INTEGRATION.md` | touching `internal/platform/tmdb` or `internal/refresh` |
 | `docs/API_SPEC.md` | any endpoint, request/response field, or error code (FE or BE) |
 | `docs/DATABASE.md` | cached data, cache files, `configs/options.yaml` |
+| `docs/DEPLOYMENT.md` | hosting, `backend/fly.toml`, production env vars, domains, deploy order |
 | `backend/internal/<feature>/context.md` | before editing that feature |
 | `docs/decisions/`, `backend/docs/decisions/` | before proposing a dependency, storage, or pattern |
 | `*/docs/PROJECT-STATUS.md` | start of a session, if it exists |
@@ -59,6 +60,7 @@ Web app for Pásta Night, a pasta startup. Customers scan the QR code on their o
 | `configs/options.yaml` schema | `docs/DATABASE.md` §2 ViewingOption |
 | TMDB params, DTOs, mapping, error handling | `backend/docs/TMDB_INTEGRATION.md` |
 | package, folder, env var, flow | `backend/docs/ARCHITECTURE.md` (+ `backend/.env.example`) |
+| hosting, `fly.toml`, production env var, domain, deploy step | `docs/DEPLOYMENT.md` |
 | new or changed convention | the relevant `PROJECT-RULES.md` |
 | dependency, storage, or pattern decision | new ADR |
 | feature behavior or invariants | `internal/<feature>/context.md` (BE) · `src/features/<feature>/context.md` (FE) |

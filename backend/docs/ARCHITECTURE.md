@@ -45,6 +45,7 @@ QR card ─scan─▶ Browser ─HTTPS─▶ Next.js frontend
 | JSON files + in-memory snapshot | < 1 MB of data; survives restarts; no DB to run, back up, or secure |
 | TMDB API | discover by genre, details, credits, trailers, artwork, and watch providers from one source |
 | Docker | reproducible deploys; `$CACHE_DIR` mounted as a volume |
+| Fly.io | one always-on machine + one volume in Singapore (`fly.toml`; SYS-001, `docs/DEPLOYMENT.md`) |
 
 ### External constraints
 
@@ -99,6 +100,7 @@ backend/
 ├── .env.example
 ├── .golangci.yml
 ├── Dockerfile
+├── fly.toml               # Fly.io app: region, volume mount, health check (docs/DEPLOYMENT.md)
 └── go.mod
 ```
 
@@ -214,3 +216,5 @@ Call budget: 3 options × (2 discover + ≤ 40 details) ≈ **126 calls** on a c
 | `TMDB_CONCURRENCY` | `5` | max parallel TMDB calls |
 | `CORS_ALLOWED_ORIGINS` | — | comma-separated frontend origins |
 | `ADMIN_TOKEN` | empty | empty = admin endpoints disabled (`404 NOT_FOUND`); set = required `X-Admin-Token` |
+
+Production values and where each one is set (`fly.toml` vs `fly secrets`): `docs/DEPLOYMENT.md` §7.

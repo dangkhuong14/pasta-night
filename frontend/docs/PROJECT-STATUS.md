@@ -1,6 +1,6 @@
 # Project Status — Frontend
 
-_Last updated: 2026-09-30_
+_Last updated: 2026-10-02_
 
 ## Done
 - Next.js 16.3 app scaffolded per ARCHITECTURE §2 (TypeScript strict, Tailwind v4 tokens, shadcn `base-nova`, Playfair + Inter with the `vietnamese` subset); ADR `docs/decisions/001-frontend-stack.md`
@@ -20,14 +20,13 @@ _Last updated: 2026-09-30_
 - Detail hero carousel (2026-09-30, revised the same day after a device check): the trailer loops so YouTube's suggestion end screen never appears, a transparent layer over the player restores swiping (a cross-origin iframe keeps the touch), the position dots became buttons, and a mouse can drag the strip (`overflow-x-auto` offers a mouse nothing once the scrollbar is hidden). `MediaCarousel` replaces the static hero — the trailer in a muted-autoplay `youtube-nocookie` embed, then up to 8 stills, on a snap scroller with position dots. Images auto-advance every 5 s; the video slide, a touch, a hidden tab and `prefers-reduced-motion` each stop it.
 
 ## In Progress
-- None
+- **First production deploy on Vercel** (2026-10-02): hosting decided (SYS-001) and the Vercel settings written down in `docs/DEPLOYMENT.md` §3.3 — root directory `frontend`, region `sin1`, `NEXT_PUBLIC_API_BASE_URL=https://api.<domain>/api/v1`. No frontend code change was needed. Waiting on: the repo pushed to GitHub, the backend live on `api.<domain>`, and the pre-deploy checklist (§2), including a real-phone test of the carousel
 
 ## Next
 - **The rest of `src/config/brand.ts`**: the Google Maps URL (the address has no house number, so the "CHỈ ĐƯỜNG" button stays hidden), **Saturday opening hours** (the business gave Mon–Fri and Sunday only), and the Facebook / Instagram / TikTok URLs. Empty links simply hide their icon, so nothing breaks until they land
 - Brand assets: `public/images/options/{netflix-chill,solo,friends}.webp`, dish photos (drop in; no code change). Sizes are in DESIGN-SYSTEM §6 "Brand assets still missing"
 - Pasta pairings per option in `src/config/brand.ts` (card hidden until then)
 - `NEXT_PUBLIC_SHOP_URL` for "MUA NGAY" (PromoCard hidden until then)
-- Deploy setup (host, env vars, backend `CORS_ALLOWED_ORIGINS` with the production origin)
 
 ## Known Issues
 - Vietnamese genre names start with "Phim …", so the second chip on movie cards is usually truncated.

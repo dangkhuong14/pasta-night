@@ -1,6 +1,6 @@
 # Project Status — Backend
 
-_Last updated: 2026-09-29 (cast photos added; cache schema v3)_
+_Last updated: 2026-10-02 (deploy config ready, not deployed yet; cache schema v5)_
 
 ## Done
 - All 5 endpoints of API_SPEC v1: `GET /api/v1/options`, `GET /api/v1/options/{option_id}/recommendations`, `GET /api/v1/movies/{movie_id}`, `POST /api/v1/admin/refresh`, `GET /healthz`
@@ -22,19 +22,18 @@ _Last updated: 2026-09-29 (cast photos added; cache schema v3)_
 - Detail carousel media (2026-09-30): `trailer_url` replaced by `media`, an ordered slide list of the trailer plus up to 8 backdrops (API_SPEC Changelog v1.2, cache schema v4 → v5). Phase 2 now appends `images` with `include_image_language=vi,en,null`, and backdrops are sorted textless-first, then by `vote_average`, then by `file_path` so the order is stable across refreshes.
 
 ## In Progress
-- None
+- **First production deploy on Fly.io** (2026-10-02): the repo side is done — `backend/fly.toml` (Singapore, one always-on `shared-cpu-1x` machine, volume `pasta_cache` at `/app/data/cache`, `/healthz` check, 15 s kill timeout for the 10 s graceful shutdown), the runbook `docs/DEPLOYMENT.md` and the decision SYS-001. Waiting on account steps that cannot be done from the repo: create the app and volume, set `TMDB_READ_TOKEN` and `ADMIN_TOKEN` with `fly secrets`, `api.<domain>` certificate and DNS, then the real `CORS_ALLOWED_ORIGINS` (DEPLOYMENT.md §3.1–3.4)
 
 ## Next
 - Replace hand-written TMDB fixtures with real captures
-- Set up a deploy environment (host, DNS, cache volume)
 - Decide whether to document the remaining stricter-than-spec behaviors found in the audit (fetched_at truncated to the second, mapper drops blank names/invalid providers, GET routes also match HEAD, options.yaml validates sort_by/IDs more tightly, admin `?option_id=` treats blank as "all" and ignores malformed values, movie_id accepts `+5`/`007`) or leave them as implementation details
 
 ## Known Issues
-- Vietnamese ISP DNS blocks `api.themoviedb.org` (NXDOMAIN). Use 1.1.1.1 / 8.8.8.8 or a VPN, locally and in production.
+- Vietnamese ISP DNS blocks `api.themoviedb.org` (NXDOMAIN). Use 1.1.1.1 / 8.8.8.8 or a VPN for local development. Production runs on Fly in Singapore and is unaffected.
 - `providers` is a worldwide list, not a "watchable in Vietnam" list (see Done). TMDB simply has no `VN` watch-provider data to offer.
 - `revive` flags `movie.MovieReader` as stuttering, but PROJECT-RULES §1 uses that name as its example; suppressed with `//nolint:revive`.
 - No gcc or golangci-lint on the dev machine: run lint and `go test -race` through Docker.
 
 ## Open Questions
-- TMDB commercial agreement before production launch.
+- TMDB commercial agreement before production launch. Now the first item of the pre-deploy checklist (`docs/DEPLOYMENT.md` §2).
 - Several replicas would each call TMDB (ADR 001): revisit before scaling out.
