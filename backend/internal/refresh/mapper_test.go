@@ -59,7 +59,14 @@ func TestMapperFixtures(t *testing.T) {
 					{Name: "Hugo Weaving", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/lSC8Et0PYi5zeQb3IpPkFje7hgR.jpg")},
 					{Name: "Gloria Foster", ProfileURL: nil},
 				},
-				TrailerURL: ptr("https://www.youtube.com/watch?v=viTrailer01"),
+				// Trailer first, then backdrops: textless before tagged, then
+				// by vote_average. The empty file_path is skipped.
+				Media: []domain.MediaItem{
+					{Type: domain.MediaVideo, URL: "https://www.youtube.com/watch?v=viTrailer01", YoutubeKey: ptr("viTrailer01")},
+					{Type: domain.MediaImage, URL: "https://image.tmdb.org/t/p/w780/textless-high.jpg"},
+					{Type: domain.MediaImage, URL: "https://image.tmdb.org/t/p/w780/textless-low.jpg"},
+					{Type: domain.MediaImage, URL: "https://image.tmdb.org/t/p/w780/lang-high.jpg"},
+				},
 				// Max (1899) and Google Play Movies (3) are not available in
 				// Vietnam, so only Netflix and Apple TV survive the allowlist.
 				// Both are in one region, so the type order decides.
@@ -88,7 +95,7 @@ func TestMapperFixtures(t *testing.T) {
 				Cast: []domain.CastMember{
 					{Name: "Leonardo DiCaprio", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/z2K1ERKlfMNzgLLIsM3jJ7Q9tHZ.jpg")},
 				},
-				TrailerURL: nil, // only a teaser
+				Media: []domain.MediaItem{}, // only a teaser, and no artwork
 				// Only Max, which does not operate in Vietnam → nothing to show.
 				Providers: []domain.Provider{},
 				FetchedAt: mappedAt,
@@ -103,6 +110,7 @@ func TestMapperFixtures(t *testing.T) {
 				Genres:        []string{},
 				Directors:     []string{},
 				Cast:          []domain.CastMember{},
+				Media:         []domain.MediaItem{},
 				Providers:     []domain.Provider{},
 				FetchedAt:     mappedAt,
 			},
@@ -174,7 +182,7 @@ func TestMapperScalarRules(t *testing.T) {
 	}
 }
 
-func TestMapperTrailerURL(t *testing.T) {
+func TestMapperTrailerKey(t *testing.T) {
 	yt := func(key, lang string, isOfficial bool) tmdb.Video {
 		return tmdb.Video{Key: key, Site: "YouTube", Type: "Trailer", Language: lang, Official: isOfficial}
 	}
@@ -196,12 +204,8 @@ func TestMapperTrailerURL(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := trailerURL(tt.videos)
-			switch {
-			case tt.want == "" && got != nil:
-				t.Errorf("trailer = %q, want null", *got)
-			case tt.want != "" && (got == nil || *got != youtubeURL+tt.want):
-				t.Errorf("trailer = %v, want %s", got, youtubeURL+tt.want)
+			if got := trailerKey(tt.videos); got != tt.want {
+				t.Errorf("trailer key = %q, want %q", got, tt.want)
 			}
 		})
 	}

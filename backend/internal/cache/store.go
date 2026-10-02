@@ -25,7 +25,8 @@ import (
 // "providers merged across every region, most widely available first".
 // v3: `cast` changed from a list of names to objects carrying a photo URL.
 // v4: `providers` is now limited to services available in Vietnam.
-const SchemaVersion = 4
+// v5: `trailer_url` became `media`, the detail carousel's slides.
+const SchemaVersion = 5
 
 // Snapshot is an immutable view of the cache. Readers must never modify it
 // or its maps; the Store swaps in a new Snapshot on every change.

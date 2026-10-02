@@ -129,15 +129,16 @@ func TestMovieDetails(t *testing.T) {
 	}
 	assertQuery(t, got.query, map[string]string{
 		"language":               "vi-VN",
-		"append_to_response":     "credits,videos,watch/providers",
+		"append_to_response":     "credits,videos,watch/providers,images",
 		"include_video_language": "vi,en",
+		"include_image_language": "vi,en,null",
 	})
 	if m.ID != 603 || m.Title != "Ma Trận" || m.Runtime != 136 || m.ReleaseDate != "1999-03-30" {
 		t.Errorf("movie = %+v", m)
 	}
-	if len(m.Credits.Cast) != 6 || len(m.Credits.Crew) != 5 || len(m.Videos.Results) != 5 {
-		t.Errorf("appended objects not decoded: %d cast, %d crew, %d videos",
-			len(m.Credits.Cast), len(m.Credits.Crew), len(m.Videos.Results))
+	if len(m.Credits.Cast) != 6 || len(m.Credits.Crew) != 5 || len(m.Videos.Results) != 5 || len(m.Images.Backdrops) != 4 {
+		t.Errorf("appended objects not decoded: %d cast, %d crew, %d videos, %d backdrops",
+			len(m.Credits.Cast), len(m.Credits.Crew), len(m.Videos.Results), len(m.Images.Backdrops))
 	}
 	if vn := m.WatchProviders.Results["VN"]; len(vn.Flatrate) != 1 || vn.Flatrate[0].ProviderName != "Netflix" {
 		t.Errorf("watch/providers VN = %+v", vn)

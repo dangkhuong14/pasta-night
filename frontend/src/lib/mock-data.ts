@@ -7,6 +7,10 @@
 // - 1204680: no runtime, no release year
 // - 1032863: no providers (the "CÓ MẶT TRÊN" card is hidden)
 // - 1288445: empty cast
+// - 1032863: media has no trailer (the carousel opens on a still)
+// - 1368337: media is empty (the hero falls back to the poster placeholder)
+// Carousel stills are real TMDB backdrops, but each movie borrows two from
+// its neighbours so there is more than one slide to scroll through.
 // Titles with an empty overview are real TMDB gaps (no vi-VN translation).
 import type { MovieDetail, ViewingOption } from "./api-types";
 
@@ -77,7 +81,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
         profile_url: null,
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=P3uI5sLosKU",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=P3uI5sLosKU",
+        youtube_key: "P3uI5sLosKU",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/qeQJx07rK2xm8SD2sJxFKhE7gs0.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/3icyRAqgakNcQn6aDVz9libFmBA.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/viZqGq9TNvQ5uXSD4ahg2RpRONT.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [],
   },
   {
@@ -123,7 +148,23 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/eZtBoBE0F7Qb9ZyNpacMOQtmWnM.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=mNd1gb19A-c",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=mNd1gb19A-c",
+        youtube_key: "mNd1gb19A-c",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/3icyRAqgakNcQn6aDVz9libFmBA.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/viZqGq9TNvQ5uXSD4ahg2RpRONT.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [],
   },
   {
@@ -168,7 +209,7 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/icqsXLmU0FxBGTv63kkA0GcrecO.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=o4s236zGkMM",
+    media: [],
     providers: [],
   },
   {
@@ -215,7 +256,23 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/ac7HoARDIHdYNqpzgJBzpmKHXHR.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=kMsiD1Nky5I",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=kMsiD1Nky5I",
+        youtube_key: "kMsiD1Nky5I",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/viZqGq9TNvQ5uXSD4ahg2RpRONT.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/o7Oy9Gbx1CCyaweL8xUhtMW4Puq.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [],
   },
   {
@@ -261,7 +318,23 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/4uwcWYbXxrxyhJbCPXshTQXQQKi.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=xwdamnfS6IM",
+    media: [
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/o7Oy9Gbx1CCyaweL8xUhtMW4Puq.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/e2QAGrEmbpmZpMymDRkDisJkvg9.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/hpBGCnzOvdtQoMyE48gvwp2y5yx.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [],
   },
   {
@@ -282,7 +355,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
     genres: ["Phim Hành Động", "Phim Gây Cấn"],
     directors: ["Jean-François Richet"],
     cast: [],
-    trailer_url: "https://www.youtube.com/watch?v=2Iqvbe98Gb4",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=2Iqvbe98Gb4",
+        youtube_key: "2Iqvbe98Gb4",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/e2QAGrEmbpmZpMymDRkDisJkvg9.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/hpBGCnzOvdtQoMyE48gvwp2y5yx.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/4D1pdB27uph7J8HQzNf8QvvH9bn.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,
@@ -337,7 +431,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/lU0yMFh5KgOEWZRThLYbB6ZI1hE.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=LW6dpj1uCK8",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=LW6dpj1uCK8",
+        youtube_key: "LW6dpj1uCK8",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/hpBGCnzOvdtQoMyE48gvwp2y5yx.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/4D1pdB27uph7J8HQzNf8QvvH9bn.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/5lTZyuBTNOfawsfPT8Q0cIg6qAF.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,
@@ -392,7 +507,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/h0loJ4v3wbUfUA6dxUYv7B6fET1.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=QftAW9TTmuQ",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=QftAW9TTmuQ",
+        youtube_key: "QftAW9TTmuQ",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/4D1pdB27uph7J8HQzNf8QvvH9bn.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/5lTZyuBTNOfawsfPT8Q0cIg6qAF.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/c6BPbkO5Npt1OdwttAxCFo06wtH.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,
@@ -454,7 +590,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/5Qr7N6TzC8cI0ULxDm6EC5GpZ4C.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=gMC8kkwbIQQ",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=gMC8kkwbIQQ",
+        youtube_key: "gMC8kkwbIQQ",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/5lTZyuBTNOfawsfPT8Q0cIg6qAF.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/c6BPbkO5Npt1OdwttAxCFo06wtH.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,
@@ -523,7 +680,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/aAUHUSf0lh3OBRoaiCRL9ep8lfL.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=EEz5xbzYPKI",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=EEz5xbzYPKI",
+        youtube_key: "EEz5xbzYPKI",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/c6BPbkO5Npt1OdwttAxCFo06wtH.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/kkcwhgSFd81QDlXo8ytrpHPQjhy.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,
@@ -578,7 +756,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/tgxYh3jMs5bY2Ub4d2dcp9iaz1R.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=4sZj4aeYUCA",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=4sZj4aeYUCA",
+        youtube_key: "4sZj4aeYUCA",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/kkcwhgSFd81QDlXo8ytrpHPQjhy.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/dqmMWNWfLnExDRpMtIMqI97GQFR.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,
@@ -646,7 +845,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/2ojZrkt5rdkUi857WSeCatxXdGS.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=V-O-uBaHk3c",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=V-O-uBaHk3c",
+        youtube_key: "V-O-uBaHk3c",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/kkcwhgSFd81QDlXo8ytrpHPQjhy.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/dqmMWNWfLnExDRpMtIMqI97GQFR.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,
@@ -708,7 +928,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/lRDf99rAfcdqt8Cqk4LsIT7XSD2.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=0HjdiohVOik",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=0HjdiohVOik",
+        youtube_key: "0HjdiohVOik",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/dqmMWNWfLnExDRpMtIMqI97GQFR.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/qeQJx07rK2xm8SD2sJxFKhE7gs0.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,
@@ -777,7 +1018,28 @@ export const MOCK_MOVIES: MovieDetail[] = [
           "https://image.tmdb.org/t/p/w185/5GilHMOt5PAQh6rlUKZzGmaKEI7.jpg",
       },
     ],
-    trailer_url: "https://www.youtube.com/watch?v=DKqu9qc-5f4",
+    media: [
+      {
+        type: "video",
+        url: "https://www.youtube.com/watch?v=DKqu9qc-5f4",
+        youtube_key: "DKqu9qc-5f4",
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/qeQJx07rK2xm8SD2sJxFKhE7gs0.jpg",
+        youtube_key: null,
+      },
+      {
+        type: "image",
+        url: "https://image.tmdb.org/t/p/w780/3icyRAqgakNcQn6aDVz9libFmBA.jpg",
+        youtube_key: null,
+      },
+    ],
     providers: [
       {
         id: 2,

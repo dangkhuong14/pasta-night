@@ -36,8 +36,14 @@ type movieDetail struct {
 	Genres         []string           `json:"genres"`
 	Directors      []string           `json:"directors"`
 	Cast           []castResponse     `json:"cast"`
-	TrailerURL     *string            `json:"trailer_url"`
+	Media          []mediaResponse    `json:"media"`
 	Providers      []providerResponse `json:"providers"`
+}
+
+type mediaResponse struct {
+	Type       string  `json:"type"`
+	URL        string  `json:"url"`
+	YoutubeKey *string `json:"youtube_key"`
 }
 
 type castResponse struct {
@@ -97,7 +103,7 @@ func newMovieDetail(m domain.MovieDetail) movieDetail {
 		Genres:         nonNil(m.Genres),
 		Directors:      nonNil(m.Directors),
 		Cast:           newCast(m.Cast),
-		TrailerURL:     m.TrailerURL,
+		Media:          newMedia(m.Media),
 		Providers:      newProviders(m.Providers),
 	}
 }
@@ -106,6 +112,14 @@ func newCast(cast []domain.CastMember) []castResponse {
 	out := make([]castResponse, 0, len(cast))
 	for _, c := range cast {
 		out = append(out, castResponse{Name: c.Name, ProfileURL: c.ProfileURL})
+	}
+	return out
+}
+
+func newMedia(media []domain.MediaItem) []mediaResponse {
+	out := make([]mediaResponse, 0, len(media))
+	for _, item := range media {
+		out = append(out, mediaResponse{Type: string(item.Type), URL: item.URL, YoutubeKey: item.YoutubeKey})
 	}
 	return out
 }

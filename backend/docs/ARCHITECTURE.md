@@ -43,7 +43,7 @@ QR card ─scan─▶ Browser ─HTTPS─▶ Next.js frontend
 | `golang.org/x/sync` | `errgroup` (bounded parallel fetches), `singleflight` (dedupe refreshes) |
 | `gopkg.in/yaml.v3` | human-editable option config |
 | JSON files + in-memory snapshot | < 1 MB of data; survives restarts; no DB to run, back up, or secure |
-| TMDB API | discover by genre, details, credits, trailers, and watch providers from one source |
+| TMDB API | discover by genre, details, credits, trailers, artwork, and watch providers from one source |
 | Docker | reproducible deploys; `$CACHE_DIR` mounted as a volume |
 
 ### External constraints

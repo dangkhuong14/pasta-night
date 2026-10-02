@@ -81,9 +81,11 @@ func (c *Client) Discover(ctx context.Context, q DiscoverQuery) (DiscoverRespons
 // appended, in one call.
 func (c *Client) MovieDetails(ctx context.Context, id int) (MovieDetails, error) {
 	params := url.Values{}
-	params.Set("append_to_response", "credits,videos,watch/providers")
+	params.Set("append_to_response", "credits,videos,watch/providers,images")
 	// With language=vi-VN alone most movies return no trailers.
 	params.Set("include_video_language", "vi,en")
+	// "null" is TMDB's bucket for textless artwork, which the carousel prefers.
+	params.Set("include_image_language", "vi,en,null")
 	var movie MovieDetails
 	if err := c.get(ctx, "/movie/"+strconv.Itoa(id), params, &movie); err != nil {
 		return MovieDetails{}, fmt.Errorf("get /movie/%d: %w", id, err)

@@ -7,7 +7,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { CalendarDays, Clock, X } from "lucide-react";
@@ -26,6 +25,7 @@ import type { MovieDetail, MovieSummary } from "@/lib/api-types";
 import { formatRuntime } from "@/lib/format";
 
 import { CastList } from "./CastList";
+import { MediaCarousel } from "./MediaCarousel";
 import { PastaPairingCard, type PastaPairingView } from "./PastaPairingCard";
 import { PromoCard } from "./PromoCard";
 import { ProvidersCard } from "./ProvidersCard";
@@ -139,28 +139,26 @@ function DetailBody({
   pairing,
   footer,
 }: DetailBodyProps) {
-  // Poster first; the backdrop arrives with GET /movies/{id} (SCREENS §3 Data).
-  const heroSrc = detail?.backdrop_url ?? movie.poster_url;
+  // The list only has a poster; the carousel slides arrive with
+  // GET /movies/{id} (SCREENS §3 Data).
+  const media = detail?.media ?? [];
   const firstGenre = movie.genres[0];
   // null = still loading (skeleton); [] = hide the section.
   const cast = detail !== null ? detail.cast : isDetailFailed ? [] : null;
 
   return (
     <div className="h-full overflow-y-auto overscroll-contain">
-      <div className="relative h-65 w-full shrink-0 bg-linear-to-b from-card to-background">
-        {heroSrc !== null && (
-          <Image
-            src={heroSrc}
-            alt=""
-            fill
-            sizes="(max-width: 448px) 100vw, 448px"
-            priority
-            className="object-cover"
-          />
-        )}
+      <div className="relative h-65 w-full shrink-0 overflow-hidden bg-linear-to-b from-card to-background">
+        <MediaCarousel
+          media={media}
+          fallbackImageUrl={movie.poster_url}
+          movieTitle={movie.title}
+        />
+        {/* Blends the hero into the sheet body. It must not swallow swipes on
+            the carousel, and it would cover a video's controls. */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-linear-to-t from-card via-card/10 to-transparent"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-card to-transparent"
         />
         <DrawerClose
           aria-label="Đóng"

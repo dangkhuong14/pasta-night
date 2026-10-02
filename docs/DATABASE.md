@@ -103,7 +103,7 @@ options:
 | `genres` | string[] | localized names | `genres[].name` |
 | `directors` | string[] | may be empty | `credits.crew` where `job == "Director"` |
 | `cast` | CastMember[] | ≤ 5, billing order | `credits.cast` sorted by `order` |
-| `trailer_url` | string \| null | YouTube URL | first `videos.results` with `site == "YouTube"` and `type == "Trailer"` |
+| `media` | MediaItem[] | may be empty; ≤ 9 (1 video + 8 images) | `videos.results` + `images.backdrops` |
 | `providers` | Provider[] | may be empty; ≤ 8 | `watch/providers.results`, all regions merged, limited to services available in Vietnam, ranked |
 | `fetched_at` | timestamp | when phase 2 fetched this movie | — |
 
@@ -113,6 +113,16 @@ options:
 |---|---|---|
 | `name` | string | required |
 | `profile_url` | string \| null | `https://image.tmdb.org/t/p/w185` + `profile_path`; `null` when TMDB has no photo |
+
+**MediaItem** (embedded in MovieDetail) — one slide of the detail carousel, in display order
+
+| Field | Type | Constraints |
+|---|---|---|
+| `type` | enum | `video` \| `image` |
+| `url` | string | `https://www.youtube.com/watch?v=` + key for `video`; `https://image.tmdb.org/t/p/w780` + `file_path` for `image` |
+| `youtube_key` | string \| null | the YouTube video id; `null` for `image` |
+
+At most one `video`, and it is always first, so the carousel opens on the trailer. Images follow, textless ones first (see TMDB_INTEGRATION.md §5).
 
 **Provider** (embedded in MovieDetail)
 
@@ -143,7 +153,10 @@ options:
     { "name": "Keanu Reeves", "profile_url": "https://image.tmdb.org/t/p/w185/<profile_path>.jpg" },
     { "name": "Gloria Foster", "profile_url": null }
   ],
-  "trailer_url": "https://www.youtube.com/watch?v=<video_key>",
+  "media": [
+    { "type": "video", "url": "https://www.youtube.com/watch?v=<video_key>", "youtube_key": "<video_key>" },
+    { "type": "image", "url": "https://image.tmdb.org/t/p/w780/<file_path>.jpg", "youtube_key": null }
+  ],
   "providers": [
     { "id": 8, "name": "Netflix", "logo_url": "https://image.tmdb.org/t/p/w92/<logo_path>.jpg", "type": "flatrate" }
   ],
@@ -156,14 +169,14 @@ options:
 ## 3. Relationships
 
 ```text
-ViewingOption 1 ──── 1 MovieList N ──────── N MovieDetail 1 ──── N Provider (embedded)
-   id  ◀──────────── option_id
+ViewingOption 1 ──── 1 MovieList N ──────── N MovieDetail 1 ──── N Provider  (embedded)
+   id  ◀──────────── option_id                              1 ──── N MediaItem (embedded)
                      movie_ids[] ──────────▶ id
 ```
 
 - **ViewingOption 1–1 MovieList:** `MovieList.option_id` → `ViewingOption.id`.
 - **MovieList N–N MovieDetail:** `movie_ids[]` → `details/{id}.json`. One movie can appear in several lists but is stored once.
-- **MovieDetail 1–N Provider:** embedded array, no separate file.
+- **MovieDetail 1–N Provider / MediaItem:** embedded arrays, no separate files.
 
 Referential integrity is enforced by **write order**, not by an engine:
 
@@ -223,3 +236,4 @@ There are no DB indexes; the snapshot's maps play that role. Total size ≈ 3 op
 | v2 | `providers` changed meaning: was the `WATCH_REGION` list, now every region merged and ranked (TMDB has no `VN` data). Old files are refetched. |
 | v3 | `cast` changed from a list of names to `CastMember` objects carrying `profile_url`. Old files are refetched. |
 | v4 | `providers` is limited to services available in Vietnam (allowlist in `internal/refresh/providers.go`). Old files are refetched. |
+| v5 | `trailer_url` replaced by `media`, the detail carousel's slides. Old files are refetched. |

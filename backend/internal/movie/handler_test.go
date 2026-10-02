@@ -38,7 +38,10 @@ var matrix = domain.MovieDetail{
 		{Name: "Keanu Reeves", ProfileURL: ptr("https://image.tmdb.org/t/p/w185/k.jpg")},
 		{Name: "Gloria Foster", ProfileURL: nil}, // no TMDB photo → null in the response
 	},
-	TrailerURL: ptr("https://www.youtube.com/watch?v=k"),
+	Media: []domain.MediaItem{
+		{Type: domain.MediaVideo, URL: "https://www.youtube.com/watch?v=k", YoutubeKey: ptr("k")},
+		{Type: domain.MediaImage, URL: "https://image.tmdb.org/t/p/w780/b.jpg"},
+	},
 	Providers: []domain.Provider{
 		{ID: 8, Name: "Netflix", LogoURL: ptr("https://image.tmdb.org/t/p/w92/n.jpg"), Type: domain.ProviderFlatrate},
 	},
@@ -117,7 +120,10 @@ func TestHandler(t *testing.T) {
 				  {"name":"Keanu Reeves","profile_url":"https://image.tmdb.org/t/p/w185/k.jpg"},
 				  {"name":"Gloria Foster","profile_url":null}
 				],
-				"trailer_url":"https://www.youtube.com/watch?v=k",
+				"media":[
+				  {"type":"video","url":"https://www.youtube.com/watch?v=k","youtube_key":"k"},
+				  {"type":"image","url":"https://image.tmdb.org/t/p/w780/b.jpg","youtube_key":null}
+				],
 				"providers":[{"id":8,"name":"Netflix","logo_url":"https://image.tmdb.org/t/p/w92/n.jpg","type":"flatrate"}]
 			},"meta":{"fetched_at":"2026-09-27T10:00:05Z"}}`,
 		},
@@ -128,7 +134,7 @@ func TestHandler(t *testing.T) {
 			wantBody: `{"data":{
 				"id":680,"title":"Pulp Fiction","original_title":"Pulp Fiction","overview":"","tagline":"",
 				"poster_url":null,"backdrop_url":null,"release_year":null,"rating":0,"vote_count":0,
-				"runtime_minutes":null,"genres":[],"directors":[],"cast":[],"trailer_url":null,"providers":[]
+				"runtime_minutes":null,"genres":[],"directors":[],"cast":[],"media":[],"providers":[]
 			},"meta":{"fetched_at":"2026-09-27T10:00:00Z"}}`,
 		},
 		{

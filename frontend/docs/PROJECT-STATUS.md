@@ -1,6 +1,6 @@
 # Project Status — Frontend
 
-_Last updated: 2026-09-29_
+_Last updated: 2026-09-30_
 
 ## Done
 - Next.js 16.3 app scaffolded per ARCHITECTURE §2 (TypeScript strict, Tailwind v4 tokens, shadcn `base-nova`, Playfair + Inter with the `vietnamese` subset); ADR `docs/decisions/001-frontend-stack.md`
@@ -16,6 +16,8 @@ _Last updated: 2026-09-29_
 - Detail sheet closing actions (2026-09-30): "Chúc bạn ngon miệng." plus share (native share sheet, clipboard fallback) and "Chọn phim khác"
 - Footer redesign + "Về Pásta Night" about sheet (2026-09-30): brand story, address, opening hours, hotline, social links and the shop CTA, opened from every page via `?about=1`. Content lives in `src/config/brand.ts`; every value still holds the mockup's placeholder
 
+- Detail hero carousel (2026-09-30, revised the same day after a device check): the trailer loops so YouTube's suggestion end screen never appears, a transparent layer over the player restores swiping (a cross-origin iframe keeps the touch), the position dots became buttons, and a mouse can drag the strip (`overflow-x-auto` offers a mouse nothing once the scrollbar is hidden). `MediaCarousel` replaces the static hero — the trailer in a muted-autoplay `youtube-nocookie` embed, then up to 8 stills, on a snap scroller with position dots. Images auto-advance every 5 s; the video slide, a touch, a hidden tab and `prefers-reduced-motion` each stop it.
+
 ## In Progress
 - None
 
@@ -28,6 +30,8 @@ _Last updated: 2026-09-29_
 
 ## Known Issues
 - Vietnamese genre names start with "Phim …", so the second chip on movie cards is usually truncated.
+- The trailer embed pulls ~1 MB of YouTube player JS on a page customers open over mobile data. If that hurts, switch to a still plus a play button and load the iframe on tap (SCREENS §3).
+- The looping trailer keeps streaming while the sheet stays open on the video slide. Acceptable for a short trailer; revisit if it shows up in data usage.
 - ESLint 9 (pinned by create-next-app) is marked unsupported by npm; upgrade when `eslint-config-next` supports ESLint 10.
 
 ## Open Questions

@@ -103,16 +103,19 @@ type DiscoverMovie struct {
 
 ### 4.2 Phase 2 — `GET /movie/{id}` with `append_to_response`
 
-One call per movie returns details + credits + videos + watch providers.
+One call per movie returns details + credits + videos + watch providers + artwork.
 
 ```text
 GET /movie/603?language=vi-VN
-              &append_to_response=credits,videos,watch/providers
+              &append_to_response=credits,videos,watch/providers,images
               &include_video_language=vi,en
+              &include_image_language=vi,en,null
 ```
 
 - `include_video_language=vi,en`: with `language=vi-VN` alone, most movies return no trailers.
-- TMDB allows at most **20** appended objects per call; we use 3.
+- `include_image_language=vi,en,null`: `null` is TMDB's bucket for **textless** artwork, which is what the carousel wants — a backdrop with a foreign title burned in looks like a mistake. Without this parameter `language=vi-VN` returns only Vietnamese artwork, which barely any movie has.
+- Only `images.backdrops` is read. Backdrops are 16:9, the shape of the carousel; posters and logos are ignored.
+- TMDB allows at most **20** appended objects per call; we use 4.
 
 **Response DTO:**
 
@@ -133,6 +136,7 @@ type MovieDetails struct {
 	Genres         []Genre        `json:"genres"`
 	Credits        Credits        `json:"credits"`
 	Videos         Videos         `json:"videos"`
+	Images         Images         `json:"images"`
 	WatchProviders WatchProviders `json:"watch/providers"` // ⚠️ the JSON key contains a slash
 }
 
@@ -167,6 +171,19 @@ type Video struct {
 	Type     string `json:"type"`      // "Trailer", "Teaser", "Clip", ...
 	Official bool   `json:"official"`
 	Language string `json:"iso_639_1"` // "vi", "en"
+}
+
+type Images struct {
+	Backdrops []Image `json:"backdrops"` // only backdrops are used: 16:9, the carousel's shape
+}
+
+type Image struct {
+	FilePath    string  `json:"file_path"`
+	Width       int     `json:"width"`
+	Height      int     `json:"height"`
+	AspectRatio float64 `json:"aspect_ratio"`
+	VoteAverage float64 `json:"vote_average"`
+	Language    string  `json:"iso_639_1"` // "" for textless art, which the carousel prefers
 }
 
 type WatchProviders struct {
@@ -212,16 +229,34 @@ type Provider struct {
 | `genres` | `genres[].name`, TMDB order | `["Phim Hành Động"]` |
 | `directors` | `credits.crew` where `job == "Director"`; names de-duplicated, TMDB order | `["Lana Wachowski", "Lilly Wachowski"]` |
 | `cast` | `credits.cast` sorted by `order` asc; first 5, each mapped to `{name, profile_url}`. `profile_url`: `""` → `null`; else `image base + "w185" + profile_path` (avatars render at 48 px, so w185 covers 3x screens) | `{"name": "Keanu Reeves", "profile_url": "…/t/p/w185/abc.jpg"}` |
-| `trailer_url` | see trailer selection below; none → `null` | `https://www.youtube.com/watch?v=<key>` |
+| `media` | see media selection below; nothing to show → `[]` | `[{"type":"video",…},{"type":"image",…}]` |
 | `providers` | see provider rules below; region missing → `[]` | |
 | `fetched_at` | `time.Now().UTC()` at fetch time | |
 
-### Trailer selection
+### Media selection
+
+`media` is the detail carousel's slide list, already in display order, so the frontend renders it as it comes.
+
+**The video slide (at most one, always index 0):**
 
 1. Keep videos with `site == "YouTube"` and `type == "Trailer"`.
 2. Prefer language `vi`, then `en`, then others.
 3. Within the same language, prefer `official == true`.
-4. Take the first → `https://www.youtube.com/watch?v=` + `key`.
+4. Take the first. `url` is `https://www.youtube.com/watch?v=` + `key`, and `youtube_key` is the key itself so a client can build an embed without parsing the URL.
+
+No trailer → no video slide, and the carousel opens on the first still.
+
+**The image slides (up to `maxCarouselImages` = 8):**
+
+Sort `images.backdrops` by, in order:
+
+1. **Textless first** — `iso_639_1` empty (TMDB's `null` bucket) before any language tag.
+2. `vote_average` descending.
+3. `file_path` ascending, so the order is deterministic across refreshes.
+
+Then skip entries with an empty `file_path` and take the first 8. `url` is `image base + "w780" + file_path`: the carousel is 448 CSS px wide, so w780 covers 2x screens. `youtube_key` is `null`.
+
+The cap matters: a popular movie carries 100+ backdrops, and every extra one is dead weight in the cache for a slide nobody scrolls to.
 
 ### Provider rules
 
@@ -292,7 +327,8 @@ TMDB error body:
 - Fixtures in `internal/platform/tmdb/testdata/`. They are hand-written in TMDB's response shape (tests and scripts never call TMDB); replace them with real captures when someone runs the manual checks:
   ```text
   discover_page1.json
-  movie_603_full.json          # all appends, providers in two regions, one actor without a photo
+  movie_603_full.json          # all appends, providers in two regions, one actor without a photo,
+                               # backdrops covering every ordering rule incl. an empty file_path
   movie_other_region.json      # watch/providers with a single non-VN region
   movie_missing_fields.json    # no poster, runtime 0, release_date ""
   error_401.json
@@ -303,7 +339,8 @@ TMDB error body:
   - title fallback to `original_title`; drop when both empty
   - `""` paths → `null` URLs; `runtime 0` → `null`; `release_date ""` → `null`
   - cast: billing order, capped at 5, and an actor without `profile_path` → `profile_url: null`
-  - trailer preference (vi > en; official first)
+  - trailer preference (vi > en; official first), and its `youtube_key`
+  - media order: video first, then textless backdrops before tagged ones, `vote_average` descending, empty `file_path` skipped, capped at 8
   - provider merging across regions: ranking by region count, best type wins, cap at 8, deterministic order
 - Refresher tests: fake client (consumer-side interface) for partial failures, 401 abort, publish guards.
 - Manual check of VN provider coverage before promising the feature:

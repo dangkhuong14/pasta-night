@@ -221,5 +221,47 @@
         ]
       }
     }
+  },
+  "images": {
+    "backdrops": [
+      {
+        "file_path": "/lang-high.jpg",
+        "width": 3840,
+        "height": 2160,
+        "aspect_ratio": 1.778,
+        "vote_average": 9.9,
+        "vote_count": 30,
+        "iso_639_1": "en"
+      },
+      {
+        "file_path": "/textless-low.jpg",
+        "width": 1920,
+        "height": 1080,
+        "aspect_ratio": 1.778,
+        "vote_average": 1.1,
+        "vote_count": 2,
+        "iso_639_1": null
+      },
+      {
+        "file_path": "/textless-high.jpg",
+        "width": 3840,
+        "height": 2160,
+        "aspect_ratio": 1.778,
+        "vote_average": 8.4,
+        "vote_count": 12,
+        "iso_639_1": null
+      },
+      {
+        "file_path": "",
+        "width": 0,
+        "height": 0,
+        "aspect_ratio": 1.778,
+        "vote_average": 5.0,
+        "vote_count": 1,
+        "iso_639_1": null
+      }
+    ],
+    "posters": [],
+    "logos": []
   }
 }

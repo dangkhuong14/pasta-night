@@ -110,7 +110,7 @@ Reference: `design/03-movie-detail.png`
 
 **Layout**
 
-1. Hero image (≈ 260 px) with bottom gradient; round close button (×) top-left.
+1. Hero (≈ 260 px): `MediaCarousel` with a bottom gradient; round close button (×) top-left, above the carousel.
 2. Sheet body (`rounded-t-3xl`, drag handle):
    1. Title row: title (Detail title) + `RatingBadge`.
    2. Meta row: clock + runtime · calendar + year · first genre as `neutral` chip.
@@ -121,6 +121,20 @@ Reference: `design/03-movie-detail.png`
    7. `PromoCard` "Cần thêm gia vị?" · "Mua ngay Pásta Night để trải nghiệm phim thêm trọn vẹn." · "MUA NGAY".
    8. `SheetActions`: "Chúc bạn ngon miệng." (serif italic, muted, centered), then two equal-width pill buttons side by side — "Chia sẻ gợi ý" and "Chọn phim khác". Always shown.
    9. `Footer`. The sheet covers the whole screen, so the page's own footer sits behind it; `recommendations/[option]/page.tsx` passes a second one in through the sheet's `footer` prop.
+
+**Hero carousel** (`MediaCarousel`)
+
+- One slide per `media[]` entry, in the order the API sends them: the trailer first, then up to 8 stills (API_SPEC §5.3). Horizontal scroll with `snap-x snap-mandatory`, so a swipe lands on a whole slide.
+- The video slide is a `youtube-nocookie.com` iframe with `autoplay=1&mute=1&playsinline=1`. **Muted is not optional:** browsers block autoplay with sound.
+- **The trailer loops** (`loop=1&playlist=<key>`). That is what keeps YouTube's end screen of suggested videos away: `rel=0` has not removed suggestions since 2018, it only limits them to the same channel, so the only reliable answer is for the video never to reach its end. `iv_load_policy=3` drops annotation overlays.
+- **Swiping over the video**: a cross-origin iframe keeps every touch that lands on it, so a swipe across the player would never reach the carousel. A transparent layer covers the video slide and takes the gesture instead. Tapping that layer hands the player over — it disappears and YouTube's own controls (pause, sound, fullscreen) start working. The hand-over is not undone while the sheet is open; from then on the dots are how the customer moves.
+- **A mouse drags the carousel.** `overflow-x-auto` gives a mouse only the scrollbar, which this carousel hides, so a plain drag would do nothing — the desktop equivalent of the dead swipe above. Pressing and moving more than 4 px scrolls the strip by hand and releases onto the nearest slide; the cursor is `grab` / `grabbing`. A drag is captured only once it passes that threshold, so a plain click still reaches the video slide's tap-to-control, and a drag that ends on the video is not mistaken for a tap.
+- **The position dots are buttons**, not decoration: 6 px dots inside 28 × 32 px targets, labelled "Trailer" / "Ảnh N". They are the navigation that always works, including once the player has been handed over. Tapping one pauses auto-advance like a swipe does.
+- The trailer costs a third-party embed (~1 MB of player JS) on a page customers open from a QR code on mobile data. If that proves too heavy, the lighter option is a still plus a play button, loading the iframe only on tap.
+- **Auto-advance** every 5 s, and only while the current slide is an **image** — on the trailer slide it stops entirely so the video plays through. It pauses as soon as the customer touches or swipes and resumes after ~6 s of quiet, stops while the tab is hidden, and wraps from the last image back to the **first image**, never to the trailer (which would replay it).
+- Auto-advance scrolls the same container a swipe does, so the scroll position is the only source of truth for which slide shows.
+- **`prefers-reduced-motion: reduce` turns off both** the autoplay and the auto-advance; the trailer stays as a normal embed the customer can start.
+- `media` empty → the hero falls back to `poster_url`, and to a film icon on `bg-card` when there is no poster either.
 
 **Sharing** (`SheetActions`)
 
@@ -134,7 +148,7 @@ Reference: `design/03-movie-detail.png`
 | UI | Source | Available |
 |---|---|---|
 | title, rating, runtime, year, genre, providers, overview | the `MovieSummary` already in the list | instantly |
-| hero | `backdrop_url` → `poster_url` | after `GET /movies/{id}` (use `poster_url` meanwhile) |
+| hero carousel | `media[]` → `poster_url` | after `GET /movies/{id}` (show `poster_url` alone meanwhile) |
 | cast names + photos | `cast[].name`, `cast[].profile_url` | after `GET /movies/{id}` |
 | pasta pairing | `brand.ts` → `pastaPairings[option_id]` | instantly |
 | shop link | `NEXT_PUBLIC_SHOP_URL` | instantly |
@@ -152,6 +166,7 @@ Reference: `design/03-movie-detail.png`
 | `providers` empty | whole "CÓ MẶT TRÊN" card |
 | `overview` = `""` | "NỘI DUNG" section |
 | `cast` empty | "DIỄN VIÊN CHÍNH" section |
+| `media` has 0–1 slides | the carousel's position dots |
 | no pairing for option | `PastaPairingCard` |
 | `NEXT_PUBLIC_SHOP_URL` unset | `PromoCard` |
 
@@ -159,7 +174,7 @@ Reference: `design/03-movie-detail.png`
 
 | State | Behavior |
 |---|---|
-| detail loading | summary parts render; hero uses poster; cast row shows 4 circle skeletons |
+| detail loading | summary parts render; hero shows the poster alone (no dots, no video); cast row shows 4 circle skeletons |
 | `MOVIE_NOT_FOUND` | close the sheet, `router.refresh()` the list |
 | other detail errors | keep summary parts; hide cast; no error screen |
 | `?movie=` not in current list | fetch detail; if it fails → close the sheet silently |

@@ -36,6 +36,16 @@ export type CastMember = {
   profile_url: string | null;
 };
 
+/**
+ * One slide of the detail carousel (DATABASE.md §2). The video, when the
+ * movie has one, always comes first; `youtube_key` is set only for it.
+ */
+export type MediaItem = {
+  type: "video" | "image";
+  url: string;
+  youtube_key: string | null;
+};
+
 /** GET /movies/{movie_id} → data (API_SPEC §5.3). */
 export type MovieDetail = MovieSummary & {
   original_title: string;
@@ -44,7 +54,7 @@ export type MovieDetail = MovieSummary & {
   vote_count: number;
   directors: string[];
   cast: CastMember[];
-  trailer_url: string | null;
+  media: MediaItem[];
 };
 
 export type RecommendationsMeta = {

@@ -19,6 +19,8 @@ _Last updated: 2026-09-29 (cast photos added; cache schema v3)_
 
 - Cast photos (2026-09-29): `cast` changed from names to `{name, profile_url}` using TMDB `profile_path` at size `w185`. Formally a breaking API change applied to v1 before launch (API_SPEC Changelog v1.1); cache schema v2 → v3. Coverage is effectively complete — every actor in the current data has a photo — and `profile_url` is `null` when TMDB has none.
 
+- Detail carousel media (2026-09-30): `trailer_url` replaced by `media`, an ordered slide list of the trailer plus up to 8 backdrops (API_SPEC Changelog v1.2, cache schema v4 → v5). Phase 2 now appends `images` with `include_image_language=vi,en,null`, and backdrops are sorted textless-first, then by `vote_average`, then by `file_path` so the order is stable across refreshes.
+
 ## In Progress
 - None
 

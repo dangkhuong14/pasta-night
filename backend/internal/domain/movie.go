@@ -30,9 +30,26 @@ type MovieDetail struct {
 	Genres         []string     `json:"genres"`
 	Directors      []string     `json:"directors"`
 	Cast           []CastMember `json:"cast"`
-	TrailerURL     *string      `json:"trailer_url"`
+	Media          []MediaItem  `json:"media"`
 	Providers      []Provider   `json:"providers"`
 	FetchedAt      time.Time    `json:"fetched_at"`
+}
+
+// MediaType tells the carousel what a MediaItem holds.
+type MediaType string
+
+// Media types, in the order the carousel shows them: the video first.
+const (
+	MediaVideo MediaType = "video"
+	MediaImage MediaType = "image"
+)
+
+// MediaItem is one slide of the detail carousel. YoutubeKey is set only for
+// videos, so the frontend can build an embed without parsing URL.
+type MediaItem struct {
+	Type       MediaType `json:"type"`
+	URL        string    `json:"url"`
+	YoutubeKey *string   `json:"youtube_key"`
 }
 
 // CastMember is one billed actor. ProfileURL is nil when TMDB has no photo,

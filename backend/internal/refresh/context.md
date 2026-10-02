@@ -18,6 +18,7 @@ Keeps the cache fresh from TMDB. A job checks every option on a ticker and refre
 
 ## Gotchas
 - Discover rankings shift between page calls: IDs are de-duplicated across pages.
+- `carouselMedia` puts the trailer at index 0 and sorts backdrops textless-first, then by vote, then by `file_path`. The last key is only there to keep the order stable across refreshes; without it TMDB's ties would reshuffle the carousel on every run.
 - `Trigger` never blocks. The 202 response lists accepted options; the refresh runs afterwards.
 
 ## Related Docs

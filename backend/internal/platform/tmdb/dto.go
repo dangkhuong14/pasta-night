@@ -35,7 +35,25 @@ type MovieDetails struct {
 	Genres         []Genre        `json:"genres"`
 	Credits        Credits        `json:"credits"`
 	Videos         Videos         `json:"videos"`
+	Images         Images         `json:"images"`
 	WatchProviders WatchProviders `json:"watch/providers"` // the JSON key contains a slash
+}
+
+// Images is the appended images object. Only backdrops are used: they are
+// 16:9, which is the shape of the detail sheet's carousel.
+type Images struct {
+	Backdrops []Image `json:"backdrops"`
+}
+
+// Image is one artwork file. Language is "" for textless art, which is what
+// the carousel prefers (TMDB_INTEGRATION.md §5).
+type Image struct {
+	FilePath    string  `json:"file_path"`
+	Width       int     `json:"width"`
+	Height      int     `json:"height"`
+	AspectRatio float64 `json:"aspect_ratio"`
+	VoteAverage float64 `json:"vote_average"`
+	Language    string  `json:"iso_639_1"`
 }
 
 // Genre is a localized TMDB genre.

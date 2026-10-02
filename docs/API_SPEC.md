@@ -149,8 +149,17 @@ Values in the examples below are illustrative.
   | `movie_id` | int | required; > 0 |
 
 - Only movies in a current recommendation list are available. There is no live TMDB lookup.
-- **200:** `data` is `MovieDetail` = all MovieSummary fields + `original_title`, `tagline`, `backdrop_url`, `vote_count`, `directors`, `cast`, `trailer_url`.
+- **200:** `data` is `MovieDetail` = all MovieSummary fields + `original_title`, `tagline`, `backdrop_url`, `vote_count`, `directors`, `cast`, `media`.
 - `cast` holds up to 5 objects in billing order: `name`, and `profile_url` which is `null` when TMDB has no photo of the actor (the frontend then shows their initials).
+- `media` holds the detail carousel's slides in display order: the trailer, when the movie has one, then up to 8 stills. Each slide is `{ type, url, youtube_key }`:
+
+  | Field | Type | Notes |
+  |---|---|---|
+  | `type` | string | `"video"` or `"image"` |
+  | `url` | string | for `video`, the YouTube watch URL; for `image`, a `w780` TMDB backdrop |
+  | `youtube_key` | string \| null | the YouTube video id, so a client need not parse `url`; `null` for images |
+
+  At most one `video` slide, always at index 0. `media` is `[]` when TMDB has neither a trailer nor a backdrop.
 
   ```json
   {
@@ -172,7 +181,10 @@ Values in the examples below are illustrative.
         { "name": "Keanu Reeves", "profile_url": "https://image.tmdb.org/t/p/w185/<profile_path>.jpg" },
         { "name": "Gloria Foster", "profile_url": null }
       ],
-      "trailer_url": "https://www.youtube.com/watch?v=<video_key>",
+      "media": [
+        { "type": "video", "url": "https://www.youtube.com/watch?v=<video_key>", "youtube_key": "<video_key>" },
+        { "type": "image", "url": "https://image.tmdb.org/t/p/w780/<file_path>.jpg", "youtube_key": null }
+      ],
       "providers": [
         { "id": 8, "name": "Netflix", "logo_url": "https://image.tmdb.org/t/p/w92/<logo_path>.jpg", "type": "flatrate" }
       ]
@@ -248,3 +260,4 @@ Values in the examples below are illustrative.
 |---|---|---|
 | v1.0 | 2026-09-27 | initial contract |
 | v1.1 | 2026-09-29 | `cast` changed from `string[]` to `{ name, profile_url }[]` so the detail sheet can show actor photos. Formally a breaking change (§1), applied to v1 rather than opening v2 because nothing is deployed yet and the frontend is the only client. |
+| v1.2 | 2026-09-30 | `trailer_url` removed, replaced by `media: { type, url, youtube_key }[]` so the detail sheet can show a scrollable carousel of the trailer and stills. Breaking, applied to v1 for the same reason as v1.1. |

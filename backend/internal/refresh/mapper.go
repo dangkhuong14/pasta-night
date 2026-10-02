@@ -20,8 +20,12 @@ const (
 	backdropSize = "w1280"
 	logoSize     = "w92"
 	profileSize  = "w185" // cast avatars render at 48 px, so this covers 3x screens
+	carouselSize = "w780" // the carousel is 448 CSS px wide, so this covers 2x screens
 	youtubeURL   = "https://www.youtube.com/watch?v="
 	maxCast      = 5
+	// maxCarouselImages caps the detail carousel: popular movies carry 100+
+	// backdrops, and every extra one is dead weight in the cache.
+	maxCarouselImages = 8
 	// maxProviders caps the merged list: popular movies are offered by 40+
 	// services worldwide, most of them single-country (TMDB_INTEGRATION.md §5).
 	maxProviders = 8
@@ -55,7 +59,7 @@ func mapMovieDetails(m tmdb.MovieDetails, fetchedAt time.Time) (domain.MovieDeta
 		Genres:         genreNames(m.Genres),
 		Directors:      directors(m.Credits.Crew),
 		Cast:           topCast(m.Credits.Cast),
-		TrailerURL:     trailerURL(m.Videos.Results),
+		Media:          carouselMedia(m),
 		Providers:      providers(m.WatchProviders),
 		FetchedAt:      fetchedAt,
 	}, true
@@ -134,9 +138,10 @@ func topCast(cast []tmdb.CastMember) []domain.CastMember {
 	return members
 }
 
-// trailerURL picks the best YouTube trailer: language vi, then en, then
+// trailerKey picks the best YouTube trailer: language vi, then en, then
 // others; official first within a language; TMDB order breaks ties.
-func trailerURL(videos []tmdb.Video) *string {
+// Returns "" when the movie has no usable trailer.
+func trailerKey(videos []tmdb.Video) string {
 	best := -1
 	for i, v := range videos {
 		if v.Site != "YouTube" || v.Type != "Trailer" || v.Key == "" {
@@ -147,10 +152,56 @@ func trailerURL(videos []tmdb.Video) *string {
 		}
 	}
 	if best == -1 {
-		return nil
+		return ""
 	}
-	u := youtubeURL + url.QueryEscape(videos[best].Key)
-	return &u
+	return videos[best].Key
+}
+
+// carouselMedia builds the detail sheet's carousel: the trailer first, if
+// there is one, then backdrops (TMDB_INTEGRATION.md §5). Textless backdrops
+// come first because a slide with burned-in foreign text reads as a mistake;
+// within each group the higher-rated artwork wins.
+func carouselMedia(m tmdb.MovieDetails) []domain.MediaItem {
+	media := make([]domain.MediaItem, 0, maxCarouselImages+1)
+
+	if key := trailerKey(m.Videos.Results); key != "" {
+		escaped := url.QueryEscape(key)
+		media = append(media, domain.MediaItem{
+			Type:       domain.MediaVideo,
+			URL:        youtubeURL + escaped,
+			YoutubeKey: &escaped,
+		})
+	}
+
+	backdrops := slices.Clone(m.Images.Backdrops)
+	slices.SortStableFunc(backdrops, func(a, b tmdb.Image) int {
+		return cmp.Or(
+			// "" is TMDB's textless bucket, and sorts before any language tag.
+			cmp.Compare(boolToInt(a.Language != ""), boolToInt(b.Language != "")),
+			cmp.Compare(b.VoteAverage, a.VoteAverage),
+			cmp.Compare(a.FilePath, b.FilePath), // deterministic tie-break
+		)
+	})
+	for _, img := range backdrops {
+		if len(media) == maxCarouselImages+1 {
+			break
+		}
+		if img.FilePath == "" {
+			continue
+		}
+		media = append(media, domain.MediaItem{
+			Type: domain.MediaImage,
+			URL:  imageBaseURL + carouselSize + img.FilePath,
+		})
+	}
+	return media
+}
+
+func boolToInt(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
 }
 
 func trailerRank(v tmdb.Video) int {

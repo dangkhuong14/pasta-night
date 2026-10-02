@@ -120,7 +120,8 @@ const inter = Inter({ subsets: ["latin", "vietnamese"], variable: "--font-inter"
 | `OutlineButton` | pill, `border-gold-line text-primary`, h-9, small | "MUA NGAY" |
 | `StickyActionBar` | fixed bottom, full width inside the column, `p-4`, gradient fade above; respects `env(safe-area-inset-bottom)` | recommendations |
 | `PageHeader` | sticky, h-14, back chevron (gold) left + centered `BrandWordmark`, `border-b border-border`, `bg-background/80 backdrop-blur` | recommendations |
-| `MovieDetailSheet` | shadcn `Drawer`; full height on mobile; hero image with bottom gradient, round close button top-left; sheet body `rounded-t-3xl bg-card` with drag handle | detail |
+| `MovieDetailSheet` | shadcn `Drawer`; full height on mobile; hero `MediaCarousel` with a bottom gradient, round close button top-left; sheet body `rounded-t-3xl bg-card` with drag handle | detail |
+| `MediaCarousel` | h-65 `snap-x snap-mandatory` scroller, one full-width slide per `media[]` entry, scrollbar hidden, `cursor-grab` with mouse drag-to-scroll; video slide = `youtube-nocookie` iframe (muted, looping autoplay) under a transparent tap-to-control layer; dot buttons at `bottom-5`, clear of the sheet body that overlaps the hero — 6 px dot in a 28 × 32 px target, active one `w-4 bg-primary`, the rest `w-1.5 bg-foreground/40`. Images auto-advance every 5 s; stops on the video slide, on touch, and under `prefers-reduced-motion` (SCREENS §3) | detail hero |
 | `InfoCard` | `bg-card rounded-xl border-border p-4`, `SectionLabel` on top | "CÓ MẶT TRÊN" |
 | `ProviderLogo` | 32 px logo `rounded-md` + 10 px name below | providers |
 | `PastaPairingCard` | like `InfoCard` but `border-gold-line`; gold `SectionLabel`; 56 px dish image `rounded-lg` + dish name (Playfair 16 px) + note (Caption) | detail |
