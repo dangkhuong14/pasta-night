@@ -117,7 +117,7 @@ At your DNS provider, add a `CNAME` record: `api` → `pasta-night-api.fly.dev`.
    | `NEXT_PUBLIC_API_BASE_URL` | `https://pasta-night-api.fly.dev/api/v1` |
    | `NEXT_PUBLIC_SHOP_URL` | the online shop link, or leave empty to hide the "MUA NGAY" card |
 
-4. **Settings → Functions → Function Region**: Singapore (`sin1`), next to the backend.
+4. Region: nothing to set. `frontend/vercel.json` pins functions to Singapore (`sin1`), next to the backend. The import screen has no region picker, so it lives in code.
 5. Deploy.
 6. **Settings → Domains**: add `<domain>`, and `www.<domain>` set to redirect to it. Add the DNS records Vercel displays.
 
