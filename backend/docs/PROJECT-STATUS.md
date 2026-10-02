@@ -1,6 +1,6 @@
 # Project Status — Backend
 
-_Last updated: 2026-10-02 (deploy config ready, not deployed yet; cache schema v5)_
+_Last updated: 2026-10-02 (deployed to Fly.io; cache schema v5)_
 
 ## Done
 - All 5 endpoints of API_SPEC v1: `GET /api/v1/options`, `GET /api/v1/options/{option_id}/recommendations`, `GET /api/v1/movies/{movie_id}`, `POST /api/v1/admin/refresh`, `GET /healthz`
@@ -20,9 +20,10 @@ _Last updated: 2026-10-02 (deploy config ready, not deployed yet; cache schema v
 - Cast photos (2026-09-29): `cast` changed from names to `{name, profile_url}` using TMDB `profile_path` at size `w185`. Formally a breaking API change applied to v1 before launch (API_SPEC Changelog v1.1); cache schema v2 → v3. Coverage is effectively complete — every actor in the current data has a photo — and `profile_url` is `null` when TMDB has none.
 
 - Detail carousel media (2026-09-30): `trailer_url` replaced by `media`, an ordered slide list of the trailer plus up to 8 backdrops (API_SPEC Changelog v1.2, cache schema v4 → v5). Phase 2 now appends `images` with `include_image_language=vi,en,null`, and backdrops are sorted textless-first, then by `vote_average`, then by `file_path` so the order is stable across refreshes.
+- **Deployed to Fly.io** (2026-10-02): `https://pasta-night-api.fly.dev`, app `pasta-night-api`, one machine in `sin`, volume `pasta_cache`. First refresh from an empty volume filled all 3 options (40 movies each); a machine restart reloaded the cache from the volume with no `503`. CORS allows `https://pastanight.io.vn`. Backend keeps Fly's own hostname (no `api.` subdomain).
 
 ## In Progress
-- **First production deploy on Fly.io** (2026-10-02): the repo side is done — `backend/fly.toml` (Singapore, one always-on `shared-cpu-1x` machine, volume `pasta_cache` at `/app/data/cache`, `/healthz` check, 15 s kill timeout for the 10 s graceful shutdown), the runbook `docs/DEPLOYMENT.md` and the decision SYS-001. Waiting on account steps that cannot be done from the repo: create the app and volume, set `TMDB_READ_TOKEN` and `ADMIN_TOKEN` with `fly secrets`, `api.<domain>` certificate and DNS, then the real `CORS_ALLOWED_ORIGINS` (DEPLOYMENT.md §3.1–3.4)
+- None
 
 ## Next
 - Replace hand-written TMDB fixtures with real captures
