@@ -38,13 +38,13 @@ export function RecommendationGrid({ movies }: RecommendationGridProps) {
     <>
       <div
         ref={gridRef}
-        className="grid scroll-mt-20 grid-cols-2 gap-4 px-5 pt-6"
+        className="grid scroll-mt-20 grid-cols-2 gap-4 px-5 pt-6 md:grid-cols-4 lg:gap-6"
       >
         {visible.map((movie, i) => (
           <MovieCard
             key={`${round}-${movie.id}`}
             movie={movie}
-            isPriority={round === 0 && i < 2}
+            isPriority={round === 0 && i < 4}
             animationDelayMs={i * 40}
           />
         ))}

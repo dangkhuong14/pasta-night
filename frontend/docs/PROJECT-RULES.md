@@ -36,7 +36,7 @@
 | Props type | `<Component>Props` | `MovieCardProps` |
 | Types | PascalCase, no `I` prefix | `MovieSummary` ❌ `IMovieSummary` |
 | Functions, variables | camelCase | `formatRuntime`, `visibleMovies` |
-| Module constants | UPPER_SNAKE | `DISPLAY_COUNT = 6` |
+| Module constants | UPPER_SNAKE | `DISPLAY_COUNT = 8` |
 | Booleans | `is/has/should` | `isSheetOpen`, `hasProviders` |
 | Event props / handlers | `onX` / `handleX` | `onShuffle` → `handleShuffle` |
 

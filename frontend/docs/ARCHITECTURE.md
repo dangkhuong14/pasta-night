@@ -5,7 +5,7 @@
 
 ## 1. Overview
 
-- **What:** a mobile-first website opened from the QR code on a Pásta Night order card. Customer picks a viewing option → sees movie recommendations → opens a movie's detail.
+- **What:** a mobile-first, responsive website opened from the QR code on a Pásta Night order card (breakpoints: DESIGN-SYSTEM §1). Customer picks a viewing option → sees movie recommendations → opens a movie's detail.
 - **Three screens:** landing (`/`), recommendations (`/recommendations/[option]`), movie detail (sheet, `?movie={id}`).
 - **Constraint:** users arrive on phones, often on mobile data → server-render the first paint, ship little JavaScript.
 
@@ -64,7 +64,7 @@ frontend/
 │   │   │   ├── MovieCard.tsx
 │   │   │   ├── CacheNotReady.tsx      # client: auto-retry
 │   │   │   ├── useShuffle.ts
-│   │   │   ├── constants.ts           # DISPLAY_COUNT
+│   │   │   ├── constants.ts           # DISPLAY_COUNT (8 per page)
 │   │   │   └── context.md
 │   │   └── movie-detail/
 │   │       ├── MovieDetailSheet.tsx   # client: ?movie= ↔ open state

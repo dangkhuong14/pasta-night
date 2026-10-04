@@ -56,7 +56,7 @@ export function MovieCard({
             src={movie.poster_url}
             alt={movie.title}
             fill
-            sizes="(max-width: 448px) 50vw, 224px"
+            sizes="(min-width: 1024px) 236px, (min-width: 768px) 25vw, 50vw"
             priority={isPriority}
             className="object-cover"
           />

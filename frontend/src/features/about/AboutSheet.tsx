@@ -81,8 +81,10 @@ export function AboutSheet() {
         if (!open) close();
       }}
     >
-      <DrawerContent className="mx-auto max-h-[85dvh] w-full max-w-md rounded-t-3xl! bg-card">
-        <div className="relative overflow-y-auto overscroll-contain px-5 pt-3 pb-8">
+      {/* A reading sheet: it widens a little from md, and only from lg enough to
+          put the three info rows side by side (SCREENS §6). */}
+      <DrawerContent className="mx-auto max-h-[85dvh] w-full max-w-md rounded-t-3xl! bg-card md:max-w-xl lg:max-w-3xl">
+        <div className="relative overflow-y-auto overscroll-contain px-5 pt-3 pb-8 md:px-8">
           <div
             aria-hidden
             className="mx-auto h-1 w-10 rounded-full bg-gold-line"
@@ -112,7 +114,7 @@ export function AboutSheet() {
             </div>
           </section>
 
-          <dl className="mt-8 divide-y divide-border border-y border-border">
+          <dl className="mt-8 divide-y divide-border border-y border-border lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_auto] lg:divide-x lg:divide-y-0">
             {shopInfo.address !== "" && (
               <InfoRow
                 icon={
@@ -144,8 +146,10 @@ export function AboutSheet() {
                       key={row.days}
                       className="flex justify-between gap-4 text-sm"
                     >
-                      <span className="text-muted-foreground">{row.days}</span>
-                      <span className="text-foreground tabular-nums">
+                      <span className="whitespace-nowrap text-muted-foreground">
+                        {row.days}
+                      </span>
+                      <span className="whitespace-nowrap text-foreground tabular-nums">
                         {row.hours}
                       </span>
                     </li>
@@ -210,7 +214,7 @@ type InfoRowProps = {
 
 function InfoRow({ icon, label, children }: InfoRowProps) {
   return (
-    <div className="flex gap-3 py-4">
+    <div className="flex gap-3 py-4 lg:px-4 lg:first:pl-0 lg:last:pr-0">
       <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full border border-gold-line text-primary">
         {icon}
       </span>

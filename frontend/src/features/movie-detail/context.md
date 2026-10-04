@@ -25,6 +25,7 @@ Bottom sheet over the recommendations page for `?movie={id}`: summary from the p
 
 ## Gotchas
 - The page renders the sheet next to the grid; features never import each other.
+- From `lg` the body is a two-column grid with `items-start`, which is what lets the carousel column be `sticky`; stretch the columns and the sticky element has nowhere to move. The hero's `-mt-6` overlap, drag handle and bottom gradient are switched off there.
 - The sheet covers the page, so it takes a `footer` prop and the route passes `<Footer aboutLink={<AboutLink />} />` in — the page's own footer is behind the sheet.
 - The pasta pairing is resolved on the server (`page.tsx`) because it checks `public/` for the dish image.
 - The carousel's only state is the scroll position; `current` mirrors it for the dots. Auto-advance calls `scrollTo` on the same element a swipe moves, so the two can never disagree.

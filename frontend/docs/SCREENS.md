@@ -31,7 +31,7 @@ Reference: `design/01-landing.png`
 2. `BrandWordmark` (centered).
 3. Eyebrow: "GỢI Ý PHIM TỐI NAY".
 4. Display H1: "Tối nay bạn xem phim cùng ai?"
-5. `OptionCard` list, `space-y-4`, API order.
+5. `OptionCard` list, API order: stacked (`space-y-4`, cards 176 px tall) below `lg`; from `lg` three cards side by side (`grid-cols-3`, 288 px tall). The wide photos are cropped to a near-square there; their subjects are centered, so that holds.
 6. `Footer`.
 
 **Data**
@@ -48,7 +48,7 @@ Reference: `design/01-landing.png`
 
 | State | Behavior |
 |---|---|
-| loading | rarely visible (server-rendered); `loading.tsx`: wordmark + H1 + 3 card skeletons (176 px) |
+| loading | rarely visible (server-rendered); `loading.tsx`: wordmark + H1 + 3 card skeletons, in the same layout as the cards |
 | error | `ErrorState` with "Thử lại" → `retry()` |
 | empty `data` | treat as error (misconfiguration) |
 
@@ -62,8 +62,8 @@ Reference: `design/02-recommendations.png`
 
 1. `PageHeader`: back chevron → `/`, centered wordmark.
 2. Page title "Dành riêng cho bạn" + eyebrow "NHỮNG BỘ PHIM HOÀN HẢO CHO TỐI NAY".
-3. 2-column grid of `MovieCard`, `gap-4`, bottom padding so the last row clears the action bar.
-4. `StickyActionBar` with `PrimaryButton` "GỢI Ý KHÁC".
+3. Grid of `MovieCard`: **2 columns** (2×4) on phones, **4 columns** (4×2) from `md` (768 px); `gap-4`, `gap-6` from `lg`. Bottom padding so the last row clears the action bar. There is deliberately no 3-column step: 8 cards in 3 columns leave a gap in the last row.
+4. `StickyActionBar` with `PrimaryButton` "GỢI Ý KHÁC" (the button is capped at 384 px from `md` rather than spanning the page).
 5. `Footer`.
 
 **Data**
@@ -79,17 +79,17 @@ Reference: `design/02-recommendations.png`
 
 **"Gợi ý khác" behavior**
 
-- Show **6** movies at a time (`DISPLAY_COUNT` in `features/recommendations/constants.ts`).
-- On load: `page.tsx` shuffles the full list once on the server, per request, and the grid shows the first 6. (A first shuffle on the client would either break hydration or visibly swap the cards after JS loads.)
-- On tap: show the next 6 from the shuffled order, no repeats. When fewer than 6 remain, reshuffle the full list and start over.
+- Show **8** movies at a time on every screen size (`DISPLAY_COUNT` in `features/recommendations/constants.ts`). Only the column count changes with the screen, so this is pure CSS: server and browser render the same 8.
+- On load: `page.tsx` shuffles the full list once on the server, per request, and the grid shows the first 8. (A first shuffle on the client would either break hydration or visibly swap the cards after JS loads.)
+- On tap: show the next 8 from the shuffled order, no repeats. When fewer than 8 remain, reshuffle the full list and start over, with the movies on screen moved to the end so the next page avoids them. A full list of 40 is exactly 5 pages with no repeats. A list shorter than 16 cannot avoid them: after the first page fewer than 8 unseen movies are left, so the next page tops up with some just shown.
 - Scroll to the top of the grid; cards re-animate.
-- Fewer than 6 movies in total → hide the button.
+- Fewer than 8 movies in total → hide the button.
 
 **States**
 
 | State | Behavior |
 |---|---|
-| loading | `loading.tsx` = `design/04-loading-state.png`: header, title bar, 2×2 card skeletons |
+| loading | `loading.tsx` = `design/04-loading-state.png`: header, title bar, 2×2 card skeletons on phones; the full 4×2 from `md` |
 | `OPTION_NOT_FOUND` | `redirect("/")` |
 | `CACHE_NOT_READY` | `ErrorState` title "Đang chuẩn bị gợi ý…", no button; auto-retry after `Retry-After` (default 30 s) |
 | other errors | `ErrorState` (§4) |
@@ -109,6 +109,11 @@ Reference: `design/03-movie-detail.png`
 - Direct link `/recommendations/friends?movie=603` opens the page with the sheet open.
 
 **Layout**
+
+Phones (below `md`), described below: full-height sheet, hero on top, body overlapping it.
+
+- **Tablet (`md`, 768 px):** the same single column, 768 px wide. The hero is 16:9 instead of 260 px tall, so a wide still is not cropped hard.
+- **Desktop (`lg`, 1024 px): two columns** in a floating panel, 1024 px wide and 90 dvh tall with rounded top corners. Left (≈ 55 %): the carousel, 16:9 with rounded corners, `sticky` so the trailer stays in view while the right column scrolls. Right: everything in item 2 below, in the same order. No overlap, no drag handle, no bottom gradient — those only make sense stacked. The footer spans both columns underneath.
 
 1. Hero (≈ 260 px): `MediaCarousel` with a bottom gradient; round close button (×) top-left, above the carousel.
 2. Sheet body (`rounded-t-3xl`, drag handle):
@@ -219,7 +224,7 @@ Reference: the UX Pilot export of the about sheet.
 - Rendered once in `app/layout.tsx`, so it is reachable from every page.
 - **One sheet at a time.** The about and movie Drawers are siblings in the layout and cannot nest, so the footer link replaces the query rather than adding to it: opening it from inside the movie sheet swaps sheets, and back returns to the movie.
 
-**Layout** (sheet `rounded-t-3xl`, max height 85 dvh, scrollable)
+**Layout** (sheet `rounded-t-3xl`, max height 85 dvh, scrollable). It is a reading sheet, so it widens only a little: 448 px on phones, 576 px from `md`, 768 px from `lg`, where the three info rows sit side by side (the opening-hours column gets the most room so days and times stay on one line each).
 
 1. Gold drag handle (top center) + round close × (top right).
 2. `BrandWordmark` then the tagline in serif italic.

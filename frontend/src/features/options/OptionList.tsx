@@ -11,7 +11,8 @@ type OptionListProps = {
 /** Option cards in API order, which is the display order (SCREENS §1). */
 export function OptionList({ options, imageSrcById }: OptionListProps) {
   return (
-    <ul className="space-y-4">
+    // One column up to lg; side by side once the page is wide enough (SCREENS §1).
+    <ul className="space-y-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:space-y-0">
       {options.map((option, index) => (
         <li key={option.id}>
           <OptionCard

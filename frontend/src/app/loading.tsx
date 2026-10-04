@@ -15,9 +15,9 @@ export default function Loading() {
         <Skeleton className="mt-4 h-7 w-64" />
         <Skeleton className="mt-2 h-7 w-40" />
       </div>
-      <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:space-y-0">
         {[0, 1, 2].map((i) => (
-          <Skeleton key={i} className="h-44 rounded-xl" />
+          <Skeleton key={i} className="h-44 rounded-xl lg:h-72" />
         ))}
       </div>
     </div>

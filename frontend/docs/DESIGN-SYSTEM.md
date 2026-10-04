@@ -7,7 +7,16 @@
 ## 1. Principles
 
 - **Cinematic & premium:** near-black canvas, gold used sparingly for brand, titles, and the one primary action per screen.
-- **Mobile-first:** designed at ~375 px. On larger screens, content stays in a centered column (`max-w-md`, 28 rem).
+- **Mobile-first, responsive:** designed at ~375 px; customers arrive from a QR code on their phone. Larger screens widen the centered page column at two Tailwind breakpoints:
+
+  | | Phones | `md` ≥ 768 px | `lg` ≥ 1024 px |
+  |---|---|---|---|
+  | Page column | `max-w-md` (448 px) | `max-w-3xl` (768 px) | `max-w-5xl` (1024 px) |
+  | Movie grid | 2 columns | 4 columns | 4 columns |
+  | Option cards | stacked | stacked | 3 side by side |
+  | Movie detail sheet | full height | full height, 16:9 hero | 90 dvh panel, two columns |
+
+  Layout changes live behind `md:` / `lg:` prefixes, so the phone layout is the unprefixed base.
 - **Dark only:** there is no light theme.
 - **Vietnamese copy:** fonts must include the `vietnamese` subset, or diacritics fall back to a system font.
 
@@ -118,10 +127,10 @@ const inter = Inter({ subsets: ["latin", "vietnamese"], variable: "--font-inter"
 | `GenreChip` | pill, 10–11 px, `px-2 py-0.5`. `gold`: `bg-gold-soft border-gold-line text-primary`. `neutral`: `bg-muted border-border text-muted-foreground` | cards, detail meta |
 | `PrimaryButton` | pill, `bg-primary text-primary-foreground shadow-gold`, h-12, Button text style | "GỢI Ý KHÁC", "THỬ LẠI" |
 | `OutlineButton` | pill, `border-gold-line text-primary`, h-9, small | "MUA NGAY" |
-| `StickyActionBar` | fixed bottom, full width inside the column, `p-4`, gradient fade above; respects `env(safe-area-inset-bottom)` | recommendations |
+| `StickyActionBar` | fixed bottom, full width inside the column, `p-4`, gradient fade above; respects `env(safe-area-inset-bottom)`; the bar follows the column width, its action is capped at `md:max-w-sm` | recommendations |
 | `PageHeader` | sticky, h-14, back chevron (gold) left + centered `BrandWordmark`, `border-b border-border`, `bg-background/80 backdrop-blur` | recommendations |
-| `MovieDetailSheet` | shadcn `Drawer`; full height on mobile; hero `MediaCarousel` with a bottom gradient, round close button top-left; sheet body `rounded-t-3xl bg-card` with drag handle | detail |
-| `MediaCarousel` | h-65 `snap-x snap-mandatory` scroller, one full-width slide per `media[]` entry, scrollbar hidden, `cursor-grab` with mouse drag-to-scroll; video slide = `youtube-nocookie` iframe (muted, looping autoplay) under a transparent tap-to-control layer; dot buttons at `bottom-5`, clear of the sheet body that overlaps the hero — 6 px dot in a 28 × 32 px target, active one `w-4 bg-primary`, the rest `w-1.5 bg-foreground/40`. Images auto-advance every 5 s; stops on the video slide, on touch, and under `prefers-reduced-motion` (SCREENS §3) | detail hero |
+| `MovieDetailSheet` | shadcn `Drawer`; full height on mobile; hero `MediaCarousel` with a bottom gradient, round close button top-left; sheet body `rounded-t-3xl bg-card` with drag handle; `md`: 768 px wide, 16:9 hero; `lg`: 1024 px × 90 dvh panel with rounded top, carousel left (`sticky`), text right, footer underneath (SCREENS §3) | detail |
+| `MediaCarousel` | h-65 `snap-x snap-mandatory` scroller, one full-width slide per `media[]` entry, scrollbar hidden, `cursor-grab` with mouse drag-to-scroll; video slide = `youtube-nocookie` iframe (muted, looping autoplay) under a transparent tap-to-control layer; dot buttons at `bottom-5`, clear of the sheet body that overlaps the hero — 6 px dot in a 28 × 32 px target, active one `w-4 bg-primary`, the rest `w-1.5 bg-foreground/40`. Images auto-advance every 5 s; stops on the video slide, on touch, and under `prefers-reduced-motion` (SCREENS §3); from `md` the hero is `aspect-video` instead of h-65 | detail hero |
 | `InfoCard` | `bg-card rounded-xl border-border p-4`, `SectionLabel` on top | "CÓ MẶT TRÊN" |
 | `ProviderLogo` | 32 px logo `rounded-md` + 10 px name below | providers |
 | `PastaPairingCard` | like `InfoCard` but `border-gold-line`; gold `SectionLabel`; 56 px dish image `rounded-lg` + dish name (Playfair 16 px) + note (Caption) | detail |
@@ -132,7 +141,7 @@ const inter = Inter({ subsets: ["latin", "vietnamese"], variable: "--font-inter"
 | `ErrorState` | centered: gold line icon (lucide `film` / `clapperboard`), Playfair 20 px title, Body muted text, `PrimaryButton` | errors |
 | `Footer` | centered stack behind a 1 px `bg-gold-line/50` divider: `BrandWordmark` (16 px) · contact and social icon row (44 px targets, gold) · "Về Pásta Night" link · TMDB logo + attribution (10 px muted). Empty destinations drop their icon | all pages |
 | `SocialIcons` | inline SVG on lucide's 24 px grid: `FacebookIcon`, `InstagramIcon`, `TiktokIcon`. lucide v1 removed brand icons | footer, about sheet |
-| `AboutSheet` | shadcn `Drawer`, `rounded-t-3xl`, max height 85 dvh, scrollable; drag handle + close ×; wordmark, serif-italic tagline, story, info rows (gold circle icon + label + value), social circles, gold CTA | `?about=1`, every page |
+| `AboutSheet` | shadcn `Drawer`, `rounded-t-3xl`, max height 85 dvh, scrollable; drag handle + close ×; wordmark, serif-italic tagline, story, info rows (gold circle icon + label + value), social circles, gold CTA; `md:max-w-xl`, `lg:max-w-3xl` with the info rows in three columns | `?about=1`, every page |
 
 Icons: `lucide-react`, stroke 1.5, gold for actions, muted for metadata (clock, calendar).
 
@@ -158,5 +167,5 @@ The app renders its fallbacks until these land; dropping the files in is enough,
 
 | Asset | Path | Size | Notes |
 |---|---|---|---|
-| Option card background | `public/images/options/{option_id}.webp` — `netflix-chill`, `solo`, `friends` | ≥ 896×352, ideally 1344×528 (≈ 2.55:1) | Rendered `object-cover` at up to 448×176 CSS px. Keep the lower half dark: a black gradient and gold title sit on top |
+| Option card background | `public/images/options/{option_id}.webp` — `netflix-chill`, `solo`, `friends` | ≥ 896×352, ideally 1344×528 (≈ 2.55:1) | Rendered `object-cover` at 448×176 CSS px on phones, 728×176 on tablets, and 320×288 from `lg`, where the three cards sit in a row and the photo is cropped to its central ~45 %. Keep the subject in the middle and the lower half dark: a black gradient and gold title sit on top |
 | Dish photo | `public/images/dishes/{dish_id}.webp` | ≥ 168×168 square (56 px at 3x) | Only needed once `pastaPairings` in `src/config/brand.ts` has entries |

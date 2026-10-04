@@ -226,7 +226,7 @@ export function MediaCarousel({
                 src={item.url}
                 alt={`${movieTitle} — ${slideLabel(slides, index).toLowerCase()}`}
                 fill
-                sizes="(max-width: 448px) 100vw, 448px"
+                sizes="(min-width: 1024px) 560px, (min-width: 768px) 768px, 100vw"
                 priority={index === 0}
                 // Without this a mouse drag starts the browser's own image
                 // drag instead of scrolling the carousel.
@@ -343,7 +343,7 @@ function SingleImage({ src, alt }: { src: string | null; alt: string }) {
       src={src}
       alt={alt}
       fill
-      sizes="(max-width: 448px) 100vw, 448px"
+      sizes="(min-width: 1024px) 560px, (min-width: 768px) 768px, 100vw"
       priority
       className="object-cover"
     />

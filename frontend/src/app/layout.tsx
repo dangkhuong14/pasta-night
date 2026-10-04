@@ -39,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="vi" className={`${playfair.variable} ${inter.variable}`}>
       <body>
         {/* Pages with a StickyActionBar get room below the footer so the bar never hides it. */}
-        <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col has-data-[slot=sticky-action-bar]:pb-24">
+        <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col has-data-[slot=sticky-action-bar]:pb-24 md:max-w-3xl lg:max-w-5xl">
           <main className="flex flex-1 flex-col">{children}</main>
           <Footer aboutLink={<AboutLink />} />
         </div>

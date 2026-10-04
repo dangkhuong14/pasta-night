@@ -22,14 +22,14 @@ export function OptionCard({
   return (
     <Link
       href={`/recommendations/${encodeURIComponent(option.id)}`}
-      className="group relative block h-44 overflow-hidden rounded-xl border border-border bg-card transition focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100"
+      className="group relative block h-44 overflow-hidden rounded-xl border border-border bg-card transition focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 lg:h-72"
     >
       {imageSrc !== null ? (
         <Image
           src={imageSrc}
           alt=""
           fill
-          sizes="(max-width: 448px) 100vw, 448px"
+          sizes="(min-width: 1024px) 320px, (min-width: 768px) 728px, 100vw"
           priority={isPriority}
           className="object-cover transition duration-500 group-hover:scale-105 motion-reduce:transition-none"
         />

@@ -107,9 +107,10 @@ export function MovieDetailSheet({
         if (!open) close();
       }}
     >
-      {/* Full height on mobile (DESIGN-SYSTEM §5). `!` beats the shadcn drawer's
-          data-[swipe-axis=y] sizing, which caps the sheet at 100dvh - 6rem. */}
-      <DrawerContent className="mx-auto h-dvh! max-h-dvh! w-full max-w-md rounded-none! border-t-0! bg-card">
+      {/* Full height up to lg, a floating 90 dvh panel from lg (DESIGN-SYSTEM §5).
+          `!` beats the shadcn drawer's data-[swipe-axis=y] sizing, which caps
+          the sheet at 100dvh - 6rem. */}
+      <DrawerContent className="mx-auto h-dvh! max-h-dvh! w-full max-w-md rounded-none! border-t-0! bg-card md:max-w-3xl lg:h-[90dvh]! lg:max-h-[90dvh]! lg:max-w-5xl lg:rounded-t-3xl! lg:border-t!">
         {movie !== null && (
           <DetailBody
             movie={movie}
@@ -148,67 +149,77 @@ function DetailBody({
 
   return (
     <div className="h-full overflow-y-auto overscroll-contain">
-      <div className="relative h-65 w-full shrink-0 overflow-hidden bg-linear-to-b from-card to-background">
-        <MediaCarousel
-          media={media}
-          fallbackImageUrl={movie.poster_url}
-          movieTitle={movie.title}
-        />
-        {/* Blends the hero into the sheet body. It must not swallow swipes on
-            the carousel, and it would cover a video's controls. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-card to-transparent"
-        />
-        <DrawerClose
-          aria-label="Đóng"
-          className="absolute top-4 left-4 flex size-11 items-center justify-center rounded-full bg-black/60 text-primary backdrop-blur transition hover:text-gold-bright focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          <X aria-hidden className="size-5" strokeWidth={1.5} />
-        </DrawerClose>
-      </div>
-
-      <div className="relative -mt-6 space-y-6 rounded-t-3xl bg-card px-5 pt-3 pb-10">
-        <div aria-hidden className="mx-auto h-1 w-10 rounded-full bg-muted" />
-
-        <div>
-          <div className="flex items-start justify-between gap-3">
-            <DrawerTitle className="font-serif text-[26px] leading-tight font-normal text-primary">
-              {movie.title}
-            </DrawerTitle>
-            <RatingBadge
-              rating={movie.rating}
-              variant="outline"
-              className="mt-1"
-            />
-          </div>
-          <DrawerDescription className="sr-only">
-            Thông tin chi tiết về phim {movie.title}
-          </DrawerDescription>
-          <MetaRow
-            runtime={movie.runtime_minutes}
-            year={movie.release_year}
-            genre={firstGenre}
+      {/* Stacked up to lg; from lg the carousel and the text sit side by side
+          (SCREENS §3). `items-start` lets the carousel column stick. */}
+      <div className="lg:grid lg:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] lg:items-start">
+        {/* 16:9 from md: a fixed 260 px would crop a wide still hard. From lg it
+          sticks while the text column scrolls, so the trailer stays in view. */}
+        <div className="relative h-65 w-full shrink-0 overflow-hidden bg-linear-to-b from-card to-background md:aspect-video md:h-auto lg:sticky lg:top-6 lg:m-6 lg:w-auto lg:rounded-xl">
+          <MediaCarousel
+            media={media}
+            fallbackImageUrl={movie.poster_url}
+            movieTitle={movie.title}
           />
+          {/* Blends the hero into the sheet body. It must not swallow swipes on
+            the carousel, and it would cover a video's controls. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-card to-transparent lg:hidden"
+          />
+          <DrawerClose
+            aria-label="Đóng"
+            className="absolute top-4 left-4 flex size-11 items-center justify-center rounded-full bg-black/60 text-primary backdrop-blur transition hover:text-gold-bright focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            <X aria-hidden className="size-5" strokeWidth={1.5} />
+          </DrawerClose>
         </div>
 
-        {movie.providers.length > 0 && (
-          <ProvidersCard providers={movie.providers} />
-        )}
-        {pairing !== null && <PastaPairingCard pairing={pairing} />}
+        {/* Overlapping the hero only makes sense while stacked. */}
+        <div className="relative -mt-6 space-y-6 rounded-t-3xl bg-card px-5 pt-3 pb-10 md:px-8 lg:mt-0 lg:rounded-none lg:pt-6 lg:pr-8 lg:pl-0">
+          <div
+            aria-hidden
+            className="mx-auto h-1 w-10 rounded-full bg-muted lg:hidden"
+          />
 
-        {movie.overview !== "" && (
-          <section>
-            <SectionLabel as="h3">Nội dung</SectionLabel>
-            <p className="mt-2 text-sm leading-relaxed text-foreground/90">
-              {movie.overview}
-            </p>
-          </section>
-        )}
+          <div>
+            <div className="flex items-start justify-between gap-3">
+              <DrawerTitle className="font-serif text-[26px] leading-tight font-normal text-primary">
+                {movie.title}
+              </DrawerTitle>
+              <RatingBadge
+                rating={movie.rating}
+                variant="outline"
+                className="mt-1"
+              />
+            </div>
+            <DrawerDescription className="sr-only">
+              Thông tin chi tiết về phim {movie.title}
+            </DrawerDescription>
+            <MetaRow
+              runtime={movie.runtime_minutes}
+              year={movie.release_year}
+              genre={firstGenre}
+            />
+          </div>
 
-        {(cast === null || cast.length > 0) && <CastList cast={cast} />}
-        {SHOP_URL !== "" && <PromoCard shopUrl={SHOP_URL} />}
-        <SheetActions movieTitle={movie.title} />
+          {movie.providers.length > 0 && (
+            <ProvidersCard providers={movie.providers} />
+          )}
+          {pairing !== null && <PastaPairingCard pairing={pairing} />}
+
+          {movie.overview !== "" && (
+            <section>
+              <SectionLabel as="h3">Nội dung</SectionLabel>
+              <p className="mt-2 text-sm leading-relaxed text-foreground/90">
+                {movie.overview}
+              </p>
+            </section>
+          )}
+
+          {(cast === null || cast.length > 0) && <CastList cast={cast} />}
+          {SHOP_URL !== "" && <PromoCard shopUrl={SHOP_URL} />}
+          <SheetActions movieTitle={movie.title} />
+        </div>
       </div>
       {footer}
     </div>
